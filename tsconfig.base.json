@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@fit-friends-1/shared/app-types": ["libs/shared/app-types/src/index.ts"]
+      "@fit-friends-1/shared/app-types": ["libs/shared/app-types/src/index.ts"],
+      "@fit-friends-1/shared/mock-data": ["libs/shared/mock-data/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
