@@ -1,0 +1,27 @@
+# Create a new user
+POST http://localhost:3333/api/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "user2@notfound.local",
+  "name": "Keks",
+  "password": "123456",
+  "role": "user"
+}
+
+###
+
+# Login user by email and password
+POST http://localhost:3333/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "user@notfound.local",
+  "password": "654321"
+}
+
+###
+
+# Check authorization
+GET http://localhost:3333/api/auth HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NiN2U5Yzg4NjgxNTIyYjdmNmM0ZSIsIm5hbWUiOiJTbWl0aCIsImVtYWlsIjoidGVzdEB0ZXN0LmxvY2FsIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1ODk3MDg2LCJleHAiOjE2ODU5MDMwODZ9.xUdvyArYQhMRDwIkJ30SbqtVq2bokS5jCfXfTfwTCtU
