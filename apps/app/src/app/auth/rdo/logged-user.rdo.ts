@@ -7,7 +7,7 @@ export class LoggedUserRdo {
     description: 'The uniq user ID',
     example: 'e1769d10b6d7'
   })
-  @Expose({ name: '_id', })
+  @Expose({ name: '_id' })
   @Transform(({ obj }) => obj._id.toString())
   public id: string;
 

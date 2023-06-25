@@ -5,6 +5,7 @@ import { SALT_ROUNDS } from './user.constant';
 import { User } from '@fit-friends-1/shared/app-types';
 
 export class UserEntity implements Entity<User> {
+  _id?: string;
   name: string;
   email: string;
   passwordHash: string;
@@ -38,6 +39,7 @@ export class UserEntity implements Entity<User> {
   }
 
   public fillEntity(user: User) {
+    this._id = user._id;
     this.name = user.name;
     this.email = user.email;
     this.passwordHash = user.passwordHash;

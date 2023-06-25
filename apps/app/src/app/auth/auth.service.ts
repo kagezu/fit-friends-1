@@ -81,15 +81,29 @@ export class AuthenticationService {
       email: user.email,
       role: user.role,
     };
-
     return {
       accessToken: await this.jwtService.signAsync(payload),
     }
   }
 
   /** Извлечение из токена */
-  public async getPayload(token: string): Promise<TokenPayload> {
-    const payload = this.jwtService.decode(token.split(' ')[1]);
-    return payload as unknown as TokenPayload;
+  // public async getPayload(authorization: string): Promise<TokenPayload> {
+  //   const payload = this.jwtService.decode(this.getToken(authorization));
+  //   return payload as unknown as TokenPayload;
+  // }
+
+  /** Проверка токена */
+  public async verifyToken(authorization: string): Promise<TokenPayload> {
+    try {
+      return await this.jwtService.verifyAsync(this.getToken(authorization));
+    }
+    catch {
+      return;
+    }
+  }
+
+  /** Извлечение токена */
+  public getToken(authorization: string): string {
+    return authorization.split(' ')[1];
   }
 }

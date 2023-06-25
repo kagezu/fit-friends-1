@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards, Headers } from '@nestjs/common';
 import { AuthenticationService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { fillObject } from '@fit-friends-1/util/util-core';
@@ -38,8 +38,12 @@ export class AuthenticationController {
     description: 'Password or Login is wrong.',
   })
   @Post('login')
-  @HttpCode(HttpStatus.OK)
-  public async login(@Body() dto: LoginUserDto) {
+  @HttpCode(HttpStatus.CREATED)
+  public async login(@Body() dto: LoginUserDto, @Headers('authorization') authorization: string) {
+    const payload = await this.authService.verifyToken(authorization);
+    if (payload) {
+      return { accessToken: this.authService.getToken(authorization) };
+    }
     const verifiedUser = await this.authService.verify(dto);
     const loggedUser = await this.authService.createToken(verifiedUser);
     const result = fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
