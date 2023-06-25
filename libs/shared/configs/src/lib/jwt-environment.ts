@@ -16,4 +16,14 @@ export class JwtEnvironment {
     message: JwtValidationMessage.TokenSecretRequired
   })
   accessTokenExpiresIn!: string;
+
+  @IsString({
+    message: JwtValidationMessage.TokenSecretRequired
+  })
+  refreshTokenSecret!: string;
+
+  @IsString({
+    message: JwtValidationMessage.TokenSecretRequired
+  })
+  refreshTokenExpiresIn!: string;
 }

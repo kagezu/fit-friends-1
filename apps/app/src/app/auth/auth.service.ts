@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TokenPayload, User } from '@fit-friends-1/shared/app-types';
 import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from './auth.constant';
@@ -6,12 +6,15 @@ import { UserEntity } from '../user/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserRepository } from '../user/user.repository';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConfig } from '@fit-friends-1/shared/configs';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
-export class AuthenticationService {
+export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    @Inject(jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
   ) { }
 
   /** Регистрация пользователя*/
@@ -76,13 +79,17 @@ export class AuthenticationService {
   /** Генерация токена */
   public async createToken(user: User) {
     const payload: TokenPayload = {
-      id: user._id,
+      sub: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
     };
     return {
       accessToken: await this.jwtService.signAsync(payload),
+      refreshToken: await this.jwtService.signAsync(payload, {
+        secret: this.jwtOptions.refreshTokenSecret,
+        expiresIn: this.jwtOptions.refreshTokenExpiresIn
+      })
     }
   }
 

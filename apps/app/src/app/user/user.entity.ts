@@ -34,7 +34,7 @@ export class UserEntity implements Entity<User> {
     this.fillEntity(user);
   }
 
-  public toObject(): User {
+  public toObject() {
     return { ...this };
   }
 
