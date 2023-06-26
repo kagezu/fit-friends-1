@@ -27,7 +27,6 @@ export function parseTime(time: string): TimeAndUnit {
   return { value, unit }
 }
 
-/*t
 export function getMongoConnectionString(
   {
     username,
@@ -46,4 +45,3 @@ export function getMongoConnectionString(
   }): string {
   return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
 }
-*/

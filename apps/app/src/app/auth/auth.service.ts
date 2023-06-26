@@ -8,6 +8,9 @@ import { UserRepository } from '../user/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from '@fit-friends-1/shared/configs';
 import { ConfigType } from '@nestjs/config';
+import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { createJWTPayload } from '@fit-friends-1/util/util-core';
+import * as crypto from 'node:crypto';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +18,7 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
+    private readonly refreshTokenService: RefreshTokenService,
   ) { }
 
   /** Регистрация пользователя*/
@@ -72,21 +76,19 @@ export class AuthService {
   }
 
   /** Информация о пользователе*/
-  public async get(id: string) {
+  public async getUser(id: string) {
     return this.userRepository.findById(id);
   }
 
   /** Генерация токена */
   public async createToken(user: User) {
-    const payload: TokenPayload = {
-      sub: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
+    const accessTokenPayload = createJWTPayload(user);
+    const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
+    await this.refreshTokenService.createRefreshSession(refreshTokenPayload)
+
     return {
-      accessToken: await this.jwtService.signAsync(payload),
-      refreshToken: await this.jwtService.signAsync(payload, {
+      accessToken: await this.jwtService.signAsync(accessTokenPayload),
+      refreshToken: await this.jwtService.signAsync(refreshTokenPayload, {
         secret: this.jwtOptions.refreshTokenSecret,
         expiresIn: this.jwtOptions.refreshTokenExpiresIn
       })

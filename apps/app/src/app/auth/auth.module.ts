@@ -8,6 +8,7 @@ import { getJwtOptions } from '@fit-friends-1/shared/configs';
 import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: getJwtOptions
-    })
+    }),
+    RefreshTokenModule
   ],
   controllers: [AuthenticationController],
   providers: [

@@ -73,7 +73,7 @@ export class AuthenticationController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   public async show(@Param('id') id: string) {
-    const existUser = await this.authService.get(id);
+    const existUser = await this.authService.getUser(id);
     const result = fillObject(UserRdo, existUser);
     return { ...result };
   }
