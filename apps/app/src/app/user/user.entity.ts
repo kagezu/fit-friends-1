@@ -59,9 +59,9 @@ export class UserEntity implements Entity<User> {
     this.caloriesPerDay = user.caloriesPerDay;
     this.readyForTraining = user.readyForTraining;
 
-    // this.certificate = user.certificate;
-    // this.meritsOfCoach = user.meritsOfCoach;
-    // this.readyForIndividualTraining = user.readyForIndividualTraining;
+    this.certificate = user.certificate;
+    this.meritsOfCoach = user.meritsOfCoach;
+    this.readyForIndividualTraining = user.readyForIndividualTraining;
   }
 
   public async setPassword(password: string): Promise<UserEntity> {

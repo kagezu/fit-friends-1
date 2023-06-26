@@ -68,4 +68,4 @@ export class UserModel extends Document implements User {
   readyForIndividualTraining: boolean;
 }
 
-export const userSchema = SchemaFactory.createForClass(UserModel);
+export const UserSchema = SchemaFactory.createForClass(UserModel);
