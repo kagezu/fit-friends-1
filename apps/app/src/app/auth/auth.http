@@ -17,7 +17,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTdlNGU4NGMwMjRlOTY4YzEyZmM5YyIsIm5hbWUiOiJLZWtzIiwiZW1haWwiOiJ1c2VyMkBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJpYXQiOjE2ODc2ODQyODEsImV4cCI6MTY4NzY4NDcwMX0.bweV-67jBqkxtgx4AGMt__XpJiGG38WUWp2HhO09QuU
 
 {
-  "email": "user2@notfound.local"
+  "email": "user2@notfound.local",
+  "password": "123456"
 }
 
 ###
@@ -30,4 +31,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTdlNGU4N
 
 # Get new JWT pair
 POST http://localhost:3333/api/auth/refresh HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDQwMzJmYmU0Y2FlYjg2OGM2ZWVjMzYiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoidXNlciIsImxhc3RuYW1lIjoiU21pdGgiLCJmaXJzdG5hbWUiOiJLZWtzIiwiaWF0IjoxNjgyNDQyMDU5LCJleHAiOjE2ODUwMzQwNTl9.2G2W2UUfQWKcPjMilQdTyCmgwxiasKZ4Z3bY72TZV_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZTRlODRjMDI0ZTk2OGMxMmZjOWMiLCJuYW1lIjoiS2VrcyIsImVtYWlsIjoidXNlcjJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoi0L_QvtC70YzQt9C-0LLQsNGC0LXQu9GMIiwiaWF0IjoxNjg3Njk5MTQ1LCJleHAiOjE2ODgzMDM5NDV9.3XHGV5oIexce-u8svzgLngqAcZEbtWlpqTjePw8g8EY

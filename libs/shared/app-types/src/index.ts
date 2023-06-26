@@ -20,3 +20,5 @@ export * from './lib/user.interface';
 export * from './lib/users-gender.enum';
 export * from './lib/token-payload.interface';
 export * from './lib/request-with-user.interface';
+export * from './lib/refresh-token-payload.interface';
+export * from './lib/token.interface';

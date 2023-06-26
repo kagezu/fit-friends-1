@@ -5,16 +5,17 @@ import { UserModule } from './user/user.module';
 import { getMongooseOptions } from '@fit-friends-1/shared/configs';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigAppModule } from '@fit-friends-1/config/config-app';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
     ConfigAppModule,
-    MongooseModule.forRootAsync(
-      getMongooseOptions()
-    )],
+    MongooseModule.forRootAsync(getMongooseOptions()),
+    RefreshTokenModule,
+  ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
