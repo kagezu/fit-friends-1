@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards, Headers, Req } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { fillObject } from '@fit-friends-1/util/util-core';
@@ -6,10 +6,9 @@ import { UserRdo } from './rdo/user.rdo';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RequestWithUser } from '@fit-friends-1/shared/app-types';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-// import { MongoidValidationPipe } from '@project/shared/shared-pipes';
+import { AuthorizedUserException } from './exception/authorized-user.exception';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,8 +22,17 @@ export class AuthenticationController {
     status: HttpStatus.CREATED,
     description: 'The new user has been successfully created.'
   })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'The user exist.'
+  })
   @Post('register')
-  public async create(@Body() dto: CreateUserDto) {
+  public async create(@Body() dto: CreateUserDto, @Headers('authorization') authorization: string) {
+    const payload = await this.authService.verifyToken(authorization);
+    if (payload) {
+      throw new AuthorizedUserException(payload.email);
+    }
+
     const newUser = await this.authService.register(dto);
     return fillObject(UserRdo, newUser);
   }
@@ -44,7 +52,7 @@ export class AuthenticationController {
   public async login(@Body() dto: LoginUserDto, @Headers('authorization') authorization: string) {
     const payload = await this.authService.verifyToken(authorization);
     if (payload) {
-      return { accessToken: this.authService.getToken(authorization) };
+      throw new AuthorizedUserException(payload.email);
     }
     const verifiedUser = await this.authService.verify(dto);
     const loggedUser = await this.authService.createToken(verifiedUser);
@@ -62,19 +70,5 @@ export class AuthenticationController {
   })
   public async refreshToken(@Req() { user }: RequestWithUser) {
     return this.authService.createToken(user);
-  }
-
-  /** Информация о пользователе*/
-  @ApiResponse({
-    type: UserRdo,
-    status: HttpStatus.OK,
-    description: 'User found'
-  })
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  public async show(@Param('id') id: string) {
-    const existUser = await this.authService.getUser(id);
-    const result = fillObject(UserRdo, existUser);
-    return { ...result };
   }
 }

@@ -21,6 +21,9 @@
       "@fit-friends-1/shared/app-types": ["libs/shared/app-types/src/index.ts"],
       "@fit-friends-1/shared/configs": ["libs/shared/configs/src/index.ts"],
       "@fit-friends-1/shared/mock-data": ["libs/shared/mock-data/src/index.ts"],
+      "@fit-friends-1/shared/shared-pipes": [
+        "libs/shared/shared-pipes/src/index.ts"
+      ],
       "@fit-friends-1/util/util-core": ["libs/util/util-core/src/index.ts"],
       "@fit-friends-1/util/util-types": ["libs/util/util-types/src/index.ts"]
     }

@@ -75,16 +75,12 @@ export class AuthService {
     return userEntity.toObject();
   }
 
-  /** Информация о пользователе*/
-  public async getUser(id: string) {
-    return this.userRepository.findById(id);
-  }
-
   /** Генерация токена */
   public async createToken(user: User) {
     const accessTokenPayload = createJWTPayload(user);
     const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
-    await this.refreshTokenService.createRefreshSession(refreshTokenPayload)
+    await this.refreshTokenService.deleteUserSession(user._id);
+    await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
 
     return {
       accessToken: await this.jwtService.signAsync(accessTokenPayload),
@@ -94,12 +90,6 @@ export class AuthService {
       })
     }
   }
-
-  /** Извлечение из токена */
-  // public async getPayload(authorization: string): Promise<TokenPayload> {
-  //   const payload = this.jwtService.decode(this.getToken(authorization));
-  //   return payload as unknown as TokenPayload;
-  // }
 
   /** Проверка токена */
   public async verifyToken(authorization: string): Promise<TokenPayload> {

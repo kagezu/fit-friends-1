@@ -19,6 +19,12 @@ export class RefreshTokenRepository {
       .exec();
   }
 
+  public async deleteByUserId(userId: string) {
+    return this.refreshTokenModel
+      .deleteMany({ userId })
+      .exec();
+  }
+
   public async findByTokenId(tokenId: string): Promise<Token | null> {
     return this.refreshTokenModel
       .findOne({ tokenId })

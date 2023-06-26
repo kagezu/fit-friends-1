@@ -31,6 +31,10 @@ export class RefreshTokenService {
     return this.refreshTokenRepository.deleteByTokenId(tokenId)
   }
 
+  public async deleteUserSession(userId: string) {
+    return this.refreshTokenRepository.deleteByUserId(userId);
+  }
+
   public async isExists(tokenId: string): Promise<boolean> {
     const refreshToken = await this.refreshTokenRepository.findByTokenId(tokenId);
     return (refreshToken !== null);

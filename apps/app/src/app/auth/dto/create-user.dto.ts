@@ -10,7 +10,7 @@ export class CreateUserDto {
   @IsString()
   @MinLength(1)
   @MaxLength(15)
-  @Matches('/^([а-яё]+|[a-z]+)$/', 'i', { message: 'Имя, должно быть, написано либо с использованием кириллицы или латиницы.' })
+  @Matches('^([а-яё]+|[a-z]+)$', 'i', { message: 'Имя, должно быть, написано либо с использованием кириллицы или латиницы.' })
   name: string;
 
   email: string;
