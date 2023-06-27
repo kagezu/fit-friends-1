@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { fillObject } from '@fit-friends-1/util/util-core';
@@ -8,7 +8,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequestWithUser } from '@fit-friends-1/shared/app-types';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-import { AuthorizedUserException } from './exception/authorized-user.exception';
+import { UserMassage } from './auth.constant';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -30,7 +30,7 @@ export class AuthenticationController {
   public async create(@Body() dto: CreateUserDto, @Headers('authorization') authorization: string) {
     const payload = await this.authService.verifyToken(authorization);
     if (payload) {
-      throw new AuthorizedUserException(payload.email);
+      throw new BadRequestException(UserMassage.AuthorizedUser);
     }
 
     const newUser = await this.authService.register(dto);
@@ -52,7 +52,7 @@ export class AuthenticationController {
   public async login(@Body() dto: LoginUserDto, @Headers('authorization') authorization: string) {
     const payload = await this.authService.verifyToken(authorization);
     if (payload) {
-      throw new AuthorizedUserException(payload.email);
+      throw new BadRequestException(UserMassage.AuthorizedUser);
     }
     const verifiedUser = await this.authService.verify(dto);
     const loggedUser = await this.authService.createToken(verifiedUser);

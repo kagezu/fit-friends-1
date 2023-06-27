@@ -11,11 +11,12 @@ export class UserEntity implements Entity<User> {
   passwordHash: string;
   avatar: string;
   gender: string;
-  birthday: string;
+  birthday: Date;
   role: string;
   description: string;
   location: string;
   background: string;
+  createdAt: Date;
 
   trainingLevel: string;
   trainingType: string[];
@@ -28,7 +29,6 @@ export class UserEntity implements Entity<User> {
   certificate: string;
   meritsOfCoach: string;
   readyForIndividualTraining: boolean;
-
 
   constructor(user: User) {
     this.fillEntity(user);

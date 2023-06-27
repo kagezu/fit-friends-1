@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
-import { AUTH_USER_EMAIL_NOT_VALID } from '../auth.constant';
+import { UserMassage, UserValidate } from '../auth.constant';
 
 export class LoginUserDto {
   @ApiProperty({
-    description: 'User uniq email',
+    description: 'Адрес электронной почты ',
     example: 'user@user.ru',
   })
-  @IsEmail({}, { message: AUTH_USER_EMAIL_NOT_VALID })
+  @IsEmail({}, { message: UserMassage.EmailNotValid })
   public email: string;
 
   @ApiProperty({
@@ -15,7 +15,7 @@ export class LoginUserDto {
     example: '123456'
   })
   @IsString()
-  @MinLength(6)
-  @MaxLength(12)
+  @MinLength(UserValidate.minLengthPassword)
+  @MaxLength(UserValidate.maxLengthPassword)
   public password: string;
 }

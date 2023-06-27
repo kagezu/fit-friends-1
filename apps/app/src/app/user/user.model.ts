@@ -28,7 +28,7 @@ export class UserModel extends Document implements User {
   public passwordHash: string;
 
   gender: string;
-  birthday: string;
+  birthday: Date;
 
   @Prop({
     required: true,

@@ -5,11 +5,12 @@ export interface User {
   avatar: string;
   passwordHash: string;
   gender: string;
-  birthday: string;
+  birthday: Date;
   role: string;
   description: string;
   location: string;
   background: string;
+  createdAt?: Date;
 
   trainingLevel: string;
   trainingType: string[];
