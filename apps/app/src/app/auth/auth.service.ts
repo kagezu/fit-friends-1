@@ -23,31 +23,11 @@ export class AuthService {
 
   /** Регистрация пользователя*/
   public async register(dto: CreateUserDto) {
-    const { name, email, password, role } = dto;
+    const { email, password } = dto;
 
     const user = {
-      name,
-      email,
-      avatar: '',
-      passwordHash: '',
-      gender: '',
-      birthday: '',
-      role,
-      description: '',
-      location: '',
-      background: '',
-
-      trainingLevel: '',
-      trainingType: [],
-
-      interval: '',
-      caloriesToBurn: 0,
-      caloriesPerDay: 0,
-      readyForTraining: false,
-
-      certificate: '',
-      meritsOfCoach: '',
-      readyForIndividualTraining: false
+      ...dto,
+      passwordHash: ''
     };
 
     const existUser = await this.userRepository.findByEmail(email);

@@ -9,26 +9,26 @@ export class UserEntity implements Entity<User> {
   name: string;
   email: string;
   passwordHash: string;
-  avatar: string;
+  avatar?: string;
   gender: string;
-  birthday: Date;
+  birthday?: Date;
   role: string;
-  description: string;
+  description?: string;
   location: string;
   background: string;
-  createdAt: Date;
+  createdAt?: Date;
 
   trainingLevel: string;
   trainingType: string[];
 
-  interval: string;
-  caloriesToBurn: number;
-  caloriesPerDay: number;
-  readyForTraining: boolean;
+  interval?: string;
+  caloriesToBurn?: number;
+  caloriesPerDay?: number;
+  readyForTraining?: boolean;
 
-  certificate: string;
-  meritsOfCoach: string;
-  readyForIndividualTraining: boolean;
+  certificate?: string;
+  meritsOfCoach?: string;
+  readyForIndividualTraining?: boolean;
 
   constructor(user: User) {
     this.fillEntity(user);
@@ -50,6 +50,7 @@ export class UserEntity implements Entity<User> {
     this.description = user.description;
     this.location = user.location;
     this.background = user.background;
+    this.createdAt = user.createdAt;
 
     this.trainingLevel = user.trainingLevel;
     this.trainingType = user.trainingType;

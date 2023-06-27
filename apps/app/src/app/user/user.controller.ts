@@ -2,7 +2,7 @@ import { Controller, Get, HttpCode, HttpStatus, Param, UseGuards } from '@nestjs
 import { fillObject } from '@fit-friends-1/util/util-core';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UserRdo } from '../auth/rdo/user.rdo';
+import { UserRdo } from './rdo/user.rdo';
 import { UserService } from './user.service';
 import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 

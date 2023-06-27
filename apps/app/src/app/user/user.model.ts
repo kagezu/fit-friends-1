@@ -1,71 +1,53 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User, UserRole } from '@fit-friends-1/shared/app-types';
+import { User } from '@fit-friends-1/shared/app-types';
 
 @Schema({
   collection: 'users',
   timestamps: true,
 })
 export class UserModel extends Document implements User {
-
-  @Prop({
-    required: true,
-  })
-  public name: string;
-
-  @Prop({
-    required: true,
-    unique: true,
-  })
-  public email: string;
-
   @Prop()
-  avatar: string;
-
-  @Prop({
-    required: true,
-  })
+  public name: string;
+  @Prop()
+  public email: string;
+  @Prop()
+  public avatar?: string;
+  @Prop()
   public passwordHash: string;
-
-  gender: string;
-  birthday: Date;
-
-  @Prop({
-    required: true,
-    type: String,
-    enum: UserRole,
-    default: UserRole.User,
-  })
-
+  @Prop()
+  public gender: string;
+  @Prop()
+  public birthday?: Date;
   @Prop()
   public role: string;
   @Prop()
-  description: string;
+  public description?: string;
   @Prop()
-  location: string;
+  public location: string;
   @Prop()
-  background: string;
+  public background: string;
 
   @Prop()
-  trainingLevel: string;
+  public trainingLevel: string;
   @Prop()
-  trainingType: string[];
+  public trainingType: string[];
 
   @Prop()
-  interval: string;
+  public interval?: string;
   @Prop()
-  caloriesToBurn: number;
+  public caloriesToBurn?: number;
   @Prop()
-  caloriesPerDay: number;
+  public caloriesPerDay?: number;
   @Prop()
-  readyForTraining: boolean;
+  public readyForTraining?: boolean;
 
   @Prop()
-  certificate: string;
+  public certificate?: string;
   @Prop()
-  meritsOfCoach: string;
+  public meritsOfCoach?: string;
   @Prop()
-  readyForIndividualTraining: boolean;
+  public readyForIndividualTraining?: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

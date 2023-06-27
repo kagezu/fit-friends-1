@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req, 
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { fillObject } from '@fit-friends-1/util/util-core';
-import { UserRdo } from './rdo/user.rdo';
+import { UserRdo } from '../user/rdo/user.rdo';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
