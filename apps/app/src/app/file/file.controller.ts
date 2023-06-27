@@ -8,6 +8,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UploadedFileRdo } from './rdo/uploaded-file.rdo';
 import { uploadConfig } from '@fit-friends-1/shared/configs';
 import { ConfigType } from '@nestjs/config';
+import { AvatarValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 
 @ApiTags('uploader')
 @Controller('files')
@@ -15,26 +16,25 @@ export class FileController {
 
   constructor(
     private readonly fileService: FileService,
-
     @Inject(uploadConfig.KEY)
     private readonly applicationConfig: ConfigType<typeof uploadConfig>,
   ) { }
 
-  /* Загрузка файла в файловую структуру сервера */
+  /** Загрузка файла в файловую структуру сервера */
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The new task has been successfully created.'
   })
-  @Post('/upload')
+  @Post('/avatar')
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file'))
-  public async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  public async uploadAvatar(@UploadedFile(AvatarValidationPipe) file: Express.Multer.File) {
     const newFile = await this.fileService.save(file);
     const path = `${this.applicationConfig.serveRoot}${newFile.path}`;
     return fillObject(UploadedFileRdo, Object.assign(newFile, { path }));
   }
 
-  /* Запрос информации о файле по id */
+  /** Запрос информации о файле по id */
   @ApiResponse({
     type: UploadedFileRdo,
     status: HttpStatus.OK,
