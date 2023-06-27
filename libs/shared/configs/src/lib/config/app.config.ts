@@ -13,7 +13,7 @@ export interface ApplicationConfig {
 export default registerAs('application', (): ApplicationConfig => {
   const config: ApplicationConfig = {
     environment: process.env['NODE_ENV'],
-    port: parseInt(process.env['PORT'] || DEFAULT_PORT.toString(), 10),
+    port: parseInt(process.env['PORT'] || DEFAULT_PORT.toString(), 10)
   };
 
   const applicationEnvironment = plainToInstance(

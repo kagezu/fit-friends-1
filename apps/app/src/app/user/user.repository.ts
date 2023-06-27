@@ -1,4 +1,3 @@
-import { CRUDRepository } from '@fit-friends-1/util/util-types';
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from './user.entity';
 import { User } from '@fit-friends-1/shared/app-types';
@@ -7,7 +6,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
-export class UserRepository implements CRUDRepository<UserEntity, string, User> {
+export class UserRepository {
   constructor(
     @InjectModel(UserModel.name) private readonly userModel: Model<UserModel>) {
   }

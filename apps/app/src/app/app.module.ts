@@ -6,9 +6,11 @@ import { getMongooseOptions } from '@fit-friends-1/shared/configs';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigAppModule } from '@fit-friends-1/config/config-app';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
+    FileModule,
     AuthModule,
     UserModule,
     ConfigAppModule,
@@ -18,4 +20,4 @@ import { RefreshTokenModule } from './refresh-token/refresh-token.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
