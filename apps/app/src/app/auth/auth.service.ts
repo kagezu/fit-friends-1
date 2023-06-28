@@ -10,7 +10,7 @@ import { ConfigType } from '@nestjs/config';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { createJWTPayload } from '@fit-friends-1/util/util-core';
 import * as crypto from 'node:crypto';
-import { UserMassage } from './auth.constant';
+import { MAX_TRAINING_TYPES, UserMassage } from './auth.constant';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +27,9 @@ export class AuthService {
 
     const user = {
       ...dto,
-      passwordHash: ''
+      passwordHash: '',
+      createdAt: new Date(),
+      trainingTypes: Array.from(new Set<string>(dto.trainingTypes)).slice(0, MAX_TRAINING_TYPES)
     };
 
     const existUser = await this.userRepository.findByEmail(email);

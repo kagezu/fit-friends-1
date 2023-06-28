@@ -8,7 +8,7 @@ export class CreateUserDto {
     description: 'Имя пользователя',
     example: 'Иван',
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @MinLength(UserValidate.minLengthName)
   @MaxLength(UserValidate.maxLengthName)
   @Matches('^([а-яё]+|[a-z]+)$', 'i', { message: UserMassage.NameNotValid })
@@ -42,7 +42,7 @@ export class CreateUserDto {
     description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',
     example: 'неважно'
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @IsEnum(Gender)
   gender: string;
 
@@ -58,14 +58,14 @@ export class CreateUserDto {
     description: 'Роль пользователя.Доступные роли тренер и пользователь.',
     example: 'тренер'
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @IsEnum(UserRole)
   role: string;
 
   @ApiProperty({
     description: 'Текст с общей информацией.'
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @MinLength(UserValidate.minLengthDescription)
   @MaxLength(UserValidate.maxLengthDescription)
   @IsOptional()
@@ -75,7 +75,7 @@ export class CreateUserDto {
     description: 'Одна из станций: «Пионерская», «Петроградская», «Удельная», «Звёздная», «Спортивная».',
     example: 'Звёздная'
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @IsIn(locations)
   location: string;
 
@@ -83,7 +83,7 @@ export class CreateUserDto {
     description: 'Фоновая картинка для карточки пользователя.',
     example: 'training-1.png'
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @IsIn(userBackgrounds)
   background: string;
 
@@ -91,7 +91,7 @@ export class CreateUserDto {
     description: 'Уровень физической подготовки пользователя.Допустимые значения: новичок, любитель, профессионал.',
     example: 'любитель'
   })
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @IsEnum(TrainingLevel)
   trainingLevel: string;
 
@@ -100,11 +100,10 @@ export class CreateUserDto {
     example: 'Звёздная'
   })
   @IsArray()
-  @MaxLength(3, {
+  @IsEnum(TrainingType, {
     each: true,
   })
-  @IsEnum(TrainingType)
-  trainingType: string[];
+  trainingTypes: string[];
 
 
   @ApiProperty({
@@ -112,7 +111,7 @@ export class CreateUserDto {
     example: '30-50 мин'
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @IsIn(intervals)
   interval: string;
 
@@ -121,9 +120,9 @@ export class CreateUserDto {
     example: '2000'
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
-  @IsInt({ message: UserMassage.ValueNotInt })
-  @Min(UserValidate.minCaloriesToBurn, { message: UserMassage.ValueTooLittle })
-  @Max(UserValidate.maxCaloriesToBurn, { message: UserMassage.ValueTooBig })
+  @IsInt()
+  @Min(UserValidate.minCaloriesToBurn, { message: `caloriesToBurn: ${UserMassage.ValueTooLittle}` })
+  @Max(UserValidate.maxCaloriesToBurn, { message: `caloriesToBurn: ${UserMassage.ValueTooBig}` })
   caloriesToBurn: number;
 
   @ApiProperty({
@@ -131,9 +130,9 @@ export class CreateUserDto {
     example: '1000'
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
-  @IsInt({ message: UserMassage.ValueNotInt })
-  @Min(UserValidate.minCaloriesPerDay, { message: UserMassage.ValueTooLittle })
-  @Max(UserValidate.maxCaloriesPerDay, { message: UserMassage.ValueTooBig })
+  @IsInt()
+  @Min(UserValidate.minCaloriesPerDay, { message: `caloriesPerDay: ${UserMassage.ValueTooLittle}` })
+  @Max(UserValidate.maxCaloriesPerDay, { message: `caloriesPerDay: ${UserMassage.ValueTooBig}` })
   caloriesPerDay: number;
 
   @ApiProperty({
@@ -150,7 +149,7 @@ export class CreateUserDto {
     example: 'certificate.pdf',
   })
   @ValidateIf((obj) => obj.role === UserRole.Coach)
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   certificate: string;
 
   @ApiProperty({
@@ -158,7 +157,7 @@ export class CreateUserDto {
     example: 'certificate.pdf',
   })
   @ValidateIf((obj) => obj.role === UserRole.Coach)
-  @IsString({ message: UserMassage.ValueNotString })
+  @IsString()
   @MinLength(UserValidate.minLengthMeritsOfCoach)
   @MaxLength(UserValidate.maxLengthMeritsOfCoach)
   @IsOptional()

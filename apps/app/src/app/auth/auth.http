@@ -4,10 +4,22 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZTRlODRjMDI0ZTk2OGMxMmZjOWMiLCJlbWFpbCI6InVzZXIyQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ItC_0L7Qu9GM0LfQvtCy0LDRgtC10LvRjCIsIm5hbWUiOiJLZWtzIiwiaWF0IjoxNjg3ODQ3MTc0LCJleHAiOjE2ODc4NDc1OTR9.aD1nOuOfVd3gEvPiUZiAwFBoDiVHoeg-q8Q4odrbi60
 
 {
-  "email": "user2@notfound.local",
+  "email": "user6@notfound.local",
   "name": "Keks",
   "password": "123456",
-  "role": "пользователь"
+  "avatar":"image.png",
+  "gender":"мужской", 
+  "birthday":"2012-02-22",
+  "role": "пользователь",
+  "description":"Текст с общей информацией. Минимальная длина 10 символ. Максимальная длина: 140 символов.", 
+  "location":"Петроградская", 
+  "background":"training-4.png",
+  "trainingLevel":"любитель", 
+  "trainingTypes":["бег","бег","бег","бег"],
+  "interval":"50-80 мин", 
+  "caloriesToBurn":4000, 
+  "caloriesPerDay":1000, 
+  "readyForTraining":true
 }
 
 ###

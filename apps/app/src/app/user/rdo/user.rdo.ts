@@ -29,7 +29,7 @@ export class UserRdo {
     example: 'ivan.jpg',
   })
   @Expose()
-  avatar?: string;
+  avatar: string;
 
   @ApiProperty({
     description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',
@@ -84,7 +84,7 @@ export class UserRdo {
     example: 'Звёздная'
   })
   @Expose()
-  trainingType: string[];
+  trainingTypes: string[];
 
 
   @ApiProperty({

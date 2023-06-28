@@ -1,5 +1,5 @@
-import { Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import 'multer';
 import { FileService } from './file.service';
@@ -9,6 +9,7 @@ import { UploadedFileRdo } from './rdo/uploaded-file.rdo';
 import { uploadConfig } from '@fit-friends-1/shared/configs';
 import { ConfigType } from '@nestjs/config';
 import { AvatarValidationPipe } from '@fit-friends-1/shared/shared-pipes';
+// import { AvatarValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 
 @ApiTags('uploader')
 @Controller('files')
@@ -27,11 +28,31 @@ export class FileController {
   })
   @Post('/avatar')
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FileInterceptor('file'))
-  public async uploadAvatar(@UploadedFile(AvatarValidationPipe) file: Express.Multer.File) {
-    const newFile = await this.fileService.save(file);
-    const path = `${this.applicationConfig.serveRoot}${newFile.path}`;
-    return fillObject(UploadedFileRdo, Object.assign(newFile, { path }));
+  @UseInterceptors(
+    FileInterceptor('avatar')
+    // FileInterceptor('certificate')
+  )
+  // @UseInterceptors(FileFieldsInterceptor([
+  //   { name: 'avatar', maxCount: 1 },
+  //   { name: 'certificate', maxCount: 1 },
+  //   { name: 'body', maxCount: 1 },
+  // ]))
+  public async uploadAvatar(
+    // @Body() body,
+    // @UploadedFiles() files: { avatar?: Express.Multer.File[], certificate?: Express.Multer.File[], body: any }
+    @UploadedFile(AvatarValidationPipe) avatar: Express.Multer.File,
+    // @UploadedFile() certificate: Express.Multer.File
+  ) {
+
+    return { avatar };
+
+    // const newFile = await this.fileService.save(image);
+    // const path = `${this.applicationConfig.serveRoot}${newFile.path}
+
+
+    // await this.fileService.save(text);
+    // const pathText = `${this.applicationConfig.serveRoot}${newFile.path}`;
+    // return fillObject(UploadedFileRdo, Object.assign(newFile, { path }));
   }
 
   /** Запрос информации о файле по id */

@@ -13,7 +13,7 @@ export interface User {
   createdAt?: Date;
 
   trainingLevel: string;
-  trainingType: string[];
+  trainingTypes: string[];
 
   interval?: string;
   caloriesToBurn?: number;

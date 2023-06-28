@@ -6,10 +6,8 @@ export enum UserMassage {
   AuthorizedUser = 'User is already logged in',
   NameNotValid = 'The name must be written in either Cyrillic or Latin.',
   BirthNotValid = 'The user date birth is not valid',
-  ValueNotInt = 'Value must be integer',
   ValueTooBig = 'Value is too big',
   ValueTooLittle = 'Value is too small',
-  ValueNotString = 'Value is not string',
 }
 
 export enum UserValidate {
@@ -26,3 +24,5 @@ export enum UserValidate {
   minLengthMeritsOfCoach = 10,
   maxLengthMeritsOfCoach = 140,
 }
+
+export const MAX_TRAINING_TYPES = 3;

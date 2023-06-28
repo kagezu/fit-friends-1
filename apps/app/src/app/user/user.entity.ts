@@ -2,7 +2,7 @@ import { Entity } from '@fit-friends-1/util/util-types';
 
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.constant';
-import { User } from '@fit-friends-1/shared/app-types';
+import { User, UserRole } from '@fit-friends-1/shared/app-types';
 
 export class UserEntity implements Entity<User> {
   _id?: string;
@@ -16,10 +16,10 @@ export class UserEntity implements Entity<User> {
   description?: string;
   location: string;
   background: string;
-  createdAt?: Date;
+  createdAt: Date;
 
   trainingLevel: string;
-  trainingType: string[];
+  trainingTypes: string[];
 
   interval?: string;
   caloriesToBurn?: number;
@@ -53,16 +53,22 @@ export class UserEntity implements Entity<User> {
     this.createdAt = user.createdAt;
 
     this.trainingLevel = user.trainingLevel;
-    this.trainingType = user.trainingType;
+    this.trainingTypes = user.trainingTypes;
 
-    this.interval = user.interval;
-    this.caloriesToBurn = user.caloriesToBurn;
-    this.caloriesPerDay = user.caloriesPerDay;
-    this.readyForTraining = user.readyForTraining;
+    switch (user.role) {
+      case UserRole.User:
+        this.interval = user.interval;
+        this.caloriesToBurn = user.caloriesToBurn;
+        this.caloriesPerDay = user.caloriesPerDay;
+        this.readyForTraining = user.readyForTraining;
+        break;
 
-    this.certificate = user.certificate;
-    this.meritsOfCoach = user.meritsOfCoach;
-    this.readyForIndividualTraining = user.readyForIndividualTraining;
+      case UserRole.Coach:
+        this.certificate = user.certificate;
+        this.meritsOfCoach = user.meritsOfCoach;
+        this.readyForIndividualTraining = user.readyForIndividualTraining;
+        break;
+    }
   }
 
   public async setPassword(password: string): Promise<UserEntity> {

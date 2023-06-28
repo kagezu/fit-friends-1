@@ -31,7 +31,7 @@ export class UserModel extends Document implements User {
   @Prop()
   public trainingLevel: string;
   @Prop()
-  public trainingType: string[];
+  public trainingTypes: string[];
 
   @Prop()
   public interval?: string;
