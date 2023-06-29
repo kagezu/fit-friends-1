@@ -1,5 +1,4 @@
 import { Entity } from '@fit-friends-1/util/util-types';
-
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.constant';
 import { User, UserRole } from '@fit-friends-1/shared/app-types';

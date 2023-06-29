@@ -31,7 +31,7 @@ export class AuthService {
       ...dto,
       passwordHash: '',
       createdAt: new Date(),
-      trainingTypes: Array.from(new Set<string>(dto.trainingTypes)).slice(0, MAX_TRAINING_TYPES)
+      trainingTypes: Array.from(new Set((dto.trainingTypes as unknown as string).split(','))).slice(0, MAX_TRAINING_TYPES)
     };
 
     const existUser = await this.userRepository.findByEmail(email);

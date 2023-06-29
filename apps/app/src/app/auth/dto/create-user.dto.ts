@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
+import { IsArray, IsBoolean, IsEmail, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserMassage, UserValidate } from '../auth.constant';
 import { Gender, TrainingLevel, TrainingType, UserRole, userBackgrounds, intervals, locations } from '@fit-friends-1/shared/app-types';
@@ -93,6 +93,7 @@ export class CreateUserDto {
     example: 'бег, бокс'
   })
   @Transform(({ obj }) => obj.trainingTypes.split(','))
+  @IsArray()
   @IsEnum(TrainingType, {
     each: true,
   })
