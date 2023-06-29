@@ -14,7 +14,8 @@ export class UserRepository {
 
   public async create(item: UserEntity): Promise<User> {
     const newUser = new this.userModel(item);
-    return newUser.save();
+    const user = await newUser.save();
+    return this.findById(user._id);
   }
 
   public async destroy(id: string): Promise<void> {
@@ -23,7 +24,8 @@ export class UserRepository {
 
   public async findById(id: string): Promise<User | null> {
     return this.userModel
-      .findOne({ _id: id })
+      .findById(id)
+      .populate('certificate', 'avatar')
       .exec();
   }
 
@@ -40,6 +42,8 @@ export class UserRepository {
   }
 
   public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: UserQuery): Promise<User[]> {
+    console.log(limit);
+    console.log(page);
     return this.userModel
       .find(Object.assign(
         location ? { location } : {},
@@ -47,8 +51,9 @@ export class UserRepository {
         trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {}
       ))
       .sort([[category, sortDirection]])
-      .skip(page * limit)
-      .limit(limit)
+      //t .skip(page * limit)
+      //t .limit(limit)
+      .populate('certificate', 'avatar')
       .exec();
   }
 }

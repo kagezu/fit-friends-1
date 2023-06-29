@@ -1,6 +1,6 @@
 import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { TokenPayload, User } from '@fit-friends-1/shared/app-types';
+import { TokenPayload, User, UserFiles, UserRole } from '@fit-friends-1/shared/app-types';
 import { UserEntity } from '../user/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserRepository } from '../user/user.repository';
@@ -11,10 +11,12 @@ import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { createJWTPayload } from '@fit-friends-1/util/util-core';
 import * as crypto from 'node:crypto';
 import { MAX_TRAINING_TYPES, UserMassage } from './auth.constant';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly fileService: FileService,
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
@@ -22,8 +24,8 @@ export class AuthService {
   ) { }
 
   /** Регистрация пользователя*/
-  public async register(dto: CreateUserDto) {
-    const { email, password } = dto;
+  public async register(dto: CreateUserDto, { avatar, certificate }: UserFiles) {
+    const { role, email, password } = dto;
 
     const user = {
       ...dto,
@@ -36,8 +38,18 @@ export class AuthService {
     if (existUser) {
       throw new ConflictException(UserMassage.EmailExists);
     }
-
     const userEntity = await new UserEntity(user).setPassword(password);
+
+    if (avatar[0]) {
+      const document = await this.fileService.save(avatar[0]);
+      userEntity.avatar = document._id;
+    }
+
+    if (role === UserRole.Coach) {
+      const document = await this.fileService.save(certificate[0]);
+      userEntity.certificate = document._id;
+    }
+
     return this.userRepository.create(userEntity);
   }
 

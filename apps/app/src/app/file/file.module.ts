@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { FileService } from './file.service';
-import { FileController } from './file.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigService } from '@nestjs/config';
 import { FileRepository } from './file.repository';
@@ -29,6 +28,6 @@ import { FileModel, FileSchema } from './file.model';
     ])
   ],
   providers: [FileService, FileRepository],
-  controllers: [FileController]
+  exports: [FileService]
 })
 export class FileModule { }

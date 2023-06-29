@@ -10,6 +10,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
 import { JwtUserStrategy } from './strategies/jwt-user.strategy';
 import { JwtCoachStrategy } from './strategies/jwt-coach.strategy';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { JwtCoachStrategy } from './strategies/jwt-coach.strategy';
       inject: [ConfigService],
       useFactory: getJwtOptions
     }),
-    RefreshTokenModule
+    RefreshTokenModule,
+    FileModule
   ],
   controllers: [AuthenticationController],
   providers: [

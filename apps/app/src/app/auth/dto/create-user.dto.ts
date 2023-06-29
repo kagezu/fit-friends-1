@@ -1,7 +1,8 @@
-import { IsArray, IsBoolean, IsEmail, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserMassage, UserValidate } from '../auth.constant';
 import { Gender, TrainingLevel, TrainingType, UserRole, userBackgrounds, intervals, locations } from '@fit-friends-1/shared/app-types';
+import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -20,14 +21,6 @@ export class CreateUserDto {
   })
   @IsEmail({}, { message: UserMassage.EmailNotValid })
   email: string;
-
-  @ApiProperty({
-    description: 'Аватар пользователя',
-    example: 'ivan.jpg',
-  })
-  @IsString()
-  @IsOptional()
-  avatar?: string;
 
   @ApiProperty({
     description: 'Пароль пользователя',
@@ -97,14 +90,13 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Тип тренировок.Допустимые значения: йога, бег, бокс, стрейчинг, кроссфит, аэробика, пилатес',
-    example: 'Звёздная'
+    example: 'бег, бокс'
   })
-  @IsArray()
+  @Transform(({ obj }) => obj.trainingTypes.split(','))
   @IsEnum(TrainingType, {
     each: true,
   })
   trainingTypes: string[];
-
 
   @ApiProperty({
     description: 'Время на тренировку.',
@@ -120,6 +112,7 @@ export class CreateUserDto {
     example: '2000'
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
+  @Transform(({ obj }) => +obj.caloriesToBurn)
   @IsInt()
   @Min(UserValidate.minCaloriesToBurn, { message: `caloriesToBurn: ${UserMassage.ValueTooLittle}` })
   @Max(UserValidate.maxCaloriesToBurn, { message: `caloriesToBurn: ${UserMassage.ValueTooBig}` })
@@ -130,6 +123,7 @@ export class CreateUserDto {
     example: '1000'
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
+  @Transform(({ obj }) => +obj.caloriesPerDay)
   @IsInt()
   @Min(UserValidate.minCaloriesPerDay, { message: `caloriesPerDay: ${UserMassage.ValueTooLittle}` })
   @Max(UserValidate.maxCaloriesPerDay, { message: `caloriesPerDay: ${UserMassage.ValueTooBig}` })
@@ -139,18 +133,10 @@ export class CreateUserDto {
     description: 'Готовность к тренировке.',
     example: 'true'
   })
+  @Transform(({ obj }) => obj.readyForTraining === 'true')
   @ValidateIf((obj) => obj.role === UserRole.User)
   @IsBoolean()
   readyForTraining: boolean;
-
-
-  @ApiProperty({
-    description: 'Сертификат тренера, pdf-файл.',
-    example: 'certificate.pdf',
-  })
-  @ValidateIf((obj) => obj.role === UserRole.Coach)
-  @IsString()
-  certificate: string;
 
   @ApiProperty({
     description: 'Текст с описанием заслуг тренера.',
@@ -161,12 +147,13 @@ export class CreateUserDto {
   @MinLength(UserValidate.minLengthMeritsOfCoach)
   @MaxLength(UserValidate.maxLengthMeritsOfCoach)
   @IsOptional()
-  meritsOfCoach?: string;
+  resume?: string;
 
   @ApiProperty({
     description: 'Флаг готовности проводить индивидуальные тренировки.',
     example: 'false'
   })
+  @Transform(({ obj }) => obj.readyForIndividualTraining === 'true')
   @ValidateIf((obj) => obj.role === UserRole.Coach)
   @IsBoolean()
   readyForIndividualTraining: boolean;

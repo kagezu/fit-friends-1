@@ -26,7 +26,7 @@ export class UserQuery {
   @IsEnum(TrainingLevel)
   public trainingLevel?: string;
 
-  @Transform(({ value }) => value.split(','))//t .filter((count) => Object.values(TrainingType).some((elem) => elem == count)))
+  @Transform(({ value }) => value.split(','))
   @IsEnum(TrainingType, {
     each: true
   })

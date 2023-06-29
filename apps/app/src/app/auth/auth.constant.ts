@@ -8,6 +8,7 @@ export enum UserMassage {
   BirthNotValid = 'The user date birth is not valid',
   ValueTooBig = 'Value is too big',
   ValueTooLittle = 'Value is too small',
+  CertificateRequired = 'Certificate file is required',
 }
 
 export enum UserValidate {

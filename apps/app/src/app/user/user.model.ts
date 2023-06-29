@@ -11,7 +11,9 @@ export class UserModel extends Document implements User {
   public name: string;
   @Prop()
   public email: string;
-  @Prop()
+  @Prop({
+    ref: 'FileModel'
+  })
   public avatar?: string;
   @Prop()
   public passwordHash: string;
@@ -42,10 +44,12 @@ export class UserModel extends Document implements User {
   @Prop()
   public readyForTraining?: boolean;
 
-  @Prop()
+  @Prop({
+    ref: 'FileModel'
+  })
   public certificate?: string;
   @Prop()
-  public meritsOfCoach?: string;
+  public resume?: string;
   @Prop()
   public readyForIndividualTraining?: boolean;
 }

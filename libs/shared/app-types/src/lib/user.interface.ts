@@ -21,6 +21,6 @@ export interface User {
   readyForTraining?: boolean;
 
   certificate?: string;
-  meritsOfCoach?: string;
+  resume?: string;
   readyForIndividualTraining?: boolean;
 }

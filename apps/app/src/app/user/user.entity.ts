@@ -27,7 +27,7 @@ export class UserEntity implements Entity<User> {
   readyForTraining?: boolean;
 
   certificate?: string;
-  meritsOfCoach?: string;
+  resume?: string;
   readyForIndividualTraining?: boolean;
 
   constructor(user: User) {
@@ -65,7 +65,7 @@ export class UserEntity implements Entity<User> {
 
       case UserRole.Coach:
         this.certificate = user.certificate;
-        this.meritsOfCoach = user.meritsOfCoach;
+        this.resume = user.resume;
         this.readyForIndividualTraining = user.readyForIndividualTraining;
         break;
     }
