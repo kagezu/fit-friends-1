@@ -34,3 +34,5 @@ export class FileModel extends Document implements File {
 }
 
 export const FileSchema = SchemaFactory.createForClass(FileModel);
+
+// FileSchema.virtual('sub', { ref: 'UserModel', localField: '_id', foreignField: 'avatar', });

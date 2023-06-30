@@ -23,9 +23,10 @@ export class UserRepository {
   }
 
   public async findById(id: string): Promise<User | null> {
+    console.log(id);
     return this.userModel
       .findById(id)
-      .populate('certificate', 'avatar')
+      .populate('avatar')
       .exec();
   }
 
@@ -41,7 +42,7 @@ export class UserRepository {
       .exec();
   }
 
-  public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: UserQuery): Promise<User[]> {
+  public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: UserQuery) {//: Promise<User[]> {
     console.log(limit);
     console.log(page);
     return this.userModel

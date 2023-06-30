@@ -2,13 +2,15 @@ import { Entity } from '@fit-friends-1/util/util-types';
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.constant';
 import { User, UserRole } from '@fit-friends-1/shared/app-types';
+import { Types } from 'mongoose';
+
 
 export class UserEntity implements Entity<User> {
   _id?: string;
   name: string;
   email: string;
   passwordHash: string;
-  avatar?: string;
+  avatar?: Types.ObjectId;
   gender: string;
   birthday?: Date;
   role: string;
@@ -25,7 +27,7 @@ export class UserEntity implements Entity<User> {
   caloriesPerDay?: number;
   readyForTraining?: boolean;
 
-  certificate?: string;
+  certificate?: Types.ObjectId;
   resume?: string;
   readyForIndividualTraining?: boolean;
 

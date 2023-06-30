@@ -11,7 +11,7 @@ Authorization: Bearer
 --Register
 Content-Disposition: form-data; name="email"
 
-user17@notfound.local
+user08@notfound.local
 --Register
 Content-Disposition: form-data; name="name"
 

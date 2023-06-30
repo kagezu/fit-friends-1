@@ -1,6 +1,6 @@
 export interface Feedback {
-  author: string;
-  training: string;
+  authorId: string;
+  trainingId: string;
   evaluation: number;
   textFeedback: string;
   createdAt: string;

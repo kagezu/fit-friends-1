@@ -1,4 +1,5 @@
 export interface Training {
+  _id?: string;
   title: string;
   background: string;
   trainingLevel: string;

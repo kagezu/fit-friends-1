@@ -12,6 +12,7 @@ import { createJWTPayload } from '@fit-friends-1/util/util-core';
 import * as crypto from 'node:crypto';
 import { MAX_TRAINING_TYPES, UserMassage } from './auth.constant';
 import { FileService } from '../file/file.service';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -42,15 +43,18 @@ export class AuthService {
 
     if (avatar[0]) {
       const document = await this.fileService.save(avatar[0]);
-      userEntity.avatar = document._id;
+      userEntity.avatar = document._id as unknown as Types.ObjectId;
     }
 
     if (role === UserRole.Coach) {
       const document = await this.fileService.save(certificate[0]);
-      userEntity.certificate = document._id;
+      userEntity.certificate = document._id as unknown as Types.ObjectId;
     }
-
-    return this.userRepository.create(userEntity);
+    const newUser = await this.userRepository.create(userEntity);
+    console.log(newUser);
+    // newUser.avatar = await this.fileService.get(newUser.avatar.toString());
+    // return this.userRepository.create(userEntity);
+    return newUser;
   }
 
   /** Проверка пароля*/

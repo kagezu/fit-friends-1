@@ -29,8 +29,8 @@ export class UserRdo {
     example: 'ivan.jpg',
   })
   @Expose()
-  // @Transform(({ obj }) => obj.avatar.path)
-  avatar: any;
+  @Transform(({ obj }) => obj.avatar.path)
+  avatar: string;
 
   @ApiProperty({
     description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',

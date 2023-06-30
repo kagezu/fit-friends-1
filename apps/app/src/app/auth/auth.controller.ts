@@ -45,6 +45,7 @@ export class AuthenticationController {
 
     const newUser = await this.authService.register(dto, files);
     return fillObject(UserRdo, newUser);
+    //t return newUser;
   }
 
   /** Вход пользователя*/
