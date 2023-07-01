@@ -8,7 +8,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RequestWithUser, UserFiles } from '@fit-friends-1/shared/app-types';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-import { UserMassage } from './auth.constant';
+import { UserMessage } from './auth.constant';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { FileValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 
@@ -40,12 +40,11 @@ export class AuthenticationController {
   ) {
     const payload = await this.authService.verifyToken(authorization);
     if (payload) {
-      throw new BadRequestException(UserMassage.AuthorizedUser);
+      throw new BadRequestException(UserMessage.AuthorizedUser);
     }
 
     const newUser = await this.authService.register(dto, files);
     return fillObject(UserRdo, newUser);
-    //t return newUser;
   }
 
   /** Вход пользователя*/
@@ -63,7 +62,7 @@ export class AuthenticationController {
   public async login(@Body() dto: LoginUserDto, @Headers('authorization') authorization: string) {
     const payload = await this.authService.verifyToken(authorization);
     if (payload) {
-      throw new BadRequestException(UserMassage.AuthorizedUser);
+      throw new BadRequestException(UserMessage.AuthorizedUser);
     }
     const verifiedUser = await this.authService.verify(dto);
     const loggedUser = await this.authService.createToken(verifiedUser);

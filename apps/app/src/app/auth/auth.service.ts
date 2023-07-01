@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TokenPayload, User, UserFiles, UserRole } from '@fit-friends-1/shared/app-types';
 import { UserEntity } from '../user/user.entity';
@@ -10,9 +10,8 @@ import { ConfigType } from '@nestjs/config';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { createJWTPayload } from '@fit-friends-1/util/util-core';
 import * as crypto from 'node:crypto';
-import { MAX_TRAINING_TYPES, UserMassage } from './auth.constant';
+import { MAX_TRAINING_TYPES, UserMessage } from './auth.constant';
 import { FileService } from '../file/file.service';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +24,7 @@ export class AuthService {
   ) { }
 
   /** Регистрация пользователя*/
-  public async register(dto: CreateUserDto, { avatar, certificate }: UserFiles) {
+  public async register(dto: CreateUserDto, files: UserFiles) {
     const { role, email, password } = dto;
 
     const user = {
@@ -37,24 +36,24 @@ export class AuthService {
 
     const existUser = await this.userRepository.findByEmail(email);
     if (existUser) {
-      throw new ConflictException(UserMassage.EmailExists);
+      throw new ConflictException(UserMessage.EmailExists);
     }
     const userEntity = await new UserEntity(user).setPassword(password);
 
-    if (avatar[0]) {
-      const document = await this.fileService.save(avatar[0]);
-      userEntity.avatar = document._id as unknown as Types.ObjectId;
+    if (files?.avatar[0]) {
+      const document = await this.fileService.save(files?.avatar[0]);
+      userEntity.avatar = document._id;
     }
 
     if (role === UserRole.Coach) {
-      const document = await this.fileService.save(certificate[0]);
-      userEntity.certificate = document._id as unknown as Types.ObjectId;
+      if (!files?.certificate[0]) {
+        throw new BadRequestException('отсутствует сертификат');
+      }
+      const document = await this.fileService.save(files?.certificate[0]);
+      userEntity.certificate = document._id;
     }
-    const newUser = await this.userRepository.create(userEntity);
-    console.log(newUser);
-    // newUser.avatar = await this.fileService.get(newUser.avatar.toString());
-    // return this.userRepository.create(userEntity);
-    return newUser;
+
+    return this.userRepository.create(userEntity);
   }
 
   /** Проверка пароля*/
@@ -62,12 +61,12 @@ export class AuthService {
     const { email, password } = dto;
     const existUser = await this.userRepository.findByEmail(email);
     if (!existUser) {
-      throw new NotFoundException(UserMassage.NotFound);
+      throw new NotFoundException(UserMessage.NotFound);
     }
 
     const userEntity = new UserEntity(existUser);
     if (!await userEntity.comparePassword(password)) {
-      throw new UnauthorizedException(UserMassage.PasswordWrong);
+      throw new UnauthorizedException(UserMessage.PasswordWrong);
     }
 
     return userEntity.toObject();

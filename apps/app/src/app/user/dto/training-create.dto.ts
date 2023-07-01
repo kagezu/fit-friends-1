@@ -38,7 +38,7 @@ export class TrainingCreateDto {
   })
   @IsString()
   @IsEnum(TrainingType)
-  trainingType: string;
+  trainingTypes: string;
 
   @ApiProperty({
     description: 'Время на тренировку.',

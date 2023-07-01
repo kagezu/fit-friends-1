@@ -23,10 +23,9 @@ export class UserRepository {
   }
 
   public async findById(id: string): Promise<User | null> {
-    console.log(id);
     return this.userModel
       .findById(id)
-      .populate('avatar')
+      .populate(['certificate', 'avatar'])
       .exec();
   }
 
@@ -39,12 +38,11 @@ export class UserRepository {
   public async update(id: string, item: UserEntity): Promise<User> {
     return this.userModel
       .findByIdAndUpdate(id, item.toObject(), { new: true })
+      .populate(['certificate', 'avatar'])
       .exec();
   }
 
-  public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: UserQuery) {//: Promise<User[]> {
-    console.log(limit);
-    console.log(page);
+  public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: UserQuery): Promise<User[]> {
     return this.userModel
       .find(Object.assign(
         location ? { location } : {},
@@ -52,9 +50,9 @@ export class UserRepository {
         trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {}
       ))
       .sort([[category, sortDirection]])
-      //t .skip(page * limit)
-      //t .limit(limit)
-      .populate('certificate', 'avatar')
+      .skip(page * limit)
+      .limit(limit)
+      .populate(['certificate', 'avatar'])
       .exec();
   }
 }

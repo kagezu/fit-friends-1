@@ -1,4 +1,4 @@
-export enum UserMassage {
+export enum UserMessage {
   NotFound = 'User not found',
   EmailExists = 'User with this email exists',
   PasswordWrong = 'User password is wrong',

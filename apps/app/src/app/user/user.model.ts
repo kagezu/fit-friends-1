@@ -1,8 +1,6 @@
-import { Document, Types, SchemaTypes } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from '@fit-friends-1/shared/app-types';
-import { FileModel } from '../file/file.model';
-import { File } from '@fit-friends-1/shared/app-types';
 
 @Schema({
   collection: 'users',
@@ -17,7 +15,7 @@ export class UserModel extends Document implements User {
     ref: 'FileModel',
     type: SchemaTypes.ObjectId
   })
-  public avatar?: Types.ObjectId;
+  public avatar?: string;
   @Prop()
   public passwordHash: string;
   @Prop()
@@ -51,7 +49,7 @@ export class UserModel extends Document implements User {
     ref: 'FileModel',
     type: SchemaTypes.ObjectId
   })
-  public certificate?: Types.ObjectId;
+  public certificate?: string;
   @Prop()
   public resume?: string;
   @Prop()

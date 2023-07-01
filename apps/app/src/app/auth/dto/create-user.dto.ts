@@ -1,6 +1,6 @@
 import { IsArray, IsBoolean, IsEmail, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserMassage, UserValidate } from '../auth.constant';
+import { UserMessage, UserValidate } from '../auth.constant';
 import { Gender, TrainingLevel, TrainingType, UserRole, userBackgrounds, intervals, locations } from '@fit-friends-1/shared/app-types';
 import { Transform } from 'class-transformer';
 
@@ -12,14 +12,14 @@ export class CreateUserDto {
   @IsString()
   @MinLength(UserValidate.minLengthName)
   @MaxLength(UserValidate.maxLengthName)
-  @Matches('^([а-яё]+|[a-z]+)$', 'i', { message: UserMassage.NameNotValid })
+  @Matches('^([а-яё]+|[a-z]+)$', 'i', { message: UserMessage.NameNotValid })
   name: string;
 
   @ApiProperty({
     description: 'Уникальный адрес электронной почты',
     example: 'user@user.ru',
   })
-  @IsEmail({}, { message: UserMassage.EmailNotValid })
+  @IsEmail({}, { message: UserMessage.EmailNotValid })
   email: string;
 
   @ApiProperty({
@@ -43,7 +43,7 @@ export class CreateUserDto {
     description: 'День рождения пользователя',
     example: '1981-03-12',
   })
-  @IsISO8601({}, { message: UserMassage.BirthNotValid })
+  @IsISO8601({}, { message: UserMessage.BirthNotValid })
   @IsOptional()
   birthday?: Date;
 
@@ -115,8 +115,8 @@ export class CreateUserDto {
   @ValidateIf((obj) => obj.role === UserRole.User)
   @Transform(({ obj }) => +obj.caloriesToBurn)
   @IsInt()
-  @Min(UserValidate.minCaloriesToBurn, { message: `caloriesToBurn: ${UserMassage.ValueTooLittle}` })
-  @Max(UserValidate.maxCaloriesToBurn, { message: `caloriesToBurn: ${UserMassage.ValueTooBig}` })
+  @Min(UserValidate.minCaloriesToBurn, { message: `caloriesToBurn: ${UserMessage.ValueTooLittle}` })
+  @Max(UserValidate.maxCaloriesToBurn, { message: `caloriesToBurn: ${UserMessage.ValueTooBig}` })
   caloriesToBurn: number;
 
   @ApiProperty({
@@ -126,8 +126,8 @@ export class CreateUserDto {
   @ValidateIf((obj) => obj.role === UserRole.User)
   @Transform(({ obj }) => +obj.caloriesPerDay)
   @IsInt()
-  @Min(UserValidate.minCaloriesPerDay, { message: `caloriesPerDay: ${UserMassage.ValueTooLittle}` })
-  @Max(UserValidate.maxCaloriesPerDay, { message: `caloriesPerDay: ${UserMassage.ValueTooBig}` })
+  @Min(UserValidate.minCaloriesPerDay, { message: `caloriesPerDay: ${UserMessage.ValueTooLittle}` })
+  @Max(UserValidate.maxCaloriesPerDay, { message: `caloriesPerDay: ${UserMessage.ValueTooBig}` })
   caloriesPerDay: number;
 
   @ApiProperty({

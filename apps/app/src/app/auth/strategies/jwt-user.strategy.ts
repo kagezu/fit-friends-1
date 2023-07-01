@@ -22,6 +22,6 @@ export class JwtUserStrategy extends PassportStrategy(Strategy, 'jwt-user') {
     if (payload.role !== UserRole.User) {
       throw new UnauthorizedException(`Access only for users with a role: '${UserRole.User}'`);
     }
-    return this.userService.getUser(payload.sub);
+    return this.userService.getUserEntity(payload.email);
   }
 }

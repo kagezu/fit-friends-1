@@ -1,10 +1,8 @@
-import { Types } from 'mongoose';
-
 export interface User {
   _id?: string;
   name: string;
   email: string;
-  avatar?: Types.ObjectId;
+  avatar?: string;
   passwordHash: string;
   gender: string;
   birthday?: Date;
@@ -22,7 +20,7 @@ export interface User {
   caloriesPerDay?: number;
   readyForTraining?: boolean;
 
-  certificate?: Types.ObjectId;
+  certificate?: string;
   resume?: string;
   readyForIndividualTraining?: boolean;
 }

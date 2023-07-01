@@ -28,6 +28,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
     }
 
     await this.refreshTokenService.deleteRefreshSession(payload.tokenId);
-    return this.userService.getUser(payload.sub);
+    return this.userService.getUserEntity(payload.email);
   }
 }

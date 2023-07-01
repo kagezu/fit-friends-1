@@ -10,17 +10,17 @@ const avatarExtensions = ['jpeg', 'png'];
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
   transform(files: UserFiles) {
-    const { certificate, avatar } = files;
-    if (certificate && CERTIFICATE_EXTENSION !== extension(certificate[0].mimetype)) {
+    if (!files) { return; }
+    if (files.certificate && CERTIFICATE_EXTENSION !== extension(files.certificate[0].mimetype)) {
       throw new BadRequestException('Certificate invalid mimetype');
     }
 
-    if (avatar) {
-      if (MAX_LIMIT_FILE_SIZE < avatar[0].size) {
+    if (files.avatar) {
+      if (MAX_LIMIT_FILE_SIZE < files.avatar[0].size) {
         throw new PayloadTooLargeException(`Avatar must not be larger than ${MAX_LIMIT_FILE_SIZE} bytes`);
       }
 
-      const avatarExtension = extension(avatar[0].mimetype);
+      const avatarExtension = extension(files.avatar[0].mimetype);
       if (!avatarExtensions.some((item) => item === avatarExtension)) {
         throw new BadRequestException('Avatar invalid mimetype');
       }

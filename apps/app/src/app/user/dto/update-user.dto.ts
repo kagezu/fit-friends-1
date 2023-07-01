@@ -1,141 +1,142 @@
+import { IsArray, IsBoolean, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
+import { Gender, TrainingLevel, TrainingType, userBackgrounds, intervals, locations } from '@fit-friends-1/shared/app-types';
+import { Transform } from 'class-transformer';
+import { UserMessage, UserValidate } from '../../auth/auth.constant';
 
-export class UserRdo {
-  @ApiProperty({
-    description: 'Идентификатор пользователя',
-    example: '6497e4e84c024e968c12fc9c'
-  })
-  @Expose({ name: '_id' })
-  @Transform(({ obj }) => obj._id.toString())
-  public id: string;
-
+export class UpdateUserDto {
   @ApiProperty({
     description: 'Имя пользователя',
     example: 'Иван',
   })
-  @Expose()
+  @IsString()
+  @MinLength(UserValidate.minLengthName)
+  @MaxLength(UserValidate.maxLengthName)
+  @Matches('^([а-яё]+|[a-z]+)$', 'i', { message: UserMessage.NameNotValid })
+  @IsOptional()
   name: string;
-
-  @ApiProperty({
-    description: 'Уникальный адрес электронной почты',
-    example: 'user@user.ru',
-  })
-  @Expose()
-  email: string;
-
-  @ApiProperty({
-    description: 'Аватар пользователя',
-    example: 'ivan.jpg',
-  })
-  @Expose()
-  @Transform(({ obj }) => obj.avatar?.path)
-  avatar: string;
 
   @ApiProperty({
     description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',
     example: 'неважно'
   })
-  @Expose()
+  @IsString()
+  @IsEnum(Gender)
+  @IsOptional()
   gender: string;
 
   @ApiProperty({
     description: 'День рождения пользователя',
     example: '1981-03-12',
   })
-  @Expose()
-  birthday?: Date;
-
-  @ApiProperty({
-    description: 'Роль пользователя.Доступные роли тренер и пользователь.',
-    example: 'тренер'
-  })
-  @Expose()
-  role: string;
+  @IsISO8601({}, { message: UserMessage.BirthNotValid })
+  @IsOptional()
+  birthday: Date;
 
   @ApiProperty({
     description: 'Текст с общей информацией.'
   })
-  @Expose()
-  description?: string;
+  @IsString()
+  @MinLength(UserValidate.minLengthDescription)
+  @MaxLength(UserValidate.maxLengthDescription)
+  @IsOptional()
+  description: string;
 
   @ApiProperty({
     description: 'Одна из станций: «Пионерская», «Петроградская», «Удельная», «Звёздная», «Спортивная».',
     example: 'Звёздная'
   })
-  @Expose()
+  @IsString()
+  @IsIn(locations)
+  @IsOptional()
   location: string;
 
   @ApiProperty({
     description: 'Фоновая картинка для карточки пользователя.',
     example: 'training-1.png'
   })
-  @Expose()
+  @IsString()
+  @IsIn(userBackgrounds)
+  @IsOptional()
   background: string;
 
   @ApiProperty({
     description: 'Уровень физической подготовки пользователя.Допустимые значения: новичок, любитель, профессионал.',
     example: 'любитель'
   })
-  @Expose()
+  @IsString()
+  @IsEnum(TrainingLevel)
+  @IsOptional()
   trainingLevel: string;
 
   @ApiProperty({
     description: 'Тип тренировок.Допустимые значения: йога, бег, бокс, стрейчинг, кроссфит, аэробика, пилатес',
-    example: 'Звёздная'
+    example: 'бег, бокс'
   })
-  @Expose()
+  @Transform(({ obj }) => obj.trainingTypes.split(','))
+  @IsArray()
+  @IsEnum(TrainingType, {
+    each: true,
+  })
+  @IsOptional()
   trainingTypes: string[];
-
 
   @ApiProperty({
     description: 'Время на тренировку.',
     example: '30-50 мин'
   })
-  @Expose()
+  @IsString()
+  @IsIn(intervals)
+  @IsOptional()
   interval: string;
 
   @ApiProperty({
     description: 'Количество калорий для сброса.',
     example: '2000'
   })
-  @Expose()
+  @Transform(({ obj }) => +obj.caloriesToBurn)
+  @IsInt()
+  @Min(UserValidate.minCaloriesToBurn, { message: `caloriesToBurn: ${UserMessage.ValueTooLittle}` })
+  @Max(UserValidate.maxCaloriesToBurn, { message: `caloriesToBurn: ${UserMessage.ValueTooBig}` })
+  @IsOptional()
   caloriesToBurn: number;
 
   @ApiProperty({
     description: 'Количество калорий для траты в день.',
     example: '1000'
   })
-  @Expose()
+  @Transform(({ obj }) => +obj.caloriesPerDay)
+  @IsInt()
+  @Min(UserValidate.minCaloriesPerDay, { message: `caloriesPerDay: ${UserMessage.ValueTooLittle}` })
+  @Max(UserValidate.maxCaloriesPerDay, { message: `caloriesPerDay: ${UserMessage.ValueTooBig}` })
+  @IsOptional()
   caloriesPerDay: number;
 
   @ApiProperty({
     description: 'Готовность к тренировке.',
     example: 'true'
   })
-  @Expose()
+  @Transform(({ obj }) => obj.readyForTraining === 'true')
+  @IsBoolean()
+  @IsOptional()
   readyForTraining: boolean;
-
-
-  @ApiProperty({
-    description: 'Сертификат тренера, pdf-файл.',
-    example: 'certificate.pdf',
-  })
-  @Expose()
-  @Transform(({ obj }) => obj.certificate?.path)
-  certificate: string;
 
   @ApiProperty({
     description: 'Текст с описанием заслуг тренера.',
     example: 'certificate.pdf',
   })
-  @Expose()
+  @IsString()
+  @MinLength(UserValidate.minLengthMeritsOfCoach)
+  @MaxLength(UserValidate.maxLengthMeritsOfCoach)
+  @IsOptional()
   resume?: string;
 
   @ApiProperty({
     description: 'Флаг готовности проводить индивидуальные тренировки.',
     example: 'false'
   })
-  @Expose()
+  @Transform(({ obj }) => obj.readyForIndividualTraining === 'true')
+  @IsBoolean()
+  @IsOptional()
   readyForIndividualTraining: boolean;
 }

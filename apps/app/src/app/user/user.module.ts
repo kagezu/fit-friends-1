@@ -5,12 +5,14 @@ import { UserRepository } from './user.repository';
 import { ConfigModule } from '@nestjs/config';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: UserModel.name, schema: UserSchema }
   ]),
-    ConfigModule
+    ConfigModule,
+    FileModule
   ],
   providers: [
     UserRepository,
