@@ -11,7 +11,7 @@ Authorization: Bearer
 --Register
 Content-Disposition: form-data; name="email"
 
-user01@notfound.local
+user06@notfound.local
 --Register
 Content-Disposition: form-data; name="name"
 
@@ -47,23 +47,23 @@ training-4.png
 --Register
 Content-Disposition: form-data; name="trainingLevel"
 
-любитель
+новичок
 --Register
 Content-Disposition: form-data; name="trainingTypes"
 
-бег,бокс,бег,бокс
+бокс,стрейчинг
 --Register
 Content-Disposition: form-data; name="interval"
 
-50-80 мин
+30-50 мин
 --Register
 Content-Disposition: form-data; name="caloriesToBurn"
 
-4000
+3000
 --Register
 Content-Disposition: form-data; name="caloriesPerDay"
 
-1000
+1150
 --Register
 Content-Disposition: form-data; name="readyForTraining"
 
@@ -75,6 +75,75 @@ Content-Type: image/png
 < ../../../../../../test/photo-1.png
 --Register--
 
+
+#### Create a new user (role = тренер)
+POST {{baseUrl}}/auth/register {{protocol}}
+Content-Type: multipart/form-data; boundary=Register
+Authorization: Bearer 
+
+--Register
+Content-Disposition: form-data; name="email"
+
+user12@notfound.local
+--Register
+Content-Disposition: form-data; name="name"
+
+Smith
+--Register
+Content-Disposition: form-data; name="password"
+
+123456
+--Register
+Content-Disposition: form-data; name="gender"
+
+мужской
+--Register
+Content-Disposition: form-data; name="birthday"
+
+2012-02-22
+--Register
+Content-Disposition: form-data; name="role"
+
+тренер
+--Register
+Content-Disposition: form-data; name="description"
+
+Текст с общей информацией. Минимальная длина 10 символ. Максимальная длина: 140 символов.
+--Register
+Content-Disposition: form-data; name="location"
+
+Спортивная
+--Register
+Content-Disposition: form-data; name="background"
+
+training-4.png
+--Register
+Content-Disposition: form-data; name="trainingLevel"
+
+профессионал
+--Register
+Content-Disposition: form-data; name="trainingTypes"
+
+аэробика,пилатес
+--Register
+Content-Disposition: form-data; name="resume"
+
+Заслуги тренера.
+--Register
+Content-Disposition: form-data; name="readyForIndividualTraining"
+
+true
+--Register
+Content-Disposition: form-data; name="avatar"; filename="photo-1.png"
+Content-Type: image/png
+
+< ../../../../../../test/photo-1.png
+--Register
+Content-Disposition: form-data; name="certificate"; filename="1.pdf"
+Content-Type: application/pdf
+
+< ../../../../../../test/1.pdf
+--Register--
 
 ###
 

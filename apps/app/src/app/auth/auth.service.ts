@@ -46,10 +46,10 @@ export class AuthService {
     }
 
     if (role === UserRole.Coach) {
-      if (!files?.certificate[0]) {
+      if (!files?.certificate) {
         throw new BadRequestException('отсутствует сертификат');
       }
-      const document = await this.fileService.save(files?.certificate[0]);
+      const document = await this.fileService.save(files.certificate[0]);
       userEntity.certificate = document._id;
     }
 

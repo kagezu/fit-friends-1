@@ -66,7 +66,7 @@ export class UserEntity implements Entity<User> {
       case UserRole.Coach:
         this.certificate = user.certificate;
         this.resume = user.resume;
-        this.readyForIndividualTraining = user.readyForIndividualTraining;
+        this.readyForIndividualTraining = user.readyForIndividualTraining ?? false;
         break;
     }
   }

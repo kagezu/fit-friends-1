@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { UserQuery } from './query/user.query';
 import { plainToInstance } from 'class-transformer';
@@ -22,7 +22,11 @@ export class UserService {
 
   /** Информация о пользователе */
   public async getUserEntity(email: string) {
-    return new UserEntity(await this.userRepository.findByEmail(email));
+    const existUser = await this.userRepository.findByEmail(email);
+    if (!existUser) {
+      throw new NotFoundException('Пользователь не существует');
+    }
+    return new UserEntity(existUser);
   }
 
   /** Список пользователей */

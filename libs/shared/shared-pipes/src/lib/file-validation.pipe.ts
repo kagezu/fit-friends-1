@@ -10,7 +10,10 @@ const avatarExtensions = ['jpeg', 'png'];
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
   transform(files: UserFiles) {
-    if (!files) { return; }
+    if (!files) {
+      return;
+    }
+
     if (files.certificate && CERTIFICATE_EXTENSION !== extension(files.certificate[0].mimetype)) {
       throw new BadRequestException('Certificate invalid mimetype');
     }

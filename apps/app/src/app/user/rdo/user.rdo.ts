@@ -138,4 +138,11 @@ export class UserRdo {
   })
   @Expose()
   readyForIndividualTraining: boolean;
+
+  @ApiProperty({
+    description: 'Дата регистрации',
+    example: '10.04.2023'
+  })
+  @Expose()
+  createdAt: Date;
 }
