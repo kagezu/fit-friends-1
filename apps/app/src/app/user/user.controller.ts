@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Param, UseGuards, Query, Body, UploadedFiles, UseInterceptors, Patch, Req } from '@nestjs/common';
 import { fillObject } from '@fit-friends-1/util/util-core';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiOkResponse, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserRdo } from './rdo/user.rdo';
 import { UserService } from './user.service';
@@ -10,6 +10,7 @@ import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { UserFiles } from '@fit-friends-1/shared/app-types';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserFilesUploadDto } from '../auth/dto/user-files-upload.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -19,10 +20,14 @@ export class UserController {
   ) { }
 
   /** Информация о пользователе*/
-  @ApiResponse({
+  @ApiOkResponse({
     type: UserRdo,
-    status: HttpStatus.OK,
     description: 'User found'
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -33,10 +38,18 @@ export class UserController {
   }
 
   /** Список пользователей */
-  @ApiResponse({
-    type: Array<UserRdo>,
-    status: HttpStatus.OK,
+  @ApiOkResponse({
+    type: [UserRdo],
     description: 'User found'
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @ApiQuery({
+    description: 'Query options',
+    type: UserQuery
   })
   @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.OK)
@@ -47,13 +60,20 @@ export class UserController {
   }
 
   /** Обновление информации о пользователе */
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'The new user has been successfully created.'
+  @ApiCreatedResponse({
+    type: UserRdo,
+    description: 'The new user has been successfully updated.'
   })
-  @ApiResponse({
-    status: HttpStatus.CONFLICT,
-    description: 'The user exist.'
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBadRequestResponse({ description: 'Bad request.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiQuery({
+    description: 'Attached files',
+    type: UserFilesUploadDto
+  })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)

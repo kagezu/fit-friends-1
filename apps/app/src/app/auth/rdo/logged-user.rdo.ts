@@ -19,15 +19,13 @@ export class LoggedUserRdo {
   public email: string;
 
   @ApiProperty({
-    description: 'Access token',
-    example: 'e1769d10-b6d7-49d9-81b4-e9c1ada05f5e'
+    description: 'Access token'
   })
   @Expose()
   public accessToken: string;
 
   @ApiProperty({
-    description: 'Access token',
-    example: 'e1769d10-b6d7-49d9-81b4-e9c1ada05f5e'
+    description: 'Access token'
   })
   @Expose()
   public refreshToken: string;

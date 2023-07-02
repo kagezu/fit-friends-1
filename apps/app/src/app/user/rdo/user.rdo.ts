@@ -1,3 +1,4 @@
+import { Gender, TrainingLevel, TrainingType, UserRole, intervals, locations } from '@fit-friends-1/shared/app-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
@@ -33,8 +34,9 @@ export class UserRdo {
   avatar: string;
 
   @ApiProperty({
-    description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',
-    example: 'неважно'
+    description: 'Пол пользователя.',
+    example: 'неважно',
+    enum: Gender
   })
   @Expose()
   gender: string;
@@ -47,8 +49,9 @@ export class UserRdo {
   birthday?: Date;
 
   @ApiProperty({
-    description: 'Роль пользователя.Доступные роли тренер и пользователь.',
-    example: 'тренер'
+    description: 'Роль пользователя.',
+    example: 'тренер',
+    enum: UserRole
   })
   @Expose()
   role: string;
@@ -60,8 +63,9 @@ export class UserRdo {
   description?: string;
 
   @ApiProperty({
-    description: 'Одна из станций: «Пионерская», «Петроградская», «Удельная», «Звёздная», «Спортивная».',
-    example: 'Звёздная'
+    description: 'Одна из станций.',
+    example: 'Звёздная',
+    enum: locations
   })
   @Expose()
   location: string;
@@ -74,15 +78,17 @@ export class UserRdo {
   background: string;
 
   @ApiProperty({
-    description: 'Уровень физической подготовки пользователя.Допустимые значения: новичок, любитель, профессионал.',
-    example: 'любитель'
+    description: 'Уровень физической подготовки пользователя.',
+    example: 'любитель',
+    enum: TrainingLevel
   })
   @Expose()
   trainingLevel: string;
 
   @ApiProperty({
-    description: 'Тип тренировок.Допустимые значения: йога, бег, бокс, стрейчинг, кроссфит, аэробика, пилатес',
-    example: 'Звёздная'
+    description: 'Тип тренировок.',
+    example: '["бег", "бокс"]',
+    enum: [TrainingType]
   })
   @Expose()
   trainingTypes: string[];
@@ -90,7 +96,8 @@ export class UserRdo {
 
   @ApiProperty({
     description: 'Время на тренировку.',
-    example: '30-50 мин'
+    example: '30-50 мин',
+    enum: intervals
   })
   @Expose()
   interval: string;
@@ -126,8 +133,7 @@ export class UserRdo {
   certificate: string;
 
   @ApiProperty({
-    description: 'Текст с описанием заслуг тренера.',
-    example: 'certificate.pdf',
+    description: 'Текст с описанием заслуг тренера.'
   })
   @Expose()
   resume?: string;

@@ -8,6 +8,9 @@ export class UpdateUserDto {
   @ApiProperty({
     description: 'Имя пользователя',
     example: 'Иван',
+    required: false,
+    minLength: UserValidate.minLengthName,
+    maxLength: UserValidate.maxLengthName
   })
   @IsString()
   @MinLength(UserValidate.minLengthName)
@@ -18,7 +21,9 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',
-    example: 'неважно'
+    example: 'неважно',
+    enum: Gender,
+    required: false
   })
   @IsString()
   @IsEnum(Gender)
@@ -28,13 +33,17 @@ export class UpdateUserDto {
   @ApiProperty({
     description: 'День рождения пользователя',
     example: '1981-03-12',
+    required: false
   })
   @IsISO8601({}, { message: UserMessage.BirthNotValid })
   @IsOptional()
   birthday: Date;
 
   @ApiProperty({
-    description: 'Текст с общей информацией.'
+    description: 'Текст с общей информацией.',
+    required: false,
+    minLength: UserValidate.minLengthDescription,
+    maxLength: UserValidate.maxLengthDescription
   })
   @IsString()
   @MinLength(UserValidate.minLengthDescription)
@@ -43,8 +52,10 @@ export class UpdateUserDto {
   description: string;
 
   @ApiProperty({
-    description: 'Одна из станций: «Пионерская», «Петроградская», «Удельная», «Звёздная», «Спортивная».',
-    example: 'Звёздная'
+    description: 'Одна из станций.',
+    example: 'Звёздная',
+    enum: locations,
+    required: false
   })
   @IsString()
   @IsIn(locations)
@@ -53,7 +64,8 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Фоновая картинка для карточки пользователя.',
-    example: 'training-1.png'
+    example: 'training-1.png',
+    required: false
   })
   @IsString()
   @IsIn(userBackgrounds)
@@ -61,8 +73,10 @@ export class UpdateUserDto {
   background: string;
 
   @ApiProperty({
-    description: 'Уровень физической подготовки пользователя.Допустимые значения: новичок, любитель, профессионал.',
-    example: 'любитель'
+    description: 'Уровень физической подготовки пользователя.',
+    example: 'любитель',
+    enum: TrainingLevel,
+    required: false
   })
   @IsString()
   @IsEnum(TrainingLevel)
@@ -70,8 +84,11 @@ export class UpdateUserDto {
   trainingLevel: string;
 
   @ApiProperty({
-    description: 'Тип тренировок.Допустимые значения: йога, бег, бокс, стрейчинг, кроссфит, аэробика, пилатес',
-    example: 'бег, бокс'
+    description: 'Тип тренировок.',
+    example: 'бег, бокс',
+    type: String,
+    enum: TrainingType,
+    required: false
   })
   @Transform(({ obj }) => obj.trainingTypes.split(','))
   @IsArray()
@@ -83,7 +100,9 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Время на тренировку.',
-    example: '30-50 мин'
+    example: '30-50 мин',
+    enum: intervals,
+    required: false
   })
   @IsString()
   @IsIn(intervals)
@@ -92,7 +111,10 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Количество калорий для сброса.',
-    example: '2000'
+    example: '2000',
+    required: false,
+    minimum: UserValidate.minCaloriesToBurn,
+    maximum: UserValidate.maxCaloriesToBurn
   })
   @Transform(({ obj }) => +obj.caloriesToBurn)
   @IsInt()
@@ -103,7 +125,10 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Количество калорий для траты в день.',
-    example: '1000'
+    example: '1000',
+    required: false,
+    minimum: UserValidate.minCaloriesPerDay,
+    maximum: UserValidate.maxCaloriesPerDay
   })
   @Transform(({ obj }) => +obj.caloriesPerDay)
   @IsInt()
@@ -114,7 +139,8 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Готовность к тренировке.',
-    example: 'true'
+    example: 'true',
+    required: false
   })
   @Transform(({ obj }) => obj.readyForTraining === 'true')
   @IsBoolean()
@@ -124,6 +150,9 @@ export class UpdateUserDto {
   @ApiProperty({
     description: 'Текст с описанием заслуг тренера.',
     example: 'certificate.pdf',
+    required: false,
+    minLength: UserValidate.minLengthMeritsOfCoach,
+    maxLength: UserValidate.maxLengthMeritsOfCoach
   })
   @IsString()
   @MinLength(UserValidate.minLengthMeritsOfCoach)
@@ -133,7 +162,8 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'Флаг готовности проводить индивидуальные тренировки.',
-    example: 'false'
+    example: 'false',
+    required: false
   })
   @Transform(({ obj }) => obj.readyForIndividualTraining === 'true')
   @IsBoolean()

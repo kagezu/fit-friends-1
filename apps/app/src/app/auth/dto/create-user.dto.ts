@@ -8,6 +8,8 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'Имя пользователя',
     example: 'Иван',
+    minLength: UserValidate.minLengthName,
+    maxLength: UserValidate.maxLengthName
   })
   @IsString()
   @MinLength(UserValidate.minLengthName)
@@ -24,7 +26,9 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Пароль пользователя',
-    example: '123456'
+    example: '123456',
+    minLength: UserValidate.minLengthPassword,
+    maxLength: UserValidate.maxLengthPassword
   })
   @IsString()
   @MinLength(UserValidate.minLengthPassword)
@@ -32,8 +36,9 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty({
-    description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',
-    example: 'неважно'
+    description: 'Пол пользователя.',
+    example: 'неважно',
+    enum: Gender
   })
   @IsString()
   @IsEnum(Gender)
@@ -41,22 +46,25 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'День рождения пользователя',
-    example: '1981-03-12',
+    example: '1981-03-12'
   })
   @IsISO8601({}, { message: UserMessage.BirthNotValid })
   @IsOptional()
   birthday?: Date;
 
   @ApiProperty({
-    description: 'Роль пользователя.Доступные роли тренер и пользователь.',
-    example: 'тренер'
+    description: 'Роль пользователя.',
+    example: 'тренер',
+    enum: UserRole
   })
   @IsString()
   @IsEnum(UserRole)
   role: string;
 
   @ApiProperty({
-    description: 'Текст с общей информацией.'
+    description: 'Текст с общей информацией.',
+    minLength: UserValidate.minLengthDescription,
+    maxLength: UserValidate.maxLengthDescription
   })
   @IsString()
   @MinLength(UserValidate.minLengthDescription)
@@ -65,8 +73,9 @@ export class CreateUserDto {
   description?: string;
 
   @ApiProperty({
-    description: 'Одна из станций: «Пионерская», «Петроградская», «Удельная», «Звёздная», «Спортивная».',
-    example: 'Звёздная'
+    description: 'Одна из станций.',
+    example: 'Звёздная',
+    enum: locations
   })
   @IsString()
   @IsIn(locations)
@@ -81,16 +90,19 @@ export class CreateUserDto {
   background: string;
 
   @ApiProperty({
-    description: 'Уровень физической подготовки пользователя.Допустимые значения: новичок, любитель, профессионал.',
-    example: 'любитель'
+    description: 'Уровень физической подготовки пользователя.',
+    example: 'любитель',
+    enum: TrainingLevel
   })
   @IsString()
   @IsEnum(TrainingLevel)
   trainingLevel: string;
 
   @ApiProperty({
-    description: 'Тип тренировок.Допустимые значения: йога, бег, бокс, стрейчинг, кроссфит, аэробика, пилатес',
-    example: 'бег, бокс'
+    description: 'Тип тренировок.',
+    example: 'бег,бокс',
+    type: String,
+    enum: TrainingType
   })
   @Transform(({ obj }) => obj.trainingTypes.split(','))
   @IsArray()
@@ -101,7 +113,8 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Время на тренировку.',
-    example: '30-50 мин'
+    example: '30-50 мин',
+    enum: intervals
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
   @IsString()
@@ -110,7 +123,9 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Количество калорий для сброса.',
-    example: '2000'
+    example: '2000',
+    minimum: UserValidate.minCaloriesToBurn,
+    maximum: UserValidate.maxCaloriesToBurn
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
   @Transform(({ obj }) => +obj.caloriesToBurn)
@@ -121,7 +136,9 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Количество калорий для траты в день.',
-    example: '1000'
+    example: '1000',
+    minimum: UserValidate.minCaloriesPerDay,
+    maximum: UserValidate.maxCaloriesPerDay
   })
   @ValidateIf((obj) => obj.role === UserRole.User)
   @Transform(({ obj }) => +obj.caloriesPerDay)
@@ -141,7 +158,8 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Текст с описанием заслуг тренера.',
-    example: 'certificate.pdf',
+    minLength: UserValidate.minLengthMeritsOfCoach,
+    maxLength: UserValidate.maxLengthMeritsOfCoach
   })
   @ValidateIf((obj) => obj.role === UserRole.Coach)
   @IsString()
@@ -152,7 +170,8 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: 'Флаг готовности проводить индивидуальные тренировки.',
-    example: 'false'
+    example: 'false',
+    required: false
   })
   @Transform(({ obj }) => obj.readyForIndividualTraining === 'true')
   @ValidateIf((obj) => obj.role === UserRole.Coach)
