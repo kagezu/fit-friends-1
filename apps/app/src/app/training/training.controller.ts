@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors, UploadedFile, Req, Patch, Param, NotFoundException, UnauthorizedException, Get } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors, UploadedFile, Req, Patch, Param, NotFoundException, UnauthorizedException, Get, Query } from '@nestjs/common';
 import { fillObject } from '@fit-friends-1/util/util-core';
 import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiNotFoundResponse, ApiOkResponse, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -10,6 +10,7 @@ import { MongoidValidationPipe, VideoValidationPipe } from '@fit-friends-1/share
 import { TrainingUpdateDto } from './dto/training-update.dto';
 import { TrainingEntity } from './training.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TrainingQuery } from './query/trainer.query';
 
 @ApiTags('training')
 @Controller('training')
@@ -103,4 +104,27 @@ export class TrainingController {
     }
     return fillObject(TrainingRdo, existTraining);
   }
+
+  /** Список тренировок */
+  @ApiOkResponse({
+    type: [TrainingRdo],
+    description: 'Training found'
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @ApiQuery({
+    description: 'Query options',
+    type: TrainingQuery
+  })
+  @UseGuards(JwtCoachGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  public async index(@Query() query: TrainingQuery) {
+    // const existUsers = await this.trainingService.index(query);
+    // return fillObject(TrainingRdo, existUsers);
+  }
+
 }

@@ -6,7 +6,7 @@ import { TrainingLevel, TrainingType, locations } from '@fit-friends-1/shared/ap
 export class UserQuery {
   @Transform(({ value }) => +value || QueryOption.DefaultCountLimit)
   @IsInt()
-  @Max(QueryOption.DefaultCountLimit)
+  @Max(QueryOption.MaxCountLimit)
   public limit: number = QueryOption.DefaultCountLimit;
 
   @IsIn(['createdAt', 'role'])

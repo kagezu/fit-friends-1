@@ -4,7 +4,7 @@ import { Training } from '@fit-friends-1/shared/app-types';
 
 @Schema({
   collection: 'trainings',
-  timestamps: false,
+  timestamps: true,
 })
 export class TrainingModel extends Document implements Training {
   @Prop()

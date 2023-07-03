@@ -40,7 +40,7 @@ export class UserController {
   /** Список пользователей */
   @ApiOkResponse({
     type: [UserRdo],
-    description: 'User found'
+    description: 'Users found'
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiHeader({
