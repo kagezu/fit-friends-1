@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigAppModule } from '@fit-friends-1/config/config-app';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { FileModule } from './file/file.module';
+import { TrainingModule } from './training/training.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { FileModule } from './file/file.module';
     ConfigAppModule,
     MongooseModule.forRootAsync(getMongooseOptions()),
     RefreshTokenModule,
+    TrainingModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

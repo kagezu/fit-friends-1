@@ -18,10 +18,6 @@ export class UserRepository {
     return this.findById(user._id);
   }
 
-  public async destroy(id: string): Promise<void> {
-    this.userModel.deleteOne({ _id: id });
-  }
-
   public async findById(id: string): Promise<User | null> {
     return this.userModel
       .findById(id)

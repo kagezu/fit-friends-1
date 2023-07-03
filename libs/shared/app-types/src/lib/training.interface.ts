@@ -5,12 +5,12 @@ export interface Training {
   trainingLevel: string;
   trainingTypes: string;
   interval: string;
-  price: string;
+  price?: number;
   caloriesToBurn: number;
   description: string;
   usersGender: string;
   demoVideo: string;
-  rating: string;
-  coach: string;
-  specialOffer: boolean;
+  rating?: number;
+  coachId: string;
+  specialOffer?: boolean;
 }

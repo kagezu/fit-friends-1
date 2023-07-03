@@ -1,4 +1,4 @@
-import { IsEnum, IsIn, IsInt, IsOptional } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, Max } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { QueryOption } from '../user.constant';
 import { TrainingLevel, TrainingType, locations } from '@fit-friends-1/shared/app-types';
@@ -6,6 +6,7 @@ import { TrainingLevel, TrainingType, locations } from '@fit-friends-1/shared/ap
 export class UserQuery {
   @Transform(({ value }) => +value || QueryOption.DefaultCountLimit)
   @IsInt()
+  @Max(QueryOption.DefaultCountLimit)
   public limit: number = QueryOption.DefaultCountLimit;
 
   @IsIn(['createdAt', 'role'])

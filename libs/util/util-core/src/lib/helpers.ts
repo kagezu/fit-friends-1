@@ -45,3 +45,11 @@ export function getMongoConnectionString(
   }): string {
   return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
 }
+
+export const generateRandomValue = (min: number, max: number, numAfterDigit = 0) =>
+  Number(((Math.random() * (max - min)) + min).toFixed(numAfterDigit));
+
+export const getRandomItem = <T>(items: T[]): T =>
+  items[generateRandomValue(0, items.length - 1)];
+
+//t export const getRandomItems = <T>(items: T[]): T[] => ((items.filter(() => Math.random() < .3) || [getRandomItem<T>(items)]));
