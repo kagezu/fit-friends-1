@@ -27,7 +27,10 @@ export class TrainingModel extends Document implements Training {
   public description: string;
   @Prop()
   public usersGender: string;
-  @Prop()
+  @Prop({
+    ref: 'FileModel',
+    type: SchemaTypes.ObjectId
+  })
   public demoVideo: string;
   @Prop({
     default: 0

@@ -150,10 +150,9 @@ Content-Type: application/pdf
 # Login user by email and password
 POST http://localhost:3333/api/auth/login HTTP/1.1
 Content-Type: {{contentType}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZTRlODRjMDI0ZTk2OGMxMmZjOWMiLCJlbWFpbCI6InVzZXIyQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ItC_0L7Qu9GM0LfQvtCy0LDRgtC10LvRjCIsIm5hbWUiOiJLZWtzIiwiaWF0IjoxNjg3Nzg1Nzk2LCJleHAiOjE2ODc3ODYyMTZ9.MKdcU3ZsrDEvAynpwP2oP6CFwYD1duuOo1emVc4D8qk
 
 {
-  "email": "user00@notfound.local",
+  "email": "user12@notfound.local",
   "password": "123456"
 }
 

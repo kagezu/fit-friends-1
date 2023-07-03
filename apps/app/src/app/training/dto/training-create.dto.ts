@@ -85,7 +85,7 @@ export class TrainingCreateDto {
     description: 'Признак специального предложения.',
     example: 'true'
   })
-  //t @Transform(({ obj }) => obj.specialOffer === 'true')
+  @Transform(({ obj }) => obj.specialOffer === 'true')
   @IsBoolean()
   @IsOptional()
   specialOffer?: boolean;
