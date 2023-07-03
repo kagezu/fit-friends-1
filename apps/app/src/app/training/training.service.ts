@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TrainingRepository } from './training.repository';
 import { TrainingEntity } from './training.entity';
 import { FileService } from '../file/file.service';
 import { TrainingCreateDto } from './dto/training-create.dto';
+import { TrainingUpdateDto } from './dto/training-update.dto';
 
 @Injectable()
 export class TrainingService {
@@ -18,6 +19,9 @@ export class TrainingService {
 
   /** Создание новой тренировки */
   public async create(coachId: string, dto: TrainingCreateDto, video: Express.Multer.File) {
+    if (!video) {
+      throw new BadRequestException('Video file is request');
+    }
     const file = await this.fileService.save(video);
     const training = {
       ...dto,
@@ -29,6 +33,17 @@ export class TrainingService {
     const trainingEntity = new TrainingEntity(training);
 
     return this.trainingRepository.create(trainingEntity);
+  }
+
+  /** Редактирование тренировки */
+  public async update(trainingEntity: TrainingEntity, dto: TrainingUpdateDto, video: Express.Multer.File) {
+    Object.assign(trainingEntity, dto);
+    if (video) {
+      const file = await this.fileService.save(video);
+      trainingEntity.demoVideo = file._id;
+    }
+
+    return this.trainingRepository.update(trainingEntity._id, trainingEntity);
   }
 
   /** Список пользователей 

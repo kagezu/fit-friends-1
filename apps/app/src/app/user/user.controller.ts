@@ -87,7 +87,7 @@ export class UserController {
     @UploadedFiles(new FileValidationPipe()) files: UserFiles,
     @Req() req: Request
   ) {
-    const newUser = await this.userService.update(req['user'], dto, files);
-    return fillObject(UserRdo, newUser);
+    const user = await this.userService.update(req['user'], dto, files);
+    return fillObject(UserRdo, user);
   }
 }

@@ -51,6 +51,22 @@ Content-Type: video/mp4
 --Create--
 
 ###
+# Update training
+PATCH   {{baseUrl}}/training/64a2e6bd72ccb0ea0c37c860 {{protocol}}
+Content-Type: multipart/form-data; boundary=Create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGEwYjVmMjNmMWY0ZDM4MjQxMDk1NTUiLCJlbWFpbCI6InVzZXIxMkBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLRgtGA0LXQvdC10YAiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgzOTY3MDcsImV4cCI6MTY4OTAwMTUwN30.0-qpTtXph3XgrprOeAjj1FqiyCRIMCEnjLJe99062x0
+
+--Create
+Content-Disposition: form-data; name="title"
+
+Разминка 2
+--Create
+Content-Disposition: form-data; name="specialOffer"
+
+true
+--Create--
+
+###
 
 # Get training info
 GET http://localhost:3333/api/training/649f9bfd7974b6f0298bc9a9 HTTP/1.1

@@ -25,27 +25,27 @@ export class TrainingRepository {
       .exec();
   }
 
+  public async update(id: string, item: TrainingEntity): Promise<Training> {
+    return this.trainingModel
+      .findByIdAndUpdate(id, item.toObject(), { new: true })
+      .populate('demoVideo')
+      .exec();
+  }
+
   /*
-    public async update(id: string, item: TrainingEntity): Promise<Training> {
-      return this.TrainingModel
-        .findByIdAndUpdate(id, item.toObject(), { new: true })
-        .populate(['certificate', 'avatar'])
-        .exec();
-    }
-  
-    public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: TrainingQuery): Promise<Training[]> {
-      return this.TrainingModel
-        .find(Object.assign(
-          location ? { location } : {},
-          trainingLevel ? { trainingLevel } : {},
-          trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {}
-        ))
-        .sort([[category, sortDirection]])
-        .skip(page * limit)
-        .limit(limit)
-        .populate(['certificate', 'avatar'])
-        .exec();
-    }
-  
-    */
+   public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: TrainingQuery): Promise<Training[]> {
+     return this.TrainingModel
+       .find(Object.assign(
+         location ? { location } : {},
+         trainingLevel ? { trainingLevel } : {},
+         trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {}
+       ))
+       .sort([[category, sortDirection]])
+       .skip(page * limit)
+       .limit(limit)
+       .populate(['certificate', 'avatar'])
+       .exec();
+   }
+ 
+   */
 }

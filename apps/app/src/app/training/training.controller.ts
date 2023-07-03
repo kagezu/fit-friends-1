@@ -1,12 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors, UploadedFile, Req, Patch, Param, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { fillObject } from '@fit-friends-1/util/util-core';
-import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiNotFoundResponse, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TrainingService } from './training.service';
 import { TrainingCreateDto } from './dto/training-create.dto';
 import { JwtCoachGuard } from '../auth/guards/jwt-coach.guard';
 import { TrainingRdo } from './rdo/training.rdo';
-import { VideoValidationPipe } from '@fit-friends-1/shared/shared-pipes';
+import { MongoidValidationPipe, VideoValidationPipe } from '@fit-friends-1/shared/shared-pipes';
+import { TrainingUpdateDto } from './dto/training-update.dto';
+import { TrainingEntity } from './training.entity';
 
 @ApiTags('training')
 @Controller('training')
@@ -36,8 +38,45 @@ export class TrainingController {
     @Req() req: Request,
     @UploadedFile(VideoValidationPipe) video: Express.Multer.File
   ) {
-    const newTraining = this.trainingService.create(req['user']._id, dto, video);
-    // return newTraining;
+    const newTraining = await this.trainingService.create(req['user']._id, dto, video);
     return fillObject(TrainingRdo, newTraining);
+  }
+
+  /**  Редактирование тренировки */
+  @ApiCreatedResponse({
+    description: 'The new training has been successfully updated.',
+    type: TrainingRdo
+  })
+  @ApiBadRequestResponse({ description: 'Bad request.' })
+  @ApiNotFoundResponse({ description: 'Training not exist.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('video'))
+  @UseGuards(JwtCoachGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Patch(':id')
+  public async update(
+    @Body() dto: TrainingUpdateDto,
+    @Req() req: Request,
+    @UploadedFile(VideoValidationPipe) video: Express.Multer.File,
+    @Param('id', MongoidValidationPipe) id: string
+  ) {
+    const existTraining = await this.trainingService.show(id);
+    if (!existTraining) {
+      throw new NotFoundException('Training not exist');
+    }
+    if (existTraining.coachId.toString() !== req['user']._id.toString()) {
+      throw new UnauthorizedException('Тo editing permissions');
+    }
+    const training = await this.trainingService.update(
+      new TrainingEntity(existTraining),
+      dto,
+      video
+    );
+    return fillObject(TrainingRdo, training);
   }
 }
