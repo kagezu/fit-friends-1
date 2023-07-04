@@ -4,6 +4,7 @@ import { Training } from '@fit-friends-1/shared/app-types';
 import { TrainingModel } from './training.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { TrainingQuery } from './query/trainer.query';
 // import { TrainingQuery } from './query/training.query';
 
 @Injectable()
@@ -32,20 +33,22 @@ export class TrainingRepository {
       .exec();
   }
 
-  /*
-   public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: TrainingQuery): Promise<Training[]> {
-     return this.TrainingModel
-       .find(Object.assign(
-         location ? { location } : {},
-         trainingLevel ? { trainingLevel } : {},
-         trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {}
-       ))
-       .sort([[category, sortDirection]])
-       .skip(page * limit)
-       .limit(limit)
-       .populate(['certificate', 'avatar'])
-       .exec();
-   }
- 
-   */
+  public async list(
+    coachId: string,
+    { limit, page, sortDirection, priceFrom, priceTo, caloriesFrom, caloriesTo, rating, interval }: TrainingQuery
+  ): Promise<Training[]> {
+    return this.trainingModel
+      .find({
+        coachId,
+        price: { $gte: priceFrom, $lte: priceTo },
+        calories: { $gte: caloriesFrom, $lte: caloriesTo },
+        rating,
+        interval: interval ? { $in: interval } : {}
+      })
+      .sort([['createdAt', sortDirection]])
+      .skip(page * limit)
+      .limit(limit)
+      .populate('demoVideo')
+      .exec();
+  }
 }

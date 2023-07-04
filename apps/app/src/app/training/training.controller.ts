@@ -105,7 +105,7 @@ export class TrainingController {
     return fillObject(TrainingRdo, existTraining);
   }
 
-  /** Список тренировок */
+  /** Список тренировок тренера */
   @ApiOkResponse({
     type: [TrainingRdo],
     description: 'Training found'
@@ -122,9 +122,10 @@ export class TrainingController {
   @UseGuards(JwtCoachGuard)
   @HttpCode(HttpStatus.OK)
   @Get()
-  public async index(@Query() query: TrainingQuery) {
-    // const existUsers = await this.trainingService.index(query);
-    // return fillObject(TrainingRdo, existUsers);
+  public async list(@Query() query: TrainingQuery,
+    @Req() req: Request
+  ) {
+    const existTraining = await this.trainingService.list(req['user']._id, query);
+    return fillObject(TrainingRdo, existTraining);
   }
-
 }

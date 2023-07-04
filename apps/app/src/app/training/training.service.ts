@@ -4,6 +4,8 @@ import { TrainingEntity } from './training.entity';
 import { FileService } from '../file/file.service';
 import { TrainingCreateDto } from './dto/training-create.dto';
 import { TrainingUpdateDto } from './dto/training-update.dto';
+import { plainToInstance } from 'class-transformer';
+import { TrainingQuery } from './query/trainer.query';
 
 @Injectable()
 export class TrainingService {
@@ -46,34 +48,12 @@ export class TrainingService {
     return this.trainingRepository.update(trainingEntity._id, trainingEntity);
   }
 
-  /** Список пользователей 
-  public async index(query: TrainingQuery) {
-    const TrainingQuery = plainToInstance(
+  /** Список тренировок тренера */
+  public async list(coachId: string, query: TrainingQuery) {
+    const trainingQuery = plainToInstance(
       TrainingQuery,
       query,
       { enableImplicitConversion: true });
-    return this.TrainingRepository.index(TrainingQuery);
+    return this.trainingRepository.list(coachId, trainingQuery);
   }
-*/
-
-  /** Обновление информации о пользователе 
-  public async update(TrainingEntity: TrainingEntity, dto: UpdateTrainingDto, files: TrainingFiles) {
-    if (dto.trainingTypes) {
-      dto.trainingTypes = Array.from(new Set((dto.trainingTypes as unknown as string).split(','))).slice(0, MAX_TRAINING_TYPES);
-    }
-    Object.assign(TrainingEntity, dto);
-
-    if (files?.avatar) {
-      const document = await this.fileService.save(files.avatar[0]);
-      TrainingEntity.avatar = document._id;
-    }
-
-    if (files?.certificate && TrainingEntity.role === TrainingRole.Coach) {
-      const document = await this.fileService.save(files.certificate[0]);
-      TrainingEntity.certificate = document._id;
-    }
-
-    return this.TrainingRepository.update(TrainingEntity._id, TrainingEntity);
-  }
-*/
 }

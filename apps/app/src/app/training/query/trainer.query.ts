@@ -46,5 +46,5 @@ export class TrainingQuery {
     each: true
   })
   @IsOptional()
-  public internal: string[];
+  public interval: string[];
 }
