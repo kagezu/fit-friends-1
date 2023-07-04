@@ -9,6 +9,7 @@ import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { FileModule } from './file/file.module';
 import { TrainingModule } from './training/training.module';
 import { OrderModule } from './order/order.module';
+import { FriendModule } from './friend/friend.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { OrderModule } from './order/order.module';
     RefreshTokenModule,
     TrainingModule,
     OrderModule,
+    FriendModule,
   ],
   controllers: [],
   providers: [],

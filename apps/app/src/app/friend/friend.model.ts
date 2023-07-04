@@ -1,0 +1,23 @@
+import { Document, SchemaTypes } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Friend } from '@fit-friends-1/shared/app-types';
+
+@Schema({
+  collection: 'friends',
+  timestamps: false,
+})
+export class FriendModel extends Document implements Friend {
+  @Prop({
+    ref: 'UserModel',
+    type: SchemaTypes.ObjectId
+  })
+  userId: string;
+
+  @Prop({
+    ref: 'UserModel',
+    type: SchemaTypes.ObjectId
+  })
+  friendId: string;
+}
+
+export const FriendSchema = SchemaFactory.createForClass(FriendModel);

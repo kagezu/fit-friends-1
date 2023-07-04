@@ -5,7 +5,6 @@ import { TrainingModel } from './training.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TrainingQuery } from './query/trainer.query';
-// import { TrainingQuery } from './query/training.query';
 
 @Injectable()
 export class TrainingRepository {

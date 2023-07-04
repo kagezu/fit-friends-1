@@ -5,5 +5,5 @@ export interface Order {
   count: number;
   orderPrice: number;
   paymentMethod: string;
-  createdAt: string;
+  createdAt?: string;
 }
