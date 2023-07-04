@@ -8,6 +8,7 @@ import { ConfigAppModule } from '@fit-friends-1/config/config-app';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { FileModule } from './file/file.module';
 import { TrainingModule } from './training/training.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TrainingModule } from './training/training.module';
     MongooseModule.forRootAsync(getMongooseOptions()),
     RefreshTokenModule,
     TrainingModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],

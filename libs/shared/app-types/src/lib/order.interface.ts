@@ -1,6 +1,6 @@
 export interface Order {
   purchaseType: string;
-  training: string;
+  trainingId: string;
   price: number;
   count: number;
   orderPrice: number;
