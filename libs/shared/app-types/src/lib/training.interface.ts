@@ -13,4 +13,6 @@ export interface Training {
   rating?: number;
   coachId: string;
   specialOffer?: boolean;
+  totalSale: number;
+  totalAmount: number;
 }

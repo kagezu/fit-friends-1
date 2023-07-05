@@ -30,7 +30,9 @@ export class TrainingService {
       rating: 0,
       background: '',
       coachId,
-      demoVideo: file._id
+      demoVideo: file._id,
+      totalSale: 0,
+      totalAmount: 0
     };
     const trainingEntity = new TrainingEntity(training);
 

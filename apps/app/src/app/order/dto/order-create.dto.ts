@@ -8,7 +8,7 @@ export class OrderCreateDto {
     example: '64a2e6bd72ccb0ea0c37c860'
   })
   @IsMongoId()
-  trainingId: string;
+  training: string;
 
   @ApiProperty({
     description: 'Количество приобретаемых тренировок.',

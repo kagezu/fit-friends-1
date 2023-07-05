@@ -3,7 +3,7 @@ import { Order } from '@fit-friends-1/shared/app-types';
 
 export class OrderEntity implements Entity<OrderEntity>, Order {
   public purchaseType: string;
-  public trainingId: string;
+  public training: string;
   public price: number;
   public count: number;
   public orderPrice: number;
@@ -16,7 +16,7 @@ export class OrderEntity implements Entity<OrderEntity>, Order {
 
   public fillEntity(entity: Order) {
     this.purchaseType = entity.purchaseType;
-    this.trainingId = entity.trainingId;
+    this.training = entity.training;
     this.price = entity.price;
     this.count = entity.count;
     this.orderPrice = entity.orderPrice;

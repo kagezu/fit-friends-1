@@ -43,6 +43,10 @@ export class TrainingModel extends Document implements Training {
   public coachId: string;
   @Prop()
   public specialOffer: boolean;
+  @Prop()
+  totalSale: number;
+  @Prop()
+  totalAmount: number;
 }
 
 export const TrainingSchema = SchemaFactory.createForClass(TrainingModel);

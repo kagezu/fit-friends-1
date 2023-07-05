@@ -36,7 +36,7 @@ export class OrderRdo {
     example: '64a2e6bd72ccb0ea0c37c860'
   })
   @Expose()
-  trainingId: string;
+  training: string;
 
   @ApiProperty({
     description: 'Количество приобретаемых тренировок.',

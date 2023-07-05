@@ -13,7 +13,7 @@ export class OrderModel extends Document implements Order {
     ref: 'TrainingModel',
     type: SchemaTypes.ObjectId
   })
-  trainingId: string;
+  training: string;
   @Prop()
   price: number;
   @Prop()

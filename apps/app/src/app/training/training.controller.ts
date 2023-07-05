@@ -125,7 +125,7 @@ export class TrainingController {
   public async list(@Query() query: TrainingQuery,
     @Req() req: Request
   ) {
-    const existTraining = await this.trainingService.list(req['user']._id, query);
-    return fillObject(TrainingRdo, existTraining);
+    const existTrainings = await this.trainingService.list(req['user']._id, query);
+    return fillObject(TrainingRdo, existTrainings);
   }
 }

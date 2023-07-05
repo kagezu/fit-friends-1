@@ -16,6 +16,8 @@ export class TrainingEntity implements Entity<TrainingEntity>, Training {
   public rating?: number;
   public coachId: string;
   public specialOffer?: boolean;
+  public totalSale: number;
+  public totalAmount: number;
 
   constructor(entity: Training) {
     this.fillEntity(entity);
@@ -36,6 +38,8 @@ export class TrainingEntity implements Entity<TrainingEntity>, Training {
     this.rating = entity.rating ?? 0;
     this.coachId = entity.coachId;
     this.specialOffer = entity.specialOffer ?? false;
+    this.totalSale = entity.totalSale;
+    this.totalAmount = entity.totalAmount;
   }
 
   public toObject(): TrainingEntity {
