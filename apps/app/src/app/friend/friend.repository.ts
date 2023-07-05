@@ -19,12 +19,19 @@ export class FriendRepository {
   public async index(userId: string): Promise<Friend[] | null> {
     return this.friendModel
       .find({ userId })
+      .populate('friend')
       .exec();
   }
 
-  public async destroy(userId: string, friendId: string) {
+  public async check(userId: string, friend: string): Promise<Friend | null> {
     return this.friendModel
-      .deleteOne({ userId, friendId })
+      .findOne({ userId, friend })
+      .exec();
+  }
+
+  public async destroy(userId: string, friend: string) {
+    return this.friendModel
+      .deleteOne({ userId, friend })
       .exec();
   }
 }

@@ -86,7 +86,9 @@ export class OrderController {
   public async list(@Query() query: CoachOrderQuery,
     @Req() req: Request
   ) {
-    return this.orderService.list(req['user']._id, query);
-    //t return fillObject(OrderRdo, existOrders);
+    return fillObject(
+      OrderRdo,
+      await this.orderService.list(req['user']._id, query)
+    );
   }
 }

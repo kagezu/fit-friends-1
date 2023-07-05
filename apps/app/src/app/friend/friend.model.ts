@@ -17,7 +17,7 @@ export class FriendModel extends Document implements Friend {
     ref: 'UserModel',
     type: SchemaTypes.ObjectId
   })
-  friendId: string;
+  friend: string;
 }
 
 export const FriendSchema = SchemaFactory.createForClass(FriendModel);

@@ -3,7 +3,7 @@ import { Friend } from '@fit-friends-1/shared/app-types';
 
 export class FriendEntity implements Entity<FriendEntity>, Friend {
   public userId: string;
-  public friendId: string;
+  public friend: string;
 
   constructor(entity: Friend) {
     this.fillEntity(entity);
@@ -11,7 +11,7 @@ export class FriendEntity implements Entity<FriendEntity>, Friend {
 
   public fillEntity(entity: Friend) {
     this.userId = entity.userId;
-    this.friendId = entity.friendId;
+    this.friend = entity.friend;
   }
 
   public toObject(): FriendEntity {

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PaymentMethod } from '@fit-friends-1/shared/app-types';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { TrainingRdo } from '../../training/rdo/training.rdo';
 
 export class OrderRdo {
   @ApiProperty({
@@ -32,11 +33,11 @@ export class OrderRdo {
   createdAt: string;
 
   @ApiProperty({
-    description: 'Id тренировки',
-    example: '64a2e6bd72ccb0ea0c37c860'
+    description: 'Тренировка'
   })
   @Expose()
-  training: string;
+  @Type(() => TrainingRdo)
+  training: TrainingRdo;
 
   @ApiProperty({
     description: 'Количество приобретаемых тренировок.',
