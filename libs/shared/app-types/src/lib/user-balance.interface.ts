@@ -1,5 +1,5 @@
 export interface UserBalance {
-  user: string;
+  userId: string;
   training: string;
   count: number;
 }

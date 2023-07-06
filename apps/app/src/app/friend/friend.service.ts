@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { FriendRepository } from './friend.repository';
 import { FriendEntity } from './friend.entity';
 
@@ -13,6 +13,9 @@ export class FriendService {
     const existFriend = await this.friendRepository.check(userId, friend);
     if (existFriend) {
       throw new ConflictException('Friend exist');
+    }
+    if (userId.toString() === friend) {
+      throw new BadRequestException("You can't be your own friend");
     }
     const friendEntity = new FriendEntity({ userId, friend });
     return this.friendRepository.create(friendEntity);

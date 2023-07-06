@@ -2,17 +2,17 @@
 @baseUrl = http://localhost:3333/api
 @protocol = HTTP/1.1
 
-# Get friends list
-GET {{baseUrl}}/friend {{protocol}}
+# Get balance list
+GET {{baseUrl}}/balance {{protocol}}
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM
 
 ###
 
-# Add friend
-PUT http://localhost:3333/api/friend/649f9bfd7974b6f0298bc9a9 HTTP/1.1
+# Add balance
+PUT http://localhost:3333/api/balance/649f9bfd7974b6f0298bc9a9/add HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM
 
 ###
-# Delete friend
-DELETE http://localhost:3333/api/friend/649f9bfd7974b6f0298bc9a9 HTTP/1.1
+# Decrice balance
+DELETE http://localhost:3333/api/balance/649f9bfd7974b6f0298bc9a9/dec HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM

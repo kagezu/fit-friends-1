@@ -10,6 +10,7 @@ import { FileModule } from './file/file.module';
 import { TrainingModule } from './training/training.module';
 import { OrderModule } from './order/order.module';
 import { FriendModule } from './friend/friend.module';
+import { UserBalanceModule } from './user-balance/user-balance.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FriendModule } from './friend/friend.module';
     TrainingModule,
     OrderModule,
     FriendModule,
+    UserBalanceModule,
   ],
   controllers: [],
   providers: [],

@@ -9,13 +9,15 @@ import { Friend } from '@fit-friends-1/shared/app-types';
 export class FriendModel extends Document implements Friend {
   @Prop({
     ref: 'UserModel',
-    type: SchemaTypes.ObjectId
+    type: SchemaTypes.ObjectId,
+    required: true
   })
   userId: string;
 
   @Prop({
     ref: 'UserModel',
-    type: SchemaTypes.ObjectId
+    type: SchemaTypes.ObjectId,
+    required: true
   })
   friend: string;
 }
