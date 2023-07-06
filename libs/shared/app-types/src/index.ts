@@ -10,7 +10,7 @@ export * from './lib/order.interface';
 export * from './lib/payment-method.enum';
 export * from './lib/personal-order.interface';
 export * from './lib/purchase-type.enum';
-export * from './lib/subscription.interface';
+export * from './lib/subscriber.interface';
 export * from './lib/training-level.enum';
 export * from './lib/training-type.enum';
 export * from './lib/training.interface';

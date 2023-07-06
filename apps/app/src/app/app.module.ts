@@ -11,6 +11,8 @@ import { TrainingModule } from './training/training.module';
 import { OrderModule } from './order/order.module';
 import { FriendModule } from './friend/friend.module';
 import { UserBalanceModule } from './user-balance/user-balance.module';
+import { MailModule } from './mail/mail.module';
+import { SubscriberModule } from './subscriber/subscriber.module';
 
 @Module({
   imports: [
@@ -24,8 +26,10 @@ import { UserBalanceModule } from './user-balance/user-balance.module';
     OrderModule,
     FriendModule,
     UserBalanceModule,
+    MailModule,
+    SubscriberModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
