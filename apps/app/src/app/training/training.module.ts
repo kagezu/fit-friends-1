@@ -6,13 +6,15 @@ import { ConfigModule } from '@nestjs/config';
 import { TrainingController } from './training.controller';
 import { TrainingService } from './training.service';
 import { FileModule } from '../file/file.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: TrainingModel.name, schema: TrainingSchema }
   ]),
     ConfigModule,
-    FileModule
+    FileModule,
+    MailModule
   ],
   providers: [
     TrainingRepository,

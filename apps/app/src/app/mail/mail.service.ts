@@ -1,38 +1,48 @@
-import { Subscriber } from '@project/shared/app-types';
-import { Injectable } from '@nestjs/common';
-import { EMAIL_ADD_SUBSCRIBER_SUBJECT, EMAIL_UPDATE_TASK } from './mail.constant';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { TasksDto } from '../subscriber/dto/tasks.dto';
+import { MailRepository } from './mail.repository';
+import { SubscriberService } from '../subscriber/subscriber.service';
+import { MailQueueEntity } from './mail-queue.entity';
+
+const EMAIL_NEW_TRAINING_SUBJECT = 'New workout';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailerService: MailerService) { }
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly mailRepository: MailRepository,
+    private readonly subscriberService: SubscriberService,
+  ) { }
 
-  public async sendNotifyNewSubscriber(subscriber: Subscriber) {
-    await this.mailerService.sendMail({
-      to: subscriber.email,
-      subject: EMAIL_ADD_SUBSCRIBER_SUBJECT,
-      template: './add-subscriber',
-      context: {
-        user: subscriber.name,
-        email: `${subscriber.email}`,
-      }
-    })
+  public async sendNotifyNewTraining() {
+    const mails = await this.mailRepository.index();
+    if (!mails) {
+      throw new NotFoundException('No messages in queue.');
+    }
+    mails.map(({ emails, training }) =>
+      emails.map(async (email: string) =>
+        await this.mailerService.sendMail({
+          to: email,
+          subject: EMAIL_NEW_TRAINING_SUBJECT,
+          template: './new-training',
+          context: {
+            email,
+            title: training['title'],
+            id: training['_id'].toString(),
+          }
+        })
+      )
+    );
+    await this.mailRepository.destroy();
   }
 
-  public async sendNotifications(subscribers: Subscriber[], dto: TasksDto) {
-    const links = dto.ids
-      .map((id) => `<a href="http://localhost:3333/api/tasks/${id}">${id}</a>`)
-      .join('<br>');
-
-    subscribers.map(async (subscriber) => await this.mailerService.sendMail({
-      to: subscriber.email,
-      subject: EMAIL_UPDATE_TASK,
-      template: './send-notifications',
-      context: {
-        user: subscriber.name,
-        links: links
-      }
-    }));
+  public async addNotify(coach: string, training: string) {
+    const subscribers = await this.subscriberService.findByCoach(coach);
+    if (!subscribers) {
+      throw new NotFoundException('No subscribers.');
+    }
+    const emails = subscribers.map(({ email }) => email);
+    const mailQueue = new MailQueueEntity({ emails, training });
+    return this.mailRepository.create(mailQueue);
   }
 }

@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SubscriberModel, SubscriberSchema } from './subscriber.model';
 import { SubscriberRepository } from './subscriber.repository';
 import { SubscriberService } from './subscriber.service';
-import { EmailSubscriberController } from './subscriber.controller';
+import { SubscriberController } from './subscriber.controller';
 
 @Module({
   imports: [
@@ -17,5 +17,8 @@ import { EmailSubscriberController } from './subscriber.controller';
     SubscriberRepository,
     SubscriberController
   ],
+  exports: [
+    SubscriberService,
+  ]
 })
 export class SubscriberModule { }

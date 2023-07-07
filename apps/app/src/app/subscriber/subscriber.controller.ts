@@ -30,9 +30,8 @@ export class SubscriberController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const { name, email } = req['user'];
+    const { email } = req['user'];
     return this.subscriberService.add({
-      name,
       email,
       coach: id
     });

@@ -29,4 +29,9 @@ export class SubscriberService {
     return this.SubscriberRepository
       .destroy(mail, coach);
   }
+
+  public async findByCoach(coach: string) {
+    return this.SubscriberRepository
+      .findByCoach(coach);
+  }
 }

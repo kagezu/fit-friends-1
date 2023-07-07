@@ -1,0 +1,13 @@
+
+@baseUrl = http://localhost:3333/api
+@protocol = HTTP/1.1
+
+# Подписка на новые тренировки тренера
+PUT {{baseUrl}}/subscribe/649f9bfd7974b6f0298bc9a9 {{protocol}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM
+
+###
+
+# Отписка от новых тренировки тренера
+DELETE {{baseUrl}}/subscribe/649f9bfd7974b6f0298bc9a9  {{protocol}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM

@@ -25,3 +25,4 @@ export * from './lib/token.interface';
 export * from './lib/user-background.enum';
 export * from './lib/file.interface';
 export * from './lib/user-files.type';
+export * from './lib/mail-queue.interface';

@@ -33,5 +33,13 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: test
       ME_CONFIG_MONGODB_URL: mongodb://admin:test@fitfriends.app.mongo:27017/
 
+  fitfriends.app.fakesmtp:
+    image: gessnerfl/fake-smtp-server
+    container_name: fitfriends.app.fakesmtp
+    hostname: fakesmtp
+    ports:
+      - '8025:8025'
+      - '1082:8080'
+
 volumes:
   fitfriends.mongo.app:

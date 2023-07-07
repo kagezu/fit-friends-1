@@ -6,12 +6,14 @@ import { TrainingCreateDto } from './dto/training-create.dto';
 import { TrainingUpdateDto } from './dto/training-update.dto';
 import { plainToInstance } from 'class-transformer';
 import { TrainingQuery } from './query/trainer.query';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class TrainingService {
   constructor(
     private readonly fileService: FileService,
     private readonly trainingRepository: TrainingRepository,
+    private readonly mailService: MailService,
   ) { }
 
   /** Информация о тренировке */
@@ -35,8 +37,9 @@ export class TrainingService {
       totalAmount: 0
     };
     const trainingEntity = new TrainingEntity(training);
-
-    return this.trainingRepository.create(trainingEntity);
+    const newTraining = await this.trainingRepository.create(trainingEntity);
+    await this.mailService.addNotify(coachId, newTraining._id.toString());
+    return newTraining;
   }
 
   /** Редактирование тренировки */

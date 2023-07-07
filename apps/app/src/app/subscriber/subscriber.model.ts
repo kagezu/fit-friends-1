@@ -10,8 +10,6 @@ const SUBSCRIBERS_COLLECTION_NAME = 'subscribers';
 })
 export class SubscriberModel extends Document implements Subscriber {
   @Prop()
-  public name: string;
-  @Prop()
   email: string;
   @Prop()
   coach: string;

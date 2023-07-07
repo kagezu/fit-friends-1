@@ -26,9 +26,16 @@ export class SubscriberRepository {
       .findOne({ email, coach })
       .exec()
   }
+
   public async findByEmail(email: string): Promise<Subscriber[] | null> {
     return this.subscriberModel
       .find({ email })
+      .exec()
+  }
+
+  public async findByCoach(coach: string): Promise<Subscriber[] | null> {
+    return this.subscriberModel
+      .find({ coach })
       .exec()
   }
 }
