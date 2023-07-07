@@ -11,6 +11,7 @@ import { TrainingUpdateDto } from './dto/training-update.dto';
 import { TrainingEntity } from './training.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TrainingQuery } from './query/trainer.query';
+import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 
 @ApiTags('training')
 @Controller('training')
@@ -121,11 +122,35 @@ export class TrainingController {
   })
   @UseGuards(JwtCoachGuard)
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get('my')
   public async list(@Query() query: TrainingQuery,
     @Req() req: Request
   ) {
     const existTrainings = await this.trainingService.list(req['user']._id, query);
+    return fillObject(TrainingRdo, existTrainings);
+  }
+
+  /** Список тренировок */
+  @ApiOkResponse({
+    type: [TrainingRdo],
+    description: 'Training found'
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @ApiQuery({
+    description: 'Query options',
+    type: TrainingCatalogQuery
+  })
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  public async index(@Query() query: TrainingCatalogQuery,
+    @Req() req: Request
+  ) {
+    const existTrainings = await this.trainingService.index(req['user']._id, query);
     return fillObject(TrainingRdo, existTrainings);
   }
 }

@@ -1,0 +1,6 @@
+
+@baseUrl = http://localhost:3333/api
+@protocol = HTTP/1.1
+
+# Get friends list
+POST {{baseUrl}}/mail/send {{protocol}}

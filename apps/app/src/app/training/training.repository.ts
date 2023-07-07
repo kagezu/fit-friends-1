@@ -5,6 +5,7 @@ import { TrainingModel } from './training.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TrainingQuery } from './query/trainer.query';
+import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 
 @Injectable()
 export class TrainingRepository {
@@ -45,6 +46,25 @@ export class TrainingRepository {
         interval: interval ? { $in: interval } : {}
       })
       .sort([['createdAt', sortDirection]])
+      .skip(page * limit)
+      .limit(limit)
+      .populate('demoVideo')
+      .exec();
+  }
+
+  public async index(
+    coachId: string,
+    { limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, rating, trainingType }: TrainingCatalogQuery
+  ): Promise<Training[]> {
+    return this.trainingModel
+      .find({
+        coachId,
+        price: { $gte: priceFrom, $lte: priceTo },
+        calories: { $gte: caloriesFrom, $lte: caloriesTo },
+        rating,
+        trainingType
+      })
+      .sort([[category, sortDirection]])
       .skip(page * limit)
       .limit(limit)
       .populate('demoVideo')

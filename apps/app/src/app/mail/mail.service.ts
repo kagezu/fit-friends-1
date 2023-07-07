@@ -26,9 +26,7 @@ export class MailService {
           subject: EMAIL_NEW_TRAINING_SUBJECT,
           template: './new-training',
           context: {
-            email,
-            title: training['title'],
-            id: training['_id'].toString(),
+            title: training['title']
           }
         })
       )

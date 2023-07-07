@@ -32,7 +32,7 @@ export class FriendController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const existFriend = await this.friendService.create(req['user']._id, id);
+    const existFriend = await this.friendService.create(req['user'], id);
     return fillObject(FriendRdo, existFriend);
   }
 

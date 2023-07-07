@@ -7,6 +7,7 @@ import { TrainingUpdateDto } from './dto/training-update.dto';
 import { plainToInstance } from 'class-transformer';
 import { TrainingQuery } from './query/trainer.query';
 import { MailService } from '../mail/mail.service';
+import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 
 @Injectable()
 export class TrainingService {
@@ -60,5 +61,14 @@ export class TrainingService {
       query,
       { enableImplicitConversion: true });
     return this.trainingRepository.list(coachId, trainingQuery);
+  }
+
+  /** Список тренировок */
+  public async index(coachId: string, query: TrainingCatalogQuery) {
+    const trainingQuery = plainToInstance(
+      TrainingCatalogQuery,
+      query,
+      { enableImplicitConversion: true });
+    return this.trainingRepository.index(coachId, trainingQuery);
   }
 }

@@ -5,12 +5,14 @@ import { FriendRepository } from './friend.repository';
 import { ConfigModule } from '@nestjs/config';
 import { FriendController } from './friend.controller';
 import { FriendService } from './friend.service';
+import { NotifyModule } from '../notify/notify.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: FriendModel.name, schema: FriendSchema }
   ]),
     ConfigModule,
+    NotifyModule
   ],
   providers: [
     FriendRepository,

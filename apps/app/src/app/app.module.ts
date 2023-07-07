@@ -13,6 +13,7 @@ import { FriendModule } from './friend/friend.module';
 import { UserBalanceModule } from './user-balance/user-balance.module';
 import { MailModule } from './mail/mail.module';
 import { SubscriberModule } from './subscriber/subscriber.module';
+import { NotifyModule } from './notify/notify.module';
 
 @Module({
   imports: [
@@ -28,8 +29,9 @@ import { SubscriberModule } from './subscriber/subscriber.module';
     UserBalanceModule,
     MailModule,
     SubscriberModule,
+    NotifyModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
