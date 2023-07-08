@@ -15,6 +15,7 @@ import { MailModule } from './mail/mail.module';
 import { SubscriberModule } from './subscriber/subscriber.module';
 import { NotifyModule } from './notify/notify.module';
 import { PersonalOrderModule } from './personal-order/personal-order.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -32,8 +33,9 @@ import { PersonalOrderModule } from './personal-order/personal-order.module';
     SubscriberModule,
     NotifyModule,
     PersonalOrderModule,
+    ReviewModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

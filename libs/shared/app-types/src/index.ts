@@ -1,4 +1,4 @@
-export * from './lib/feedback.interface';
+export * from './lib/review.interface';
 export * from './lib/friend.interface';
 export * from './lib/gender.enum';
 export * from './lib/intervals.array';
