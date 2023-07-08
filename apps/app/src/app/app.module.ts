@@ -14,6 +14,7 @@ import { UserBalanceModule } from './user-balance/user-balance.module';
 import { MailModule } from './mail/mail.module';
 import { SubscriberModule } from './subscriber/subscriber.module';
 import { NotifyModule } from './notify/notify.module';
+import { PersonalOrderModule } from './personal-order/personal-order.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { NotifyModule } from './notify/notify.module';
     MailModule,
     SubscriberModule,
     NotifyModule,
+    PersonalOrderModule,
   ],
   controllers: [],
   providers: [],
