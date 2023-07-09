@@ -1,156 +1,66 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors, UploadedFile, Req, Patch, Param, NotFoundException, UnauthorizedException, Get, Query } from '@nestjs/common';
+import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { fillObject } from '@fit-friends-1/util/util-core';
-import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiNotFoundResponse, ApiOkResponse, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { TrainingService } from './training.service';
-import { TrainingCreateDto } from './dto/review-create.dto';
-import { JwtCoachGuard } from '../auth/guards/jwt-coach.guard';
-import { TrainingRdo } from './rdo/review.rdo';
-import { MongoidValidationPipe, VideoValidationPipe } from '@fit-friends-1/shared/shared-pipes';
-import { TrainingUpdateDto } from './dto/training-update.dto';
-import { TrainingEntity } from './training.entity';
+import { Controller, UseGuards, HttpCode, HttpStatus, Post, Body, Req, Get, Query, Param } from '@nestjs/common';
+import { ApiTags, ApiCreatedResponse, ApiBadRequestResponse, ApiUnauthorizedResponse, ApiConflictResponse, ApiHeader, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { TrainingQuery } from './query/trainer.query';
-import { TrainingCatalogQuery } from './query/trainer-catalog.query';
+import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
+import { ReviewCreateDto } from './dto/review-create.dto';
+import { ReviewQuery } from './query/review.query';
+import { ReviewRdo } from './rdo/review.rdo';
+import { ReviewService } from './review.service';
 
-@ApiTags('training')
-@Controller('training')
-export class TrainingController {
+@ApiTags('review')
+@Controller('review')
+export class ReviewController {
   constructor(
-    private readonly trainingService: TrainingService,
+    private readonly reviewService: ReviewService,
   ) { }
 
-  /**  Создание новой тренировки */
+  /**  Создание отзыва */
   @ApiCreatedResponse({
-    description: 'The new training has been successfully created.',
-    type: TrainingRdo
+    description: 'The new Review has been successfully created.',
+    type: ReviewRdo
   })
   @ApiBadRequestResponse({ description: 'Bad request.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiConflictResponse({ description: 'Review already exists.' })
   @ApiHeader({
     name: 'authorization',
     description: 'Access token'
   })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('video'))
-  @UseGuards(JwtCoachGuard)
+  @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post('')
+  @Post()
   public async create(
-    @Body() dto: TrainingCreateDto,
-    @Req() req: Request,
-    @UploadedFile(VideoValidationPipe) video: Express.Multer.File
+    @Body() dto: ReviewCreateDto,
+    @Req() req: Request
   ) {
-    const newTraining = await this.trainingService.create(req['user']._id, dto, video);
-    return fillObject(TrainingRdo, newTraining);
+    const newReview = await this.reviewService.create(req['user']._id, dto);
+    return fillObject(ReviewRdo, newReview);
   }
 
-  /**  Редактирование тренировки */
+  /** Список отзывов */
   @ApiOkResponse({
-    description: 'The new training has been successfully updated.',
-    type: TrainingRdo
+    type: [ReviewRdo],
+    description: 'Review found'
   })
-  @ApiBadRequestResponse({ description: 'Bad request.' })
-  @ApiNotFoundResponse({ description: 'Training not exist.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiHeader({
     name: 'authorization',
     description: 'Access token'
   })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('video'))
-  @UseGuards(JwtCoachGuard)
-  @HttpCode(HttpStatus.OK)
-  @Patch(':id')
-  public async update(
-    @Body() dto: TrainingUpdateDto,
-    @Req() req: Request,
-    @UploadedFile(VideoValidationPipe) video: Express.Multer.File,
-    @Param('id', MongoidValidationPipe) id: string
-  ) {
-    const existTraining = await this.trainingService.show(id);
-    if (!existTraining) {
-      throw new NotFoundException('Training not exist');
-    }
-    if (existTraining.coachId.toString() !== req['user']._id.toString()) {
-      throw new UnauthorizedException('Тo editing permissions');
-    }
-    const training = await this.trainingService.update(
-      new TrainingEntity(existTraining),
-      dto,
-      video
-    );
-    return fillObject(TrainingRdo, training);
-  }
-
-  /** Информация о тренировке */
-  @ApiOkResponse({
-    description: 'The exist training.',
-    type: TrainingRdo
-  })
-  @ApiBadRequestResponse({ description: 'Bad request.' })
-  @ApiNotFoundResponse({ description: 'Training not exist.' })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiHeader({
-    name: 'authorization',
-    description: 'Access token'
+  @ApiQuery({
+    description: 'Query options',
+    type: ReviewQuery
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  public async show(@Param('id', MongoidValidationPipe) id: string) {
-    const existTraining = await this.trainingService.show(id);
-    if (!existTraining) {
-      throw new NotFoundException('Training not exist');
-    }
-    return fillObject(TrainingRdo, existTraining);
-  }
-
-  /** Список тренировок тренера */
-  @ApiOkResponse({
-    type: [TrainingRdo],
-    description: 'Training found'
-  })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiHeader({
-    name: 'authorization',
-    description: 'Access token'
-  })
-  @ApiQuery({
-    description: 'Query options',
-    type: TrainingQuery
-  })
-  @UseGuards(JwtCoachGuard)
-  @HttpCode(HttpStatus.OK)
-  @Get('my')
-  public async list(@Query() query: TrainingQuery,
-    @Req() req: Request
+  public async index(
+    @Query() query: ReviewQuery,
+    @Param('id', MongoidValidationPipe) id: string
   ) {
-    const existTrainings = await this.trainingService.list(req['user']._id, query);
-    return fillObject(TrainingRdo, existTrainings);
-  }
-
-  /** Список тренировок */
-  @ApiOkResponse({
-    type: [TrainingRdo],
-    description: 'Training found'
-  })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiHeader({
-    name: 'authorization',
-    description: 'Access token'
-  })
-  @ApiQuery({
-    description: 'Query options',
-    type: TrainingCatalogQuery
-  })
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.OK)
-  @Get()
-  public async index(@Query() query: TrainingCatalogQuery,
-    @Req() req: Request
-  ) {
-    const existTrainings = await this.trainingService.index(req['user']._id, query);
-    return fillObject(TrainingRdo, existTrainings);
+    const existReviews = await this.reviewService.index(id, query);
+    return fillObject(ReviewRdo, existReviews);
   }
 }

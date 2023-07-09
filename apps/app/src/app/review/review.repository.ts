@@ -4,6 +4,7 @@ import { Review } from '@fit-friends-1/shared/app-types';
 import { ReviewModel } from './review.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { ReviewQuery } from './query/review.query';
 
 @Injectable()
 export class ReviewRepository {
@@ -16,9 +17,29 @@ export class ReviewRepository {
     return await newReview.save();
   }
 
-  public async index(training: string): Promise<Review[]> {
+  public async index(
+    training: string,
+    { limit, page, sortDirection, category }: ReviewQuery
+  ): Promise<Review[]> {
     return this.reviewModel
       .find({ training })
+      .sort([[category, sortDirection]])
+      .skip(page * limit)
+      .limit(limit)
       .exec();
+  }
+
+  public async check(author: string, training: string): Promise<Review> {
+    return this.reviewModel
+      .findOne({ author, training })
+      .exec();
+  }
+
+  public async getAverageRating(training: string): Promise<number> {
+    const reviews = await this.reviewModel
+      .find({ training })
+      .exec();
+    const sum = reviews.reduce((current, { evaluation }) => current + evaluation, 0);
+    return sum / reviews.length;
   }
 }

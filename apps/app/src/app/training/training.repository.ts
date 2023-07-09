@@ -26,6 +26,12 @@ export class TrainingRepository {
       .exec();
   }
 
+  public async check(id: string): Promise<Training | null> {
+    return this.trainingModel
+      .findById(id)
+      .exec();
+  }
+
   public async update(id: string, item: TrainingEntity): Promise<Training> {
     return this.trainingModel
       .findByIdAndUpdate(id, item.toObject(), { new: true })
