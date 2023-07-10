@@ -1,31 +1,115 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { FileRepository } from '../file/file.repository';
 import { mockData } from '@fit-friends-1/shared/mock-data';
 import { FileEntity } from '../file/file.entity';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 import { generateRandomValue, getRandomItem, getRandomItems } from '@fit-friends-1/util/util-core';
-import { UserRole } from '@fit-friends-1/shared/app-types';
+import { Training, User, UserRole } from '@fit-friends-1/shared/app-types';
 import { UserValidate } from '../auth/auth.constant';
 import { File } from '@fit-friends-1/shared/app-types';
+import { TrainingRepository } from '../training/training.repository';
+import { TrainingEntity } from '../training/training.entity';
+import { ReviewValidate } from '../review/review.const';
+import { ReviewService } from '../review/review.service'
+import { OrderRepository } from '../order/order.repository';
+import { OrderEntity } from '../order/order.entity';
+
+const COUNT_ITEM = 10;
+const MAX_PRICE = 10;
+const STEP_PRICE = 200;
+const MAX_COUNT_ORDER = 10;
 
 @Injectable()
-export class ReviewService {
+export class SeedService {
   constructor(
     private readonly fileRepository: FileRepository,
     private readonly userRepository: UserRepository,
+    private readonly trainingRepository: TrainingRepository,
+    private readonly reviewService: ReviewService,
+    private readonly orderRepository: OrderRepository,
   ) { }
 
   /** Начальное наполнение базы */
   public async generate() {
     const avatars = await this.generateAvatars();
     const certificates = await this.generateCertificates();
+    const video = await this.generateVideo();
+    Logger.log('Created files');
+
     const users = await this.generateUsers(avatars);
-    // const users = await this.generateUsers(avatars, certificates);
+    const coachs = await this.generateCoach(avatars, certificates);
+    Logger.log('Created users');
+
+    const trainings = await this.generateTrainings(coachs, video);
+    Logger.log('Created trainings');
+
+    await this.generateReviews(users, trainings);
+    Logger.log('Created reviews');
+
+    await this.generateOrders(trainings);
+    Logger.log('Created orders');
+  }
+
+  private async generateOrders(trainings: Training[]) {
+    return Promise.all(trainings.map(
+      (training) => {
+        const orders = [];
+        for (let i = 0; i < COUNT_ITEM; i++) {
+          const count = generateRandomValue(0, MAX_COUNT_ORDER);
+          orders[i] = this.orderRepository.create(
+            new OrderEntity({
+              purchaseType: getRandomItem(mockData.purchaseTypes),
+              training: training._id,
+              price: training.price,
+              count,
+              orderPrice: training.price * count,
+              paymentMethod: getRandomItem(mockData.paymentMethods)
+            }));
+        }
+        return Promise.all(orders);
+      }));
+  }
+
+  private async generateReviews(users: User[], trainings: Training[]) {
+    Promise.all(trainings.map(
+      (training) => Promise.all(users.map(
+        (user) => this.reviewService.create(
+          user._id,
+          {
+            training: training._id,
+            evaluation: generateRandomValue(ReviewValidate.MinEvaluation, ReviewValidate.MaxEvaluation),
+            textReview: getRandomItem(mockData.textFeedbacks)
+          })))));
+  }
+
+  private async generateTrainings(coachs: User[], video: File) {
+    const trainings = [];
+    for (let i = 0; i < COUNT_ITEM; i++) {
+      trainings[i] = await this.trainingRepository.create(
+        new TrainingEntity({
+          title: getRandomItem(mockData.titles),
+          background: getRandomItem(mockData.backgrounds),
+          trainingLevel: getRandomItem(mockData.trainingLevels),
+          trainingTypes: getRandomItem(mockData.trainingTypes),
+          interval: getRandomItem(mockData.intervals),
+          price: generateRandomValue(0, MAX_PRICE) * STEP_PRICE,
+          caloriesToBurn: generateRandomValue(UserValidate.minCaloriesToBurn, UserValidate.maxCaloriesToBurn),
+          description: getRandomItem(mockData.descriptions),
+          usersGender: getRandomItem(mockData.genders),
+          demoVideo: video._id,
+          rating: 0,
+          coachId: getRandomItem(coachs)._id,
+          specialOffer: true,
+          totalSale: 0,
+          totalAmount: 0
+        }));
+    }
+    return trainings;
   }
 
   private async generateUsers(avatars: File[]) {
-    return mockData.emails.map(async (email) => {
+    return Promise.all(mockData.emails.map(async (email) => {
       const userEntity = new UserEntity({
         name: getRandomItem(mockData.names),
         email,
@@ -48,19 +132,19 @@ export class ReviewService {
       });
       userEntity.setPassword(mockData.password);
       return this.userRepository.create(userEntity);
-    })
+    }));
   }
 
   private async generateCoach(avatars: File[], certificates: File[]) {
-    return mockData.emails.map(async (email) => {
+    return Promise.all(mockData.emails.map(async (email) => {
       const userEntity = new UserEntity({
         name: getRandomItem(mockData.names),
-        email,
+        email: `c-${email}`,
         avatar: getRandomItem(avatars)._id,
         passwordHash: '',
         gender: getRandomItem(mockData.genders),
         birthday: new Date(),
-        role: UserRole.User,
+        role: UserRole.Coach,
         description: getRandomItem(mockData.userDescriptions),
         location: getRandomItem(mockData.locations),
         background: getRandomItem(mockData.backgrounds),
@@ -69,12 +153,12 @@ export class ReviewService {
         trainingTypes: getRandomItems(mockData.trainingTypes),
 
         certificate: getRandomItem(certificates)._id,
-        resume: getRandomItem(mockData.userDescriptions),
+        resume: getRandomItem(mockData.resumes),
         readyForIndividualTraining: false
       });
       userEntity.setPassword(mockData.password);
       return this.userRepository.create(userEntity);
-    })
+    }));
   }
 
   private async generateAvatars() {
@@ -103,4 +187,15 @@ export class ReviewService {
           }))));
   }
 
+  private async generateVideo() {
+    const video = getRandomItem(mockData.demoVideos);
+    return this.fileRepository.create(
+      new FileEntity({
+        originalName: video,
+        size: 0,
+        mimetype: 'video/mkv',
+        hashName: video,
+        path: video
+      }));
+  }
 }
