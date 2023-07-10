@@ -5,7 +5,7 @@ import { FileEntity } from '../file/file.entity';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 import { generateRandomValue, getRandomItem, getRandomItems } from '@fit-friends-1/util/util-core';
-import { Training, User, UserRole } from '@fit-friends-1/shared/app-types';
+import { OrderStatus, Training, User, UserRole } from '@fit-friends-1/shared/app-types';
 import { UserValidate } from '../auth/auth.constant';
 import { File } from '@fit-friends-1/shared/app-types';
 import { TrainingRepository } from '../training/training.repository';
@@ -14,6 +14,11 @@ import { ReviewValidate } from '../review/review.const';
 import { ReviewService } from '../review/review.service'
 import { OrderRepository } from '../order/order.repository';
 import { OrderEntity } from '../order/order.entity';
+import { PersonalOrderRepository } from '../personal-order/personal-order.repository';
+import { PersonalOrderEntity } from '../personal-order/personal-order.entity';
+import { NotifyRepository } from '../notify/notify.repository';
+import { NotifyEntity } from '../notify/notify.entity';
+import { UserBalanceRepository } from '../user-balance/user-balance.repository';
 
 const COUNT_ITEM = 10;
 const MAX_PRICE = 10;
@@ -28,6 +33,9 @@ export class SeedService {
     private readonly trainingRepository: TrainingRepository,
     private readonly reviewService: ReviewService,
     private readonly orderRepository: OrderRepository,
+    private readonly personalOrderRepository: PersonalOrderRepository,
+    private readonly notifyRepository: NotifyRepository,
+    private readonly userBalanceRepository: UserBalanceRepository,
   ) { }
 
   /** Начальное наполнение базы */
@@ -49,6 +57,43 @@ export class SeedService {
 
     await this.generateOrders(trainings);
     Logger.log('Created orders');
+
+    await this.generatePersonalOrders(users, coachs);
+    Logger.log('Created personal orders');
+
+    await this.generateNotify([...users, ...coachs]);
+    Logger.log('Created notify');
+
+    await this.generateBalance(users, trainings);
+    Logger.log('Created balance');
+  }
+
+  private async generateBalance(users: User[], trainings: Training[]) {
+    return Promise.all(users.map(
+      (user) => this.userBalanceRepository.create({
+        userId: user._id,
+        training: getRandomItem(trainings)._id,
+        count: generateRandomValue(0, MAX_COUNT_ORDER)
+      })));
+  }
+
+  private async generateNotify(users: User[]) {
+    return Promise.all(users.map(
+      (user) => this.notifyRepository.create(
+        new NotifyEntity({
+          user: user._id,
+          message: getRandomItem(mockData.messages)
+        }))));
+  }
+
+  private async generatePersonalOrders(users: User[], coachs: User[]) {
+    return Promise.all(users.map(
+      (user) => this.personalOrderRepository.create(
+        new PersonalOrderEntity({
+          initiator: user._id,
+          user: getRandomItem([...users, ...coachs])._id,
+          orderStatus: OrderStatus.Pending
+        }))));
   }
 
   private async generateOrders(trainings: Training[]) {

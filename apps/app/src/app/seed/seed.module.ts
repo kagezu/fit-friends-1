@@ -13,6 +13,8 @@ import { SubscriberModule } from '../subscriber/subscriber.module';
 import { TrainingModule } from '../training/training.module';
 import { UserBalanceModule } from '../user-balance/user-balance.module';
 import { UserModule } from '../user/user.module';
+import { SeedController } from './seed.controller';
+import { SeedService } from './seed.service';
 
 @Module({
   imports: [
@@ -31,7 +33,10 @@ import { UserModule } from '../user/user.module';
     PersonalOrderModule,
     ReviewModule
   ],
-  controllers: [],
-  providers: [],
+  controllers: [SeedController],
+  providers: [
+    SeedController,
+    SeedService
+  ],
 })
 export class SeedModule { }

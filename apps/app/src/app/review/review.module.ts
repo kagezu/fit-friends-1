@@ -20,6 +20,9 @@ import { ReviewService } from './review.service';
     ReviewController
   ],
   controllers: [ReviewController],
+  exports: [
+    ReviewService
+  ]
 })
 export class ReviewModule { }
 

@@ -20,5 +20,8 @@ import { TrainingModule } from '../training/training.module';
     UserBalanceController
   ],
   controllers: [UserBalanceController],
+  exports: [
+    UserBalanceRepository
+  ]
 })
 export class UserBalanceModule { }

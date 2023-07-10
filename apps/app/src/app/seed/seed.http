@@ -1,0 +1,7 @@
+
+@baseUrl = http://localhost:3333/api
+@protocol = HTTP/1.1
+
+# Initial database
+POST  {{baseUrl}}/seed {{protocol}}
+

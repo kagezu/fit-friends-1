@@ -18,5 +18,8 @@ import { OrderService } from './order.service';
     OrderController
   ],
   controllers: [OrderController],
+  exports: [
+    OrderRepository
+  ]
 })
 export class OrderModule { }

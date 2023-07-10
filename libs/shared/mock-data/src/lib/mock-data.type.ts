@@ -20,5 +20,6 @@ export type MockData = {
   userDescriptions: string[],
   certificates: string[],
   resumes: string[],
-  usersGenders: string[]
+  usersGenders: string[],
+  messages: string[]
 }

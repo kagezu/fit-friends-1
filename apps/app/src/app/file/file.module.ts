@@ -28,6 +28,6 @@ import { FileModel, FileSchema } from './file.model';
     ])
   ],
   providers: [FileService, FileRepository],
-  exports: [FileService]
+  exports: [FileService, FileRepository]
 })
 export class FileModule { }

@@ -22,7 +22,7 @@ export class ReviewService {
       throw new NotFoundException('Training not exist.');
     }
 
-    const existReview = this.reviewRepository.check(author, training);
+    const existReview = await this.reviewRepository.check(author, training);
     if (existReview) {
       throw new ConflictException('Review already exists.');
     }

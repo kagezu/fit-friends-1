@@ -20,5 +20,8 @@ import { UserModule } from '../user/user.module';
     PersonalOrderController
   ],
   controllers: [PersonalOrderController],
+  exports: [
+    PersonalOrderRepository
+  ]
 })
 export class PersonalOrderModule { }

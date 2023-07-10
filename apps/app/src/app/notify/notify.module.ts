@@ -19,7 +19,8 @@ import { NotifyService } from './notify.service';
   ],
   controllers: [NotifyController],
   exports: [
-    NotifyService
+    NotifyService,
+    NotifyRepository
   ]
 })
 export class NotifyModule { }
