@@ -122,12 +122,12 @@ export const mockData: MockData = {
     'Чтобы дойти до цели, надо идти!'
   ],
   certificates: [
-    'certificate-1.jpg',
-    'certificate-2.jpg',
-    'certificate-3.jpg',
-    'certificate-4.jpg',
-    'certificate-5.jpg',
-    'certificate-6.jpg'
+    '1.pdf',
+    '2.pdf',
+    '3.pdf',
+    '4.pdf',
+    '5.pdf',
+    '6.pdf'
   ],
   meritsOfCoaches: [
     'Сертификат "Инструктор йоги" Студия Yoga Stefa, г. Москва, 2019 г.',

@@ -2,7 +2,7 @@ import { Entity } from '@fit-friends-1/util/util-types';
 import { File } from '@fit-friends-1/shared/app-types';
 
 export class FileEntity implements Entity<FileEntity>, File {
-  public id: string;
+  public _id?: string;
   public hashName: string;
   public mimetype: string;
   public originalName: string;
@@ -14,7 +14,7 @@ export class FileEntity implements Entity<FileEntity>, File {
   }
 
   public fillEntity(entity: File) {
-    this.id = entity._id;
+    this._id = entity._id;
     this.hashName = entity.hashName;
     this.mimetype = entity.mimetype;
     this.originalName = entity.originalName;

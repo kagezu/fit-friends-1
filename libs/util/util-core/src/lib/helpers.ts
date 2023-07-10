@@ -52,4 +52,4 @@ export const generateRandomValue = (min: number, max: number, numAfterDigit = 0)
 export const getRandomItem = <T>(items: T[]): T =>
   items[generateRandomValue(0, items.length - 1)];
 
-//t export const getRandomItems = <T>(items: T[]): T[] => ((items.filter(() => Math.random() < .3) || [getRandomItem<T>(items)]));
+export const getRandomItems = <T>(items: T[]): T[] => ((items.filter(() => Math.random() < .3) || [getRandomItem<T>(items)]));
