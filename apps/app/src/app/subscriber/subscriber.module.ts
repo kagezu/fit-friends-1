@@ -18,7 +18,7 @@ import { SubscriberController } from './subscriber.controller';
     SubscriberController
   ],
   exports: [
-    SubscriberService,
+    SubscriberRepository
   ]
 })
 export class SubscriberModule { }

@@ -20,5 +20,8 @@ import { NotifyModule } from '../notify/notify.module';
     FriendController
   ],
   controllers: [FriendController],
+  exports: [
+    FriendService
+  ]
 })
 export class FriendModule { }

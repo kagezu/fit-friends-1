@@ -16,9 +16,10 @@ import { OrderRepository } from '../order/order.repository';
 import { OrderEntity } from '../order/order.entity';
 import { PersonalOrderRepository } from '../personal-order/personal-order.repository';
 import { PersonalOrderEntity } from '../personal-order/personal-order.entity';
-import { NotifyRepository } from '../notify/notify.repository';
-import { NotifyEntity } from '../notify/notify.entity';
 import { UserBalanceRepository } from '../user-balance/user-balance.repository';
+import { FriendService } from '../friend/friend.service';
+import { SubscriberRepository } from '../subscriber/subscriber.repository';
+import { SubscriberEntity } from '../subscriber/subscriber.entity';
 
 const COUNT_ITEM = 10;
 const MAX_PRICE = 10;
@@ -34,8 +35,9 @@ export class SeedService {
     private readonly reviewService: ReviewService,
     private readonly orderRepository: OrderRepository,
     private readonly personalOrderRepository: PersonalOrderRepository,
-    private readonly notifyRepository: NotifyRepository,
     private readonly userBalanceRepository: UserBalanceRepository,
+    private readonly friendService: FriendService,
+    private readonly subscriberRepository: SubscriberRepository
   ) { }
 
   /** Начальное наполнение базы */
@@ -49,6 +51,9 @@ export class SeedService {
     const coachs = await this.generateCoach(avatars, certificates);
     Logger.log('Created users');
 
+    await this.generateSubscriptions(users, coachs);
+    Logger.log('Created subscriptions');
+
     const trainings = await this.generateTrainings(coachs, video);
     Logger.log('Created trainings');
 
@@ -61,11 +66,30 @@ export class SeedService {
     await this.generatePersonalOrders(users, coachs);
     Logger.log('Created personal orders');
 
-    await this.generateNotify([...users, ...coachs]);
-    Logger.log('Created notify');
+    await this.generateFriend([...users, ...coachs]);
+    Logger.log('Created friends');
 
     await this.generateBalance(users, trainings);
     Logger.log('Created balance');
+  }
+
+  private async generateSubscriptions(users: User[], coachs: User[]) {
+    return Promise.all(users.map(
+      (user) => this.subscriberRepository.create(
+        new SubscriberEntity({
+          email: user.email,
+          coach: getRandomItem(coachs)._id
+        }))));
+  }
+
+  private async generateFriend(users: User[]) {
+    return Promise.all(users.map(
+      (user) => {
+        const friendId = getRandomItem(users)._id.toString();
+        if (friendId !== user._id.toString()) {
+          return this.friendService.create(user, friendId);
+        }
+      }));
   }
 
   private async generateBalance(users: User[], trainings: Training[]) {
@@ -75,15 +99,6 @@ export class SeedService {
         training: getRandomItem(trainings)._id,
         count: generateRandomValue(0, MAX_COUNT_ORDER)
       })));
-  }
-
-  private async generateNotify(users: User[]) {
-    return Promise.all(users.map(
-      (user) => this.notifyRepository.create(
-        new NotifyEntity({
-          user: user._id,
-          message: getRandomItem(mockData.messages)
-        }))));
   }
 
   private async generatePersonalOrders(users: User[], coachs: User[]) {

@@ -3,12 +3,14 @@ import { PersonalOrderRepository } from './personal-order.repository';
 import { PersonalOrderEntity } from './personal-order.entity';
 import { OrderStatus, User } from '@fit-friends-1/shared/app-types';
 import { UserService } from '../user/user.service';
+import { NotifyService } from '../notify/notify.service';
 
 @Injectable()
 export class PersonalOrderService {
   constructor(
     private readonly personalOrderRepository: PersonalOrderRepository,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly notifyService: NotifyService
   ) { }
 
   /** Создание заявки на персональную/совместную тренировку */
@@ -26,6 +28,11 @@ export class PersonalOrderService {
       user: userId,
       initiator: initiator._id,
       orderStatus: OrderStatus.Pending
+    });
+
+    await this.notifyService.create({
+      user: userId,
+      message: `${initiator.name} invites you to a personal training`
     });
 
     return this.personalOrderRepository.create(personalOrderEntity);

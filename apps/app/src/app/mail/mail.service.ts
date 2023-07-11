@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { MailRepository } from './mail.repository';
-import { SubscriberService } from '../subscriber/subscriber.service';
 import { MailQueueEntity } from './mail-queue.entity';
+import { SubscriberRepository } from '../subscriber/subscriber.repository';
 
 const EMAIL_NEW_TRAINING_SUBJECT = 'New workout';
 
@@ -11,7 +11,7 @@ export class MailService {
   constructor(
     private readonly mailerService: MailerService,
     private readonly mailRepository: MailRepository,
-    private readonly subscriberService: SubscriberService,
+    private readonly subscriberRepository: SubscriberRepository,
   ) { }
 
   public async sendNotifyNewTraining() {
@@ -35,7 +35,7 @@ export class MailService {
   }
 
   public async addNotify(coach: string, training: string) {
-    const subscribers = await this.subscriberService.findByCoach(coach);
+    const subscribers = await this.subscriberRepository.findByCoach(coach);
     if (!subscribers) {
       throw new NotFoundException('No subscribers.');
     }
