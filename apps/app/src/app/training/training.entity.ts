@@ -6,7 +6,7 @@ export class TrainingEntity implements Entity<TrainingEntity>, Training {
   public title: string;
   public background: string;
   public trainingLevel: string;
-  public trainingTypes: string;
+  public trainingType: string;
   public interval: string;
   public price?: number;
   public caloriesToBurn: number;
@@ -28,16 +28,16 @@ export class TrainingEntity implements Entity<TrainingEntity>, Training {
     this.title = entity.title;
     this.background = entity.background;
     this.trainingLevel = entity.trainingLevel;
-    this.trainingTypes = entity.trainingTypes;
+    this.trainingType = entity.trainingType;
     this.interval = entity.interval;
-    this.price = entity.price ?? 0;
+    this.price = entity.price;
     this.caloriesToBurn = entity.caloriesToBurn;
     this.description = entity.description;
     this.usersGender = entity.usersGender;
     this.demoVideo = entity.demoVideo;
-    this.rating = entity.rating ?? 0;
+    this.rating = entity.rating;
     this.coachId = entity.coachId;
-    this.specialOffer = entity.specialOffer ?? false;
+    this.specialOffer = entity.specialOffer || false;
     this.totalSale = entity.totalSale;
     this.totalAmount = entity.totalAmount;
   }

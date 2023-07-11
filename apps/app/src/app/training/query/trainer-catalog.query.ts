@@ -20,32 +20,44 @@ export class TrainingCatalogQuery {
   @IsInt()
   public page = 0;
 
+  @Transform(({ value }) => +value)
   @Min(TrainingQueryOption.minPrice)
   @IsInt()
   @IsOptional()
   public priceFrom = TrainingQueryOption.minPrice;
 
+  @Transform(({ value }) => +value)
   @IsInt()
   @IsOptional()
-  public priceTo: number;
+  public priceTo = TrainingQueryOption.maxPrice;
 
+  @Transform(({ value }) => +value)
   @Min(TrainingQueryOption.minCaloriesToBurn)
   @Max(TrainingQueryOption.maxCaloriesToBurn)
   @IsOptional()
   public caloriesFrom = TrainingQueryOption.minCaloriesToBurn;
 
+  @Transform(({ value }) => +value)
   @Min(TrainingQueryOption.minCaloriesToBurn)
   @Max(TrainingQueryOption.maxCaloriesToBurn)
   @IsOptional()
   public caloriesTo = TrainingQueryOption.maxCaloriesToBurn;
 
+  @Transform(({ value }) => +value)
   @Min(TrainingQueryOption.minRatind)
   @Max(TrainingQueryOption.maxRating)
   @IsInt()
   @IsOptional()
-  public rating: number;
+  public ratingFrom = TrainingQueryOption.minRatind;
+
+  @Transform(({ value }) => +value)
+  @Min(TrainingQueryOption.minRatind)
+  @Max(TrainingQueryOption.maxRating)
+  @IsInt()
+  @IsOptional()
+  public ratingTo = TrainingQueryOption.maxRating;
 
   @IsEnum(TrainingType)
   @IsOptional()
-  public trainingType: string;
+  public trainingType?: string;
 }

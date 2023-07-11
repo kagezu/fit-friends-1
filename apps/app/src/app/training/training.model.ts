@@ -14,7 +14,7 @@ export class TrainingModel extends Document implements Training {
   @Prop()
   public trainingLevel: string;
   @Prop()
-  public trainingTypes: string;
+  public trainingType: string;
   @Prop()
   public interval: string;
   @Prop({

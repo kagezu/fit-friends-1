@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Subscriber } from '@fit-friends-1/shared/app-types';
 
@@ -11,7 +11,10 @@ const SUBSCRIBERS_COLLECTION_NAME = 'subscribers';
 export class SubscriberModel extends Document implements Subscriber {
   @Prop()
   email: string;
-  @Prop()
+  @Prop({
+    ref: 'UserModel',
+    type: SchemaTypes.ObjectId
+  })
   coach: string;
 }
 

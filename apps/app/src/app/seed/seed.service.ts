@@ -20,6 +20,7 @@ import { UserBalanceRepository } from '../user-balance/user-balance.repository';
 import { FriendService } from '../friend/friend.service';
 import { SubscriberRepository } from '../subscriber/subscriber.repository';
 import { SubscriberEntity } from '../subscriber/subscriber.entity';
+import { MailService } from '../mail/mail.service';
 
 const COUNT_ITEM = 10;
 const MAX_PRICE = 10;
@@ -33,6 +34,7 @@ export class SeedService {
     private readonly userRepository: UserRepository,
     private readonly trainingRepository: TrainingRepository,
     private readonly reviewService: ReviewService,
+    private readonly mailService: MailService,
     private readonly orderRepository: OrderRepository,
     private readonly personalOrderRepository: PersonalOrderRepository,
     private readonly userBalanceRepository: UserBalanceRepository,
@@ -146,12 +148,13 @@ export class SeedService {
   private async generateTrainings(coachs: User[], video: File) {
     const trainings = [];
     for (let i = 0; i < COUNT_ITEM; i++) {
+      const coachId = getRandomItem(coachs)._id;
       trainings[i] = await this.trainingRepository.create(
         new TrainingEntity({
           title: getRandomItem(mockData.titles),
           background: getRandomItem(mockData.backgrounds),
           trainingLevel: getRandomItem(mockData.trainingLevels),
-          trainingTypes: getRandomItem(mockData.trainingTypes),
+          trainingType: getRandomItem(mockData.trainingTypes),
           interval: getRandomItem(mockData.intervals),
           price: generateRandomValue(0, MAX_PRICE) * STEP_PRICE,
           caloriesToBurn: generateRandomValue(UserValidate.minCaloriesToBurn, UserValidate.maxCaloriesToBurn),
@@ -159,11 +162,12 @@ export class SeedService {
           usersGender: getRandomItem(mockData.genders),
           demoVideo: video._id,
           rating: 0,
-          coachId: getRandomItem(coachs)._id,
+          coachId,
           specialOffer: true,
           totalSale: 0,
           totalAmount: 0
         }));
+      await this.mailService.addNotify(coachId, trainings[i]._id.toString());
     }
     return trainings;
   }

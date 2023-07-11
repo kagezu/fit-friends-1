@@ -36,11 +36,10 @@ export class MailService {
 
   public async addNotify(coach: string, training: string) {
     const subscribers = await this.subscriberRepository.findByCoach(coach);
-    if (!subscribers) {
-      throw new NotFoundException('No subscribers.');
-    }
     const emails = subscribers.map(({ email }) => email);
-    const mailQueue = new MailQueueEntity({ emails, training });
-    return this.mailRepository.create(mailQueue);
+    if (emails.length) {
+      const mailQueue = new MailQueueEntity({ emails, training });
+      return this.mailRepository.create(mailQueue);
+    }
   }
 }

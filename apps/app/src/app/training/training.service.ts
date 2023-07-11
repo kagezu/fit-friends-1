@@ -64,11 +64,11 @@ export class TrainingService {
   }
 
   /** Список тренировок */
-  public async index(coachId: string, query: TrainingCatalogQuery) {
+  public async index(query: TrainingCatalogQuery) {
     const trainingQuery = plainToInstance(
       TrainingCatalogQuery,
       query,
       { enableImplicitConversion: true });
-    return this.trainingRepository.index(coachId, trainingQuery);
+    return this.trainingRepository.index(trainingQuery);
   }
 }

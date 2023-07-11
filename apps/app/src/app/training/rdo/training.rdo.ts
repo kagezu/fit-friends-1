@@ -56,7 +56,7 @@ export class TrainingRdo {
     enum: TrainingType
   })
   @Expose()
-  trainingTypes: string;
+  trainingType: string;
 
   @ApiProperty({
     description: 'Время на тренировку.',

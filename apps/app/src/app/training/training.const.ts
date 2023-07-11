@@ -17,4 +17,5 @@ export enum TrainingQueryOption {
   maxRating = 5,
   minRatind = 0,
   minPrice = 0,
+  maxPrice = 100000
 }

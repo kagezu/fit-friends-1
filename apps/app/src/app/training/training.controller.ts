@@ -147,10 +147,8 @@ export class TrainingController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get()
-  public async index(@Query() query: TrainingCatalogQuery,
-    @Req() req: Request
-  ) {
-    const existTrainings = await this.trainingService.index(req['user']._id, query);
+  public async index(@Query() query: TrainingCatalogQuery) {
+    const existTrainings = await this.trainingService.index(query);
     return fillObject(TrainingRdo, existTrainings);
   }
 }

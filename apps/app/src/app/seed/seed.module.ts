@@ -11,6 +11,7 @@ import { UserBalanceModule } from '../user-balance/user-balance.module';
 import { UserModule } from '../user/user.module';
 import { SeedController } from './seed.controller';
 import { SeedService } from './seed.service';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { SeedService } from './seed.service';
     UserBalanceModule,
     SubscriberModule,
     PersonalOrderModule,
-    ReviewModule
+    ReviewModule,
+    MailModule
   ],
   controllers: [SeedController],
   providers: [

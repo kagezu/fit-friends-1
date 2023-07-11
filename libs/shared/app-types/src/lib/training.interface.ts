@@ -3,7 +3,7 @@ export interface Training {
   title: string;
   background: string;
   trainingLevel: string;
-  trainingTypes: string;
+  trainingType: string;
   interval: string;
   price?: number;
   caloriesToBurn: number;

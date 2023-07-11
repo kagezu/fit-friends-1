@@ -41,16 +41,17 @@ export class TrainingRepository {
 
   public async list(
     coachId: string,
-    { limit, page, sortDirection, priceFrom, priceTo, caloriesFrom, caloriesTo, rating, interval }: TrainingQuery
+    { limit, page, sortDirection, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, interval }: TrainingQuery
   ): Promise<Training[]> {
     return this.trainingModel
-      .find({
+      .find(Object.assign({
         coachId,
         price: { $gte: priceFrom, $lte: priceTo },
-        calories: { $gte: caloriesFrom, $lte: caloriesTo },
-        rating,
-        interval: interval ? { $in: interval } : {}
-      })
+        caloriesToBurn: { $gte: caloriesFrom, $lte: caloriesTo },
+        rating: { $gte: ratingFrom, $lte: ratingTo }
+      },
+        { interval: interval ? { $in: interval } : {} }
+      ))
       .sort([['createdAt', sortDirection]])
       .skip(page * limit)
       .limit(limit)
@@ -58,18 +59,16 @@ export class TrainingRepository {
       .exec();
   }
 
-  public async index(
-    coachId: string,
-    { limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, rating, trainingType }: TrainingCatalogQuery
+  public async index({ limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, trainingType }: TrainingCatalogQuery
   ): Promise<Training[]> {
     return this.trainingModel
-      .find({
-        coachId,
+      .find(Object.assign({
         price: { $gte: priceFrom, $lte: priceTo },
-        calories: { $gte: caloriesFrom, $lte: caloriesTo },
-        rating,
-        trainingType
-      })
+        caloriesToBurn: { $gte: caloriesFrom, $lte: caloriesTo },
+        rating: { $gte: ratingFrom, $lte: ratingTo }
+      },
+        trainingType ? { trainingType } : {}
+      ))
       .sort([[category, sortDirection]])
       .skip(page * limit)
       .limit(limit)
