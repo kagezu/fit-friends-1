@@ -20,8 +20,8 @@ export class MailService {
       throw new NotFoundException('No messages in queue.');
     }
     mails.map(({ emails, training }) =>
-      emails.map(async (email: string) =>
-        await this.mailerService.sendMail({
+      Promise.all(emails.map((email: string) =>
+        this.mailerService.sendMail({
           to: email,
           subject: EMAIL_NEW_TRAINING_SUBJECT,
           template: './new-training',
@@ -29,7 +29,7 @@ export class MailService {
             title: training['title']
           }
         })
-      )
+      ))
     );
     await this.mailRepository.destroy();
   }

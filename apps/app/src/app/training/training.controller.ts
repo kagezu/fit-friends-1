@@ -97,7 +97,7 @@ export class TrainingController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get(':id')
+  @Get('detail/:id')
   public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existTraining = await this.trainingService.show(id);
     if (!existTraining) {
@@ -146,7 +146,7 @@ export class TrainingController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get('')
   public async index(@Query() query: TrainingCatalogQuery) {
     const existTrainings = await this.trainingService.index(query);
     return fillObject(TrainingRdo, existTrainings);

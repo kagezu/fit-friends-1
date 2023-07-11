@@ -69,15 +69,15 @@ true
 ###
 
 # Get training info
-GET http://localhost:3333/api/training/64aceb2ba6024431a2237a65 {{protocol}}
+GET http://localhost:3333/api/training/detail/64aceb2ba6024431a2237a65 {{protocol}}
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFjZTlhOWI3ZWYyZGJlMDAxNjAyZjMiLCJlbWFpbCI6InVzZXIxMkBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLRgtGA0LXQvdC10YAiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODkwNTM2NjMsImV4cCI6MTY4OTY1ODQ2M30.xFsUgXC-PGBBeqjE9yP4JddU_AZlk255JYYinFEnG5s
 
 ###
 # Get training list
-GET http://localhost:3333/api/training/my?limit=50&sortDirection=desc&page=0&priceFrom=0&priceTo=20000&caloriesFrom=1000&caloriesTo=5000&ratingFrom=0&ratingTo=5&interval=30 мин — 50 мин {{protocol}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFjZTlhOWI3ZWYyZGJlMDAxNjAyZjMiLCJlbWFpbCI6InVzZXIxMkBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLRgtGA0LXQvdC10YAiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODkwNTM2NjMsImV4cCI6MTY4OTY1ODQ2M30.xFsUgXC-PGBBeqjE9yP4JddU_AZlk255JYYinFEnG5s
+GET http://localhost:3333/api/training/my?limit=50&sortDirection=desc&page=0&priceFrom=0&priceTo=20000&caloriesFrom=1000&caloriesTo=5000&ratingFrom=0&ratingTo=5 {{protocol}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFkMzI0ZmIzMTM3NDg3N2IxYjc4YTciLCJlbWFpbCI6ImMtdGVzdEBnbWFpbC5jb20iLCJyb2xlIjoi0YLRgNC10L3QtdGAIiwibmFtZSI6ItCY0L3QtdGB0YHQsCDQpNGD0YDRgdC-0LLQsCIsImlhdCI6MTY4OTA3MjIzMiwiZXhwIjoxNjg5Njc3MDMyfQ.QuJXP__4KuESCwKUXGaThbMLbMCy9trkH-7sGO4oJws
 
 ###
 # Get training index
 GET http://localhost:3333/api/training/?limit=50&sortDirection=desc&category=createdAt&page=0&priceFrom=0&priceTo=20000&caloriesFrom=1000&caloriesTo=5000&ratingFrom=0&ratingTo=5&trainingType=бег {{protocol}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFjZTlhOWI3ZWYyZGJlMDAxNjAyZjMiLCJlbWFpbCI6InVzZXIxMkBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLRgtGA0LXQvdC10YAiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODkwNTM2NjMsImV4cCI6MTY4OTY1ODQ2M30.xFsUgXC-PGBBeqjE9yP4JddU_AZlk255JYYinFEnG5s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFkMzI0ZmIzMTM3NDg3N2IxYjc4YTciLCJlbWFpbCI6ImMtdGVzdEBnbWFpbC5jb20iLCJyb2xlIjoi0YLRgNC10L3QtdGAIiwibmFtZSI6ItCY0L3QtdGB0YHQsCDQpNGD0YDRgdC-0LLQsCIsImlhdCI6MTY4OTA3MjIzMiwiZXhwIjoxNjg5Njc3MDMyfQ.QuJXP__4KuESCwKUXGaThbMLbMCy9trkH-7sGO4oJws

@@ -194,7 +194,7 @@ export class SeedService {
         caloriesPerDay: generateRandomValue(UserValidate.minCaloriesPerDay, UserValidate.maxCaloriesPerDay),
         readyForTraining: true
       });
-      userEntity.setPassword(mockData.password);
+      await userEntity.setPassword(mockData.password);
       return this.userRepository.create(userEntity);
     }));
   }
@@ -220,7 +220,7 @@ export class SeedService {
         resume: getRandomItem(mockData.resumes),
         readyForIndividualTraining: false
       });
-      userEntity.setPassword(mockData.password);
+      await userEntity.setPassword(mockData.password);
       return this.userRepository.create(userEntity);
     }));
   }

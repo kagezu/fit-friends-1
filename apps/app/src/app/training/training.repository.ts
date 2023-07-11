@@ -50,7 +50,7 @@ export class TrainingRepository {
         caloriesToBurn: { $gte: caloriesFrom, $lte: caloriesTo },
         rating: { $gte: ratingFrom, $lte: ratingTo }
       },
-        { interval: interval ? { $in: interval } : {} }
+        interval ? { $in: interval } : {}
       ))
       .sort([['createdAt', sortDirection]])
       .skip(page * limit)

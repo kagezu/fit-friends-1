@@ -6,6 +6,7 @@ import { SubscriberModule } from '../subscriber/subscriber.module';
 import { MailRepository } from './mail.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MailModel, MailSchema } from './mail.model';
+import { MailController } from './mail.controller';
 
 @Module({
   imports: [
@@ -17,8 +18,10 @@ import { MailModel, MailSchema } from './mail.model';
   ],
   providers: [
     MailService,
-    MailRepository
+    MailRepository,
+    MailController
   ],
+  controllers: [MailController],
   exports: [
     MailService
   ]

@@ -6,13 +6,15 @@ import { ConfigModule } from '@nestjs/config';
 import { FriendController } from './friend.controller';
 import { FriendService } from './friend.service';
 import { NotifyModule } from '../notify/notify.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: FriendModel.name, schema: FriendSchema }
   ]),
     ConfigModule,
-    NotifyModule
+    NotifyModule,
+    UserModule
   ],
   providers: [
     FriendRepository,

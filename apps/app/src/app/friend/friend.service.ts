@@ -3,20 +3,28 @@ import { FriendRepository } from './friend.repository';
 import { FriendEntity } from './friend.entity';
 import { NotifyService } from '../notify/notify.service';
 import { User } from '@fit-friends-1/shared/app-types';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class FriendService {
   constructor(
     private readonly friendRepository: FriendRepository,
+    private readonly userRepository: UserRepository,
     private readonly notifyService: NotifyService,
   ) { }
 
   /** Добавление в друзья */
   public async create(user: User, friend: string) {
+    const userExist = await this.userRepository.findById(friend);
+    if (!userExist) {
+      throw new NotFoundException('User not exist');
+    }
+
     const existFriend = await this.friendRepository.check(user._id, friend);
     if (existFriend) {
       throw new ConflictException('Friend exist');
     }
+
     if (user._id.toString() === friend) {
       throw new BadRequestException("You can't be your own friend");
     }

@@ -152,7 +152,7 @@ POST http://localhost:3333/api/auth/login HTTP/1.1
 Content-Type: {{contentType}}
 
 {
-  "email": "user12@notfound.local",
+  "email": "c-test@gmail.com",
   "password": "123456"
 }
 

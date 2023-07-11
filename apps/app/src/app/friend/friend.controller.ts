@@ -21,6 +21,7 @@ export class FriendController {
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiConflictResponse({ description: 'The friend exist.' })
+  @ApiNotFoundResponse({ description: 'User not exist.' })
   @ApiHeader({
     name: 'authorization',
     description: 'Access token'

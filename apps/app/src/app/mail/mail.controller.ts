@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('mail')
 @Controller('mail')
-export class FriendController {
+export class MailController {
   constructor(
     private readonly mailService: MailService,
   ) { }
