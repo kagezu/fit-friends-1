@@ -23,7 +23,8 @@ import { UserBalanceModule } from '../user-balance/user-balance.module';
   ],
   controllers: [OrderController],
   exports: [
-    OrderRepository
+    OrderRepository,
+    OrderService
   ]
 })
 export class OrderModule { }

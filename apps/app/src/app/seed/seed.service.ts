@@ -12,8 +12,6 @@ import { TrainingRepository } from '../training/training.repository';
 import { TrainingEntity } from '../training/training.entity';
 import { ReviewValidate } from '../review/review.const';
 import { ReviewService } from '../review/review.service'
-import { OrderRepository } from '../order/order.repository';
-import { OrderEntity } from '../order/order.entity';
 import { PersonalOrderRepository } from '../personal-order/personal-order.repository';
 import { PersonalOrderEntity } from '../personal-order/personal-order.entity';
 import { UserBalanceRepository } from '../user-balance/user-balance.repository';
@@ -21,6 +19,7 @@ import { FriendService } from '../friend/friend.service';
 import { SubscriberRepository } from '../subscriber/subscriber.repository';
 import { SubscriberEntity } from '../subscriber/subscriber.entity';
 import { MailService } from '../mail/mail.service';
+import { OrderService } from '../order/order.service';
 
 const COUNT_ITEM = 10;
 const MAX_PRICE = 10;
@@ -35,7 +34,7 @@ export class SeedService {
     private readonly trainingRepository: TrainingRepository,
     private readonly reviewService: ReviewService,
     private readonly mailService: MailService,
-    private readonly orderRepository: OrderRepository,
+    private readonly orderService: OrderService,
     private readonly personalOrderRepository: PersonalOrderRepository,
     private readonly userBalanceRepository: UserBalanceRepository,
     private readonly friendService: FriendService,
@@ -62,7 +61,7 @@ export class SeedService {
     await this.generateReviews(users, trainings);
     Logger.log('Created reviews');
 
-    await this.generateOrders(trainings);
+    await this.generateOrders(users, trainings);
     Logger.log('Created orders');
 
     await this.generatePersonalOrders(users, coachs);
@@ -72,7 +71,16 @@ export class SeedService {
     Logger.log('Created friends');
 
     await this.generateBalance(users, trainings);
-    Logger.log('Created balance');
+    Logger.log('Created orders');
+  }
+
+  private async generateBalance(users: User[], trainings: Training[]) {
+    return Promise.all(users.map(
+      (user) => this.userBalanceRepository.create({
+        userId: user._id,
+        training: getRandomItem(trainings)._id,
+        count: generateRandomValue(0, MAX_COUNT_ORDER)
+      })));
   }
 
   private async generateSubscriptions(users: User[], coachs: User[]) {
@@ -94,15 +102,6 @@ export class SeedService {
       }));
   }
 
-  private async generateBalance(users: User[], trainings: Training[]) {
-    return Promise.all(users.map(
-      (user) => this.userBalanceRepository.create({
-        userId: user._id,
-        training: getRandomItem(trainings)._id,
-        count: generateRandomValue(0, MAX_COUNT_ORDER)
-      })));
-  }
-
   private async generatePersonalOrders(users: User[], coachs: User[]) {
     return Promise.all(users.map(
       (user) => this.personalOrderRepository.create(
@@ -113,21 +112,19 @@ export class SeedService {
         }))));
   }
 
-  private async generateOrders(trainings: Training[]) {
+  private async generateOrders(users: User[], trainings: Training[]) {
     return Promise.all(trainings.map(
       (training) => {
         const orders = [];
         for (let i = 0; i < COUNT_ITEM; i++) {
           const count = generateRandomValue(0, MAX_COUNT_ORDER);
-          orders[i] = this.orderRepository.create(
-            new OrderEntity({
-              purchaseType: getRandomItem(mockData.purchaseTypes),
+          orders[i] = this.orderService.create(
+            getRandomItem(users)._id,
+            {
               training: training._id,
-              price: training.price,
               count,
-              orderPrice: training.price * count,
               paymentMethod: getRandomItem(mockData.paymentMethods)
-            }));
+            });
         }
         return Promise.all(orders);
       }));
