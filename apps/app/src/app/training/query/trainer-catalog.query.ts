@@ -1,17 +1,16 @@
 import { IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { TrainingQueryOption } from '../training.const';
 import { TrainingType } from '@fit-friends-1/shared/app-types';
 import { QueryOption } from '../../app.const';
 
 export class TrainingCatalogQuery {
-  @Transform(({ value }) => +value || TrainingQueryOption.DefaultCountLimit)
+  @Transform(({ value }) => +value || QueryOption.DefaultCountLimit)
   @IsInt()
-  @Max(TrainingQueryOption.MaxCountLimit)
-  public limit: number = TrainingQueryOption.DefaultCountLimit;
+  @Max(QueryOption.MaxCountLimit)
+  public limit: number = QueryOption.DefaultCountLimit;
 
   @IsIn(['asc', 'desc'])
-  public sortDirection: 'desc' | 'asc' = TrainingQueryOption.DefaultSortDirection;
+  public sortDirection: 'desc' | 'asc' = QueryOption.DefaultSortDirection;
 
   @IsIn(['createdAt', 'price'])
   public category: string = QueryOption.DefaultSortCategory;
@@ -21,41 +20,41 @@ export class TrainingCatalogQuery {
   public page = 0;
 
   @Transform(({ value }) => +value)
-  @Min(TrainingQueryOption.minPrice)
+  @Min(QueryOption.minPrice)
   @IsInt()
   @IsOptional()
-  public priceFrom = TrainingQueryOption.minPrice;
+  public priceFrom = QueryOption.minPrice;
 
   @Transform(({ value }) => +value)
   @IsInt()
   @IsOptional()
-  public priceTo = TrainingQueryOption.maxPrice;
+  public priceTo = QueryOption.maxPrice;
 
   @Transform(({ value }) => +value)
-  @Min(TrainingQueryOption.minCaloriesToBurn)
-  @Max(TrainingQueryOption.maxCaloriesToBurn)
+  @Min(QueryOption.minCaloriesToBurn)
+  @Max(QueryOption.maxCaloriesToBurn)
   @IsOptional()
-  public caloriesFrom = TrainingQueryOption.minCaloriesToBurn;
+  public caloriesFrom = QueryOption.minCaloriesToBurn;
 
   @Transform(({ value }) => +value)
-  @Min(TrainingQueryOption.minCaloriesToBurn)
-  @Max(TrainingQueryOption.maxCaloriesToBurn)
+  @Min(QueryOption.minCaloriesToBurn)
+  @Max(QueryOption.maxCaloriesToBurn)
   @IsOptional()
-  public caloriesTo = TrainingQueryOption.maxCaloriesToBurn;
+  public caloriesTo = QueryOption.maxCaloriesToBurn;
 
   @Transform(({ value }) => +value)
-  @Min(TrainingQueryOption.minRatind)
-  @Max(TrainingQueryOption.maxRating)
+  @Min(QueryOption.minRatind)
+  @Max(QueryOption.maxRating)
   @IsInt()
   @IsOptional()
-  public ratingFrom = TrainingQueryOption.minRatind;
+  public ratingFrom = QueryOption.minRatind;
 
   @Transform(({ value }) => +value)
-  @Min(TrainingQueryOption.minRatind)
-  @Max(TrainingQueryOption.maxRating)
+  @Min(QueryOption.minRatind)
+  @Max(QueryOption.maxRating)
   @IsInt()
   @IsOptional()
-  public ratingTo = TrainingQueryOption.maxRating;
+  public ratingTo = QueryOption.maxRating;
 
   @IsEnum(TrainingType)
   @IsOptional()

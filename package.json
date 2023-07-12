@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run app:serve"
+    "start": "nx run app:serve",
+    "lint": "nx run app:lint"
   },
   "private": true,
   "dependencies": {

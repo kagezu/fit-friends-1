@@ -7,15 +7,3 @@ export enum TrainingValidate {
   minLengthDescription = 10,
   maxLengthDescription = 140,
 }
-
-export enum TrainingQueryOption {
-  DefaultCountLimit = 50,
-  MaxCountLimit = 50,
-  DefaultSortDirection = 'desc',
-  minCaloriesToBurn = 1000,
-  maxCaloriesToBurn = 5000,
-  maxRating = 5,
-  minRatind = 0,
-  minPrice = 0,
-  maxPrice = 100000
-}
