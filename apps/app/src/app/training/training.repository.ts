@@ -26,6 +26,12 @@ export class TrainingRepository {
       .exec();
   }
 
+  public async findByCoach(coachId: string): Promise<Training[] | null> {
+    return this.trainingModel
+      .find({ coachId })
+      .exec();
+  }
+
   public async check(id: string): Promise<Training | null> {
     return this.trainingModel
       .findById(id)

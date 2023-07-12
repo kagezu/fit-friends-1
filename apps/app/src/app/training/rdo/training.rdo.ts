@@ -16,7 +16,7 @@ export class TrainingRdo {
     description: 'Идентификатор тренера',
     example: '6497e4e84c024e968c12fc9c'
   })
-  @Expose({ name: 'coachId' })
+  @Expose()
   @Transform(({ obj }) => obj.coachId.toString())
   public coachId: string;
 

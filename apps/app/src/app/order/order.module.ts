@@ -6,13 +6,15 @@ import { ConfigModule } from '@nestjs/config';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { TrainingModule } from '../training/training.module';
+import { UserBalanceModule } from '../user-balance/user-balance.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: OrderModel.name, schema: OrderSchema }
   ]),
     ConfigModule,
-    TrainingModule
+    TrainingModule,
+    UserBalanceModule
   ],
   providers: [
     OrderRepository,

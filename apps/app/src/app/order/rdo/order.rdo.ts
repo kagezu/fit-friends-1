@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PaymentMethod } from '@fit-friends-1/shared/app-types';
-import { Expose, Type } from 'class-transformer';
-import { TrainingRdo } from '../../training/rdo/training.rdo';
+import { Expose, Transform } from 'class-transformer';
 
 export class OrderRdo {
   @ApiProperty({
@@ -12,7 +11,7 @@ export class OrderRdo {
   purchaseType: string;
 
   @ApiProperty({
-    description: 'Стоимость приобретаемой тренировки.',
+    description: 'Стоимость приобретённой тренировки.',
     example: '500'
   })
   @Expose()
@@ -35,9 +34,9 @@ export class OrderRdo {
   @ApiProperty({
     description: 'Тренировка'
   })
+  @Transform(({ obj }) => obj.training._id.toString())
   @Expose()
-  @Type(() => TrainingRdo)
-  training: TrainingRdo;
+  training: string;
 
   @ApiProperty({
     description: 'Количество приобретаемых тренировок.',
@@ -51,4 +50,20 @@ export class OrderRdo {
     enum: PaymentMethod
   })
   paymentMethod: string;
+
+  @ApiProperty({
+    description: 'Общая стоимость всех заказов.',
+    example: '4500'
+  })
+  @Transform(({ obj }) => obj.training.totalSale)
+  @Expose()
+  totalSale: number;
+
+  @ApiProperty({
+    description: 'Общее количество приобретаемых тренировок.',
+    example: '15'
+  })
+  @Transform(({ obj }) => obj.training.totalAmount)
+  @Expose()
+  totalAmount: number;
 }
