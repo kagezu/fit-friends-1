@@ -18,7 +18,7 @@ export class UserBalanceRepository {
   public async update(item: UserBalance): Promise<UserBalance | null> {
     return this.userBalanceModel
       .findOneAndUpdate(
-        { userId: item, training: item.training },
+        { userId: item.userId, training: item.training },
         item
       )
       .exec();
@@ -27,11 +27,10 @@ export class UserBalanceRepository {
   public async index(userId: string): Promise<UserBalance[] | null> {
     return this.userBalanceModel
       .find({ userId })
-      .populate('training')
       .exec();
   }
 
-  public async check(userId: string, training: string): Promise<UserBalance | null> {
+  public async show(userId: string, training: string): Promise<UserBalance | null> {
     return this.userBalanceModel
       .findOne({ userId, training })
       .exec();

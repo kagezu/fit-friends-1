@@ -1,11 +1,11 @@
-import { Controller, HttpCode, HttpStatus, UseGuards, Req, Param, Get, Patch } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, UseGuards, Req, Get, Patch, Body } from '@nestjs/common';
 import { fillObject } from '@fit-friends-1/util/util-core';
 import { ApiCreatedResponse, ApiHeader, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserBalanceService } from './user-balance.service';
-import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { UserBalanceRdo } from './rdo/user-balance.rdo';
 import { JwtCoachGuard } from '../auth/guards/jwt-coach.guard';
+import { UpdateUserBalanceDto } from './dto/update-user-balance.dto';
 
 @ApiTags('balance')
 @Controller('balance')
@@ -20,19 +20,21 @@ export class UserBalanceController {
     type: UserBalanceRdo
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiUnauthorizedResponse({ description: 'To change the balance you need to be the creator of the workout.' })
   @ApiNotFoundResponse({ description: 'Training not found.' })
+  @ApiNotFoundResponse({ description: 'User not found.' })
   @ApiHeader({
     name: 'authorization',
     description: 'Access token'
   })
   @UseGuards(JwtCoachGuard)
   @HttpCode(HttpStatus.OK)
-  @Patch(':id/add')
+  @Patch('add')
   public async increase(
-    @Param('id', MongoidValidationPipe) id: string,
-    @Req() req: Request
+    @Body() dto: UpdateUserBalanceDto,
+    @Req() req: Request,
   ) {
-    const existUserBalance = await this.userBalanceService.increase(req['user']._id, id, 1);
+    const existUserBalance = await this.userBalanceService.increase(req['user']._id, dto);
     return fillObject(UserBalanceRdo, existUserBalance);
   }
 
@@ -42,23 +44,25 @@ export class UserBalanceController {
     type: UserBalanceRdo
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiNotFoundResponse({ description: 'No information.' })
+  @ApiUnauthorizedResponse({ description: 'To change the balance you need to be the creator of the workout.' })
+  @ApiNotFoundResponse({ description: 'Training not found.' })
+  @ApiNotFoundResponse({ description: 'Nothing to write off.' })
   @ApiHeader({
     name: 'authorization',
     description: 'Access token'
   })
   @UseGuards(JwtCoachGuard)
   @HttpCode(HttpStatus.OK)
-  @Patch(':id/dec')
+  @Patch('dec')
   public async decrease(
-    @Param('id', MongoidValidationPipe) id: string,
+    @Body() dto: UpdateUserBalanceDto,
     @Req() req: Request
   ) {
-    const existUserBalance = await this.userBalanceService.decrease(req['user']._id, id, 1);
+    const existUserBalance = await this.userBalanceService.decrease(req['user']._id, dto);
     return fillObject(UserBalanceRdo, existUserBalance);
   }
 
-  /** Запрос баланса */
+  /** Запрос баланса пользователем */
   @ApiOkResponse({
     type: [UserBalanceRdo],
     description: 'Balance found'
@@ -70,7 +74,7 @@ export class UserBalanceController {
   })
   @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.OK)
-  @Get('')
+  @Get()
   public async index(@Req() req: Request) {
     const userBalances = await this.userBalanceService.index(req['user']._id);
     return fillObject(UserBalanceRdo, userBalances);

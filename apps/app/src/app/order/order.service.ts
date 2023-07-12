@@ -1,47 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { OrderRepository } from './order.repository';
 import { plainToInstance } from 'class-transformer';
 import { CoachOrderQuery } from './query/coach-order.query';
+import { OrderCreateDto } from './dto/order-create.dto';
+import { PurchaseType } from '@fit-friends-1/shared/app-types';
+import { TrainingRepository } from '../training/training.repository';
+import { OrderEntity } from './order.entity';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly orderRepository: OrderRepository,
+    private readonly trainingRepository: TrainingRepository,
   ) { }
 
-  /** Информация о заказе
-  public async show(id: string) {
-    return this.OrderRepository.findById(id);
-  } */
-
-  /** Создание новой тренировки
-  public async create(coachId: string, dto: OrderCreateDto, video: Express.Multer.File) {
-    if (!video) {
-      throw new BadRequestException('Video file is request');
+  /**  Создание нового заказа */
+  public async create(dto: OrderCreateDto) {
+    const existTraining = await this.trainingRepository.findById(dto.training);
+    if (!existTraining) {
+      throw new NotFoundException('Training  not found.');
     }
-    const file = await this.fileService.save(video);
-    const Order = {
+
+    const orderEntity = new OrderEntity({
       ...dto,
-      rating: 0,
-      background: '',
-      coachId,
-      demoVideo: file._id
-    };
-    const OrderEntity = new OrderEntity(Order);
+      purchaseType: PurchaseType.Subscription,
+      price: existTraining.price,
+      orderPrice: existTraining.price * dto.count
+    });
 
-    return this.OrderRepository.create(OrderEntity);
-  } */
-
-  /** Редактирование тренировки
-  public async update(OrderEntity: OrderEntity, dto: OrderUpdateDto, video: Express.Multer.File) {
-    Object.assign(OrderEntity, dto);
-    if (video) {
-      const file = await this.fileService.save(video);
-      OrderEntity.demoVideo = file._id;
-    }
-
-    return this.OrderRepository.update(OrderEntity._id, OrderEntity);
-  } */
+    return this.orderRepository.create(orderEntity);
+  }
 
   /** Список заказов тренера */
   public async list(coachId: string, query: CoachOrderQuery) {

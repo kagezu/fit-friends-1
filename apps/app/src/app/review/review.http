@@ -3,18 +3,18 @@
 @protocol = HTTP/1.1
 
 # Get reviews list
-GET {{baseUrl}}/review/649f9bfd7974b6f0298bc9a9 {{protocol}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM
+GET {{baseUrl}}/review/64ad3250b31374877b1b78df {{protocol}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFkMzI0ZmIzMTM3NDg3N2IxYjc4OTEiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6ItC_0L7Qu9GM0LfQvtCy0LDRgtC10LvRjCIsIm5hbWUiOiLQoNC-0LzQsNC9INCU0LzQuNGC0YDQuNC10LLQuNGHIiwiaWF0IjoxNjg5MDgxMzA3LCJleHAiOjE2ODk2ODYxMDd9.R6hqgufpPsM5XCWV1zrT4i0A40eMWpb9kUyK9-G2FlU
 
 ###
 
 # Add review
 POST {{baseUrl}}/review  {{protocol}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlmOWJmZDc5NzRiNmYwMjk4YmM5YTkiLCJlbWFpbCI6InVzZXIwMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiLQv9C-0LvRjNC30L7QstCw0YLQtdC70YwiLCJuYW1lIjoiU21pdGgiLCJpYXQiOjE2ODgxODc0MjUsImV4cCI6MTY4ODc5MjIyNX0.rct9pAZe6brCBa-ZjiUqbvjmhbyETqjDorh57aBqEiM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NGFkMzI0ZmIzMTM3NDg3N2IxYjc4OTEiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6ItC_0L7Qu9GM0LfQvtCy0LDRgtC10LvRjCIsIm5hbWUiOiLQoNC-0LzQsNC9INCU0LzQuNGC0YDQuNC10LLQuNGHIiwiaWF0IjoxNjg5MDgxMzA3LCJleHAiOjE2ODk2ODYxMDd9.R6hqgufpPsM5XCWV1zrT4i0A40eMWpb9kUyK9-G2FlU
 
 {
-  "training": "",
+  "training": "64ad3250b31374877b1b78df",
   "evaluation": 4,
-  "textReview": "Создание отзыва к тренировке"
+  "textReview": "Создание отзыва к тренировке Создание отзыва к тренировке Создание отзыва к тренировке Создание отзыва к тренировке Создание отзыва к тренировке"
 }

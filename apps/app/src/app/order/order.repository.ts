@@ -5,12 +5,14 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CoachOrderQuery } from './query/coach-order.query';
 import { OrderEntity } from './order.entity';
+import { TrainingRepository } from '../training/training.repository';
 
 @Injectable()
 export class OrderRepository {
   constructor(
-    @InjectModel(OrderModel.name) private readonly orderModel: Model<OrderModel>) {
-  }
+    @InjectModel(OrderModel.name) private readonly orderModel: Model<OrderModel>,
+    private readonly trainingRepository: TrainingRepository
+  ) { }
 
   public async create(item: OrderEntity): Promise<Order> {
     const newTraining = new this.orderModel(item);
@@ -21,6 +23,8 @@ export class OrderRepository {
     coachId: string,
     { limit, page, sortDirection, category }: CoachOrderQuery
   ): Promise<Order[]> {
+    // const trainings = await this.trainingRepository.find({coachId}).exec();
+
     return this.orderModel
       .find({ coachId })
       .sort([[category, sortDirection]])

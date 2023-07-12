@@ -5,12 +5,14 @@ import { OrderRepository } from './order.repository';
 import { ConfigModule } from '@nestjs/config';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
+import { TrainingModule } from '../training/training.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: OrderModel.name, schema: OrderSchema }
   ]),
     ConfigModule,
+    TrainingModule
   ],
   providers: [
     OrderRepository,

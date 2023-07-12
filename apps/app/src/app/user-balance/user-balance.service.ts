@@ -1,56 +1,72 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserBalanceRepository } from './user-balance.repository';
 import { TrainingService } from '../training/training.service';
+import { UpdateUserBalanceDto } from './dto/update-user-balance.dto';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class UserBalanceService {
   constructor(
     private readonly userBalanceRepository: UserBalanceRepository,
+    private readonly userRepository: UserRepository,
     private readonly trainingService: TrainingService,
   ) { }
 
   /** Поступление */
-  public async increase(userId: string, training: string, count: number) {
+  public async increase(coachId: string, dto: UpdateUserBalanceDto) {
+    const { userId, training, count } = dto;
     const existTraining = await this.trainingService.show(training);
     if (!existTraining) {
       throw new NotFoundException('Training not found.');
     }
 
-    const existUserBalance = await this.userBalanceRepository.check(userId, training);
+    if (existTraining.coachId.toString() !== coachId.toString()) {
+      throw new UnauthorizedException('To change the balance you need to be the creator of the workout.');
+    }
+
+    const existUserBalance = await this.userBalanceRepository.show(userId, training);
     if (existUserBalance) {
-      return this.userBalanceRepository.update({
-        userId,
-        training,
+      await this.userBalanceRepository.update({
+        ...dto,
         count: existUserBalance.count + count
       });
+      return this.userBalanceRepository.show(userId, training);
     }
-    return this.userBalanceRepository.create({
-      userId,
-      training,
-      count: count
-    });
+
+    const existUser = this.userRepository.findById(userId);
+    if (!existUser) {
+      throw new NotFoundException('User not found.');
+    }
+
+    return this.userBalanceRepository.create(dto);
   }
 
   /** Списание  */
-  public async decrease(userId: string, training: string, count: number) {
+  public async decrease(coachId: string, dto: UpdateUserBalanceDto) {
+    const { userId, training, count } = dto;
     const existTraining = await this.trainingService.show(training);
     if (!existTraining) {
       throw new NotFoundException('Training not found.');
     }
 
-    const existUserBalance = await this.userBalanceRepository.check(userId, training);
-    if (!existUserBalance) {
-      throw new NotFoundException('Nothing to write off');
-    }
-    if (existUserBalance.count < count) {
-      count = existUserBalance.count;
+    if (existTraining.coachId.toString() !== coachId.toString()) {
+      throw new UnauthorizedException('To change the balance you need to be the creator of the workout.');
     }
 
-    return this.userBalanceRepository.update({
-      userId,
-      training,
+    const existUserBalance = await this.userBalanceRepository.show(userId, training);
+    if (!existUserBalance) {
+      throw new NotFoundException('Nothing to write off.');
+    }
+
+    if (existUserBalance.count < count) {
+      existUserBalance.count = count;
+    }
+
+    await this.userBalanceRepository.update({
+      ...dto,
       count: existUserBalance.count - count
     });
+    return this.userBalanceRepository.show(userId, training);
   }
 
   /** Запрос баланса */

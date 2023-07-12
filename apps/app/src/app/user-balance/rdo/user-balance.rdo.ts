@@ -1,14 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import { TrainingRdo } from '../../training/rdo/training.rdo';
+import { Expose, Transform } from 'class-transformer';
 
 export class UserBalanceRdo {
   @ApiProperty({
     description: 'Тренировка'
   })
   @Expose()
-  @Type(() => TrainingRdo)
-  training: TrainingRdo;
+  @Transform(({ obj }) => obj.training.toString())
+  training: string;
 
   @ApiProperty({
     description: 'Количество купленных тренировок'
