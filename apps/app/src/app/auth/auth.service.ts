@@ -20,12 +20,17 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
-    private readonly refreshTokenService: RefreshTokenService,
+    private readonly refreshTokenService: RefreshTokenService
   ) { }
 
   /** Регистрация пользователя*/
-  public async register(dto: CreateUserDto, files: UserFiles) {
+  public async register(authorization: string, dto: CreateUserDto, files: UserFiles) {
     const { role, email, password } = dto;
+
+    const payload = await this.verifyToken(authorization);
+    if (payload) {
+      throw new BadRequestException(UserMessage.AuthorizedUser);
+    }
 
     const user = {
       ...dto,
@@ -54,6 +59,17 @@ export class AuthService {
     }
 
     return this.userRepository.create(userEntity);
+  }
+
+  /** Вход пользователя*/
+  public async login(authorization: string, dto: LoginUserDto) {
+    const payload = await this.verifyToken(authorization);
+    if (payload) {
+      throw new BadRequestException(UserMessage.AuthorizedUser);
+    }
+    const verifiedUser = await this.verify(dto);
+    const loggedUser = await this.createToken(verifiedUser);
+    return Object.assign(verifiedUser, loggedUser);
   }
 
   /** Проверка пароля*/

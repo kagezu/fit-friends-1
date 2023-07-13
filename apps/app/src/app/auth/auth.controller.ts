@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req, BadRequestException, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { fillObject } from '@fit-friends-1/util/util-core';
@@ -8,7 +8,6 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ApiBadRequestResponse, ApiBody, ApiConflictResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiProperty, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { RequestWithUser, UserFiles } from '@fit-friends-1/shared/app-types';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-import { UserMessage } from './auth.constant';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { FileValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { UserFilesUploadDto } from './dto/user-files-upload.dto';
@@ -47,12 +46,7 @@ export class AuthenticationController {
     @Headers('authorization') authorization: string,
     @UploadedFiles(new FileValidationPipe()) files: UserFiles
   ) {
-    const payload = await this.authService.verifyToken(authorization);
-    if (payload) {
-      throw new BadRequestException(UserMessage.AuthorizedUser);
-    }
-
-    const newUser = await this.authService.register(dto, files);
+    const newUser = await this.authService.register(authorization, dto, files);
     return fillObject(UserRdo, newUser);
   }
 
@@ -65,14 +59,8 @@ export class AuthenticationController {
   @Post('login')
   @HttpCode(HttpStatus.CREATED)
   public async login(@Body() dto: LoginUserDto, @Headers('authorization') authorization: string) {
-    const payload = await this.authService.verifyToken(authorization);
-    if (payload) {
-      throw new BadRequestException(UserMessage.AuthorizedUser);
-    }
-    const verifiedUser = await this.authService.verify(dto);
-    const loggedUser = await this.authService.createToken(verifiedUser);
-    const result = fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
-    return result;
+    const loggedUser = await this.authService.login(authorization, dto);
+    return fillObject(LoggedUserRdo, loggedUser);
   }
 
   /** Генерация нового токена */

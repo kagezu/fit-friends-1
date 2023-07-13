@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { TrainingRepository } from './training.repository';
 import { TrainingEntity } from './training.entity';
 import { FileService } from '../file/file.service';
@@ -19,7 +19,11 @@ export class TrainingService {
 
   /** Информация о тренировке */
   public async show(id: string) {
-    return this.trainingRepository.findById(id);
+    const existTraining = await this.trainingRepository.findById(id);
+    if (!existTraining) {
+      throw new NotFoundException('Training not exist');
+    }
+    return existTraining;
   }
 
   /** Создание новой тренировки */
@@ -44,13 +48,19 @@ export class TrainingService {
   }
 
   /** Редактирование тренировки */
-  public async update(trainingEntity: TrainingEntity, dto: TrainingUpdateDto, video: Express.Multer.File) {
+  public async update(trainingId: string, coachId: string, dto: TrainingUpdateDto, video: Express.Multer.File) {
+    const existTraining = await this.show(trainingId);
+    const trainingEntity = new TrainingEntity(existTraining);
+
+    if (existTraining.coachId.toString() !== coachId) {
+      throw new UnauthorizedException('Тo editing permissions');
+    }
+
     Object.assign(trainingEntity, dto);
     if (video) {
       const file = await this.fileService.save(video);
       trainingEntity.demoVideo = file._id;
     }
-
     return this.trainingRepository.update(trainingEntity._id, trainingEntity);
   }
 
