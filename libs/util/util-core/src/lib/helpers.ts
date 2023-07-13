@@ -1,5 +1,9 @@
 import { plainToInstance, ClassConstructor } from 'class-transformer';
 
+const RADIX = 10;
+const CHANCE_TRIGGER = .3;
+
+
 export type DateTimeUnit = 's' | 'h' | 'd' | 'm' | 'y';
 export type TimeAndUnit = { value: number; unit: DateTimeUnit };
 
@@ -17,7 +21,7 @@ export function parseTime(time: string): TimeAndUnit {
   }
 
   const [, valueRaw, unitRaw] = match;
-  const value = parseInt(valueRaw, 10);
+  const value = parseInt(valueRaw, RADIX);
   const unit = unitRaw as DateTimeUnit;
 
   if (isNaN(value)) {
@@ -52,4 +56,4 @@ export const generateRandomValue = (min: number, max: number, numAfterDigit = 0)
 export const getRandomItem = <T>(items: T[]): T =>
   items[generateRandomValue(0, items.length - 1)];
 
-export const getRandomItems = <T>(items: T[]): T[] => ((items.filter(() => Math.random() < .3) || [getRandomItem<T>(items)]));
+export const getRandomItems = <T>(items: T[]): T[] => ((items.filter(() => Math.random() < CHANCE_TRIGGER) || [getRandomItem<T>(items)]));

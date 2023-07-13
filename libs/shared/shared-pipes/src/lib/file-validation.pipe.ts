@@ -6,6 +6,10 @@ import { UserFiles } from '@fit-friends-1/shared/app-types';
 const MAX_LIMIT_FILE_SIZE = 1000000;
 const CERTIFICATE_EXTENSION = 'pdf';
 const avatarExtensions = ['jpeg', 'png'];
+enum MessagePipe {
+  CertificateInvalid = 'Certificate invalid mimetype',
+  AvatarInvalid = 'Avatar invalid mimetype'
+}
 
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
@@ -15,7 +19,7 @@ export class FileValidationPipe implements PipeTransform {
     }
 
     if (files.certificate && CERTIFICATE_EXTENSION !== extension(files.certificate[0].mimetype)) {
-      throw new BadRequestException('Certificate invalid mimetype');
+      throw new BadRequestException(MessagePipe.CertificateInvalid);
     }
 
     if (files.avatar) {
@@ -25,7 +29,7 @@ export class FileValidationPipe implements PipeTransform {
 
       const avatarExtension = extension(files.avatar[0].mimetype);
       if (!avatarExtensions.some((item) => item === avatarExtension)) {
-        throw new BadRequestException('Avatar invalid mimetype');
+        throw new BadRequestException(MessagePipe.AvatarInvalid);
       }
     }
 

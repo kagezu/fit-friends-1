@@ -3,6 +3,7 @@ import { extension } from 'mime-types';
 import 'multer';
 
 const videoExtensions = ['mov', 'avi', 'mp4'];
+const VIDEO_INVALID = 'Video invalid mimetype';
 
 @Injectable()
 export class VideoValidationPipe implements PipeTransform {
@@ -10,7 +11,7 @@ export class VideoValidationPipe implements PipeTransform {
     if (file) {
       const avatarExtension = extension(file.mimetype);
       if (!videoExtensions.some((item: string) => item === avatarExtension)) {
-        throw new BadRequestException('Video invalid mimetype');
+        throw new BadRequestException(VIDEO_INVALID);
       }
     }
     return file;
