@@ -3,6 +3,11 @@ import { SubscriberEntity } from './subscriber.entity';
 import { SubscriberRepository } from './subscriber.repository';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 
+enum ExceptionMessage {
+  NotFound = 'Coach not found',
+  SubscriptionExist = 'The subscription exist.'
+}
+
 @Injectable()
 export class SubscriberService {
   constructor(
@@ -13,12 +18,12 @@ export class SubscriberService {
     const { coach, email } = subscriber;
     const existsCoach = await this.subscriberRepository.findByEmail(coach);
     if (!existsCoach) {
-      throw new NotFoundException('Coach not found');
+      throw new NotFoundException(ExceptionMessage.NotFound);
     }
 
     const existSubscriber = this.subscriberRepository.check(email, coach);
     if (existSubscriber) {
-      throw new ConflictException('The subscription exist.');
+      throw new ConflictException(ExceptionMessage.SubscriptionExist);
     }
 
     return this.subscriberRepository

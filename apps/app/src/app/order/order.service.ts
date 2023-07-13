@@ -9,6 +9,8 @@ import { OrderEntity } from './order.entity';
 import { UserBalanceService } from '../user-balance/user-balance.service';
 import { TrainingEntity } from '../training/training.entity';
 
+const TRAINING_NOT_FOUND = 'Training not found.';
+
 @Injectable()
 export class OrderService {
   constructor(
@@ -21,7 +23,7 @@ export class OrderService {
   public async create(userId: string, dto: OrderCreateDto) {
     const existTraining = await this.trainingRepository.findById(dto.training);
     if (!existTraining) {
-      throw new NotFoundException('Training  not found.');
+      throw new NotFoundException(TRAINING_NOT_FOUND);
     }
 
     await this.userBalanceService.increase(

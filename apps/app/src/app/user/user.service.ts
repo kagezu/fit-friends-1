@@ -8,6 +8,8 @@ import { MAX_TRAINING_TYPES } from '../auth/auth.constant';
 import { UserEntity } from './user.entity';
 import { FileService } from '../file/file.service';
 
+const USER_NOT_EXIST_MESSAGE = 'User not exist';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -24,7 +26,7 @@ export class UserService {
   public async getUserEntity(email: string) {
     const existUser = await this.userRepository.findByEmail(email);
     if (!existUser) {
-      throw new NotFoundException('Пользователь не существует');
+      throw new NotFoundException(USER_NOT_EXIST_MESSAGE);
     }
     return new UserEntity(existUser);
   }

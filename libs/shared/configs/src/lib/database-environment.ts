@@ -1,7 +1,9 @@
 import { IsNumber, IsString, Max, Min } from 'class-validator';
 
-const MIN_PORT = 0;
-const MAX_PORT = 65535;
+enum RangeOfPort {
+  MinPort = 0,
+  MaxPort = 65535
+}
 
 export enum DatabaseValidationMessage {
   DBHostRequired = 'MongoDB host is required',
@@ -26,8 +28,8 @@ export class DatabaseEnvironment {
   @IsNumber({}, {
     message: DatabaseValidationMessage.DBPortRequired
   })
-  @Min(MIN_PORT)
-  @Max(MAX_PORT)
+  @Min(RangeOfPort.MinPort)
+  @Max(RangeOfPort.MaxPort)
   public port!: number;
 
   @IsString({

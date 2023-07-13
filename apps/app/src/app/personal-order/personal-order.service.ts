@@ -5,6 +5,14 @@ import { OrderStatus, User } from '@fit-friends-1/shared/app-types';
 import { UserService } from '../user/user.service';
 import { NotifyService } from '../notify/notify.service';
 
+enum ExceptionMessage {
+  UserNotFound = 'User not exist.',
+  OrderForYourself = 'You cannot create an order for yourself.',
+  OrderNotExist = 'Personal order not exist.',
+  CannotChangeStatus = 'You cannot change the status of this order',
+  StatusNotChanged = 'Status not changed.'
+}
+
 @Injectable()
 export class PersonalOrderService {
   constructor(
@@ -17,11 +25,11 @@ export class PersonalOrderService {
   public async create(initiator: User, userId: string) {
     const existUser = this.userService.getUser(userId);
     if (!existUser) {
-      throw new NotFoundException('User not exist.');
+      throw new NotFoundException(ExceptionMessage.UserNotFound);
     }
 
     if (initiator._id.toString() === userId) {
-      throw new BadRequestException('You cannot create an order for yourself.');
+      throw new BadRequestException(ExceptionMessage.OrderForYourself);
     }
 
     const personalOrderEntity = new PersonalOrderEntity({
@@ -42,15 +50,15 @@ export class PersonalOrderService {
   public async update(user: User, id: string, status: string) {
     const existPersonalOrder = await this.personalOrderRepository.show(id);
     if (!existPersonalOrder) {
-      throw new NotFoundException('Personal order not exist.')
+      throw new NotFoundException(ExceptionMessage.OrderNotExist)
     }
 
     if (user._id.toString() !== existPersonalOrder.user.toString()) {
-      throw new BadRequestException('You cannot change the status of this order');
+      throw new BadRequestException(ExceptionMessage.CannotChangeStatus);
     }
 
     if (existPersonalOrder.orderStatus === status) {
-      throw new ConflictException('Status not changed.')
+      throw new ConflictException(ExceptionMessage.CannotChangeStatus)
     }
 
     const orderEntity = new PersonalOrderEntity({

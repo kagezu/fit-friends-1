@@ -7,6 +7,11 @@ import { ReviewQuery } from './query/review.query';
 import { TrainingEntity } from '../training/training.entity';
 import { plainToInstance } from 'class-transformer';
 
+enum ExceptionMessage {
+  TrainingNotFound = 'Training not exist.',
+  ReviewExists = 'Review already exists.'
+}
+
 @Injectable()
 export class ReviewService {
   constructor(
@@ -19,12 +24,12 @@ export class ReviewService {
     const { training } = dto;
     const existTraining = await this.trainingRepository.findById(training);
     if (!existTraining) {
-      throw new NotFoundException('Training not exist.');
+      throw new NotFoundException(ExceptionMessage.TrainingNotFound);
     }
 
     const existReview = await this.reviewRepository.check(author, training);
     if (existReview) {
-      throw new ConflictException('Review already exists.');
+      throw new ConflictException(ExceptionMessage.ReviewExists);
     }
 
     const newReview = await this.reviewRepository.create(new ReviewEntity({

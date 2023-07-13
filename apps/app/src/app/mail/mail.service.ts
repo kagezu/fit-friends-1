@@ -5,6 +5,7 @@ import { MailQueueEntity } from './mail-queue.entity';
 import { SubscriberRepository } from '../subscriber/subscriber.repository';
 
 const EMAIL_NEW_TRAINING_SUBJECT = 'New workout';
+const NO_QUEUE_MESSAGE = 'No messages in queue.';
 
 @Injectable()
 export class MailService {
@@ -17,7 +18,7 @@ export class MailService {
   public async sendNotifyNewTraining() {
     const mails = await this.mailRepository.index();
     if (!mails) {
-      throw new NotFoundException('No messages in queue.');
+      throw new NotFoundException(NO_QUEUE_MESSAGE);
     }
     mails.map(({ emails, training }) =>
       Promise.all(emails.map((email: string) =>

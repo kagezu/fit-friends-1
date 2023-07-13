@@ -9,6 +9,12 @@ import { TrainingQuery } from './query/trainer.query';
 import { MailService } from '../mail/mail.service';
 import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 
+enum ExceptionMessage {
+  NotFound = 'Training not exist',
+  VideoIsRequest = 'Video file is request',
+  ТoEditingPermissions = 'Тo editing permissions'
+}
+
 @Injectable()
 export class TrainingService {
   constructor(
@@ -21,7 +27,7 @@ export class TrainingService {
   public async show(id: string) {
     const existTraining = await this.trainingRepository.findById(id);
     if (!existTraining) {
-      throw new NotFoundException('Training not exist');
+      throw new NotFoundException(ExceptionMessage.NotFound);
     }
     return existTraining;
   }
@@ -29,7 +35,7 @@ export class TrainingService {
   /** Создание новой тренировки */
   public async create(coachId: string, dto: TrainingCreateDto, video: Express.Multer.File) {
     if (!video) {
-      throw new BadRequestException('Video file is request');
+      throw new BadRequestException(ExceptionMessage.VideoIsRequest);
     }
     const file = await this.fileService.save(video);
     const training = {
@@ -53,7 +59,7 @@ export class TrainingService {
     const trainingEntity = new TrainingEntity(existTraining);
 
     if (existTraining.coachId.toString() !== coachId) {
-      throw new UnauthorizedException('Тo editing permissions');
+      throw new UnauthorizedException(ExceptionMessage.ТoEditingPermissions);
     }
 
     Object.assign(trainingEntity, dto);

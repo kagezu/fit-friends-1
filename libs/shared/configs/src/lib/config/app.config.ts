@@ -4,6 +4,7 @@ import { ApplicationEnvironment } from '../application-environment';
 import { plainToInstance } from 'class-transformer';
 
 const DEFAULT_PORT = 3333;
+const RADIX = 10;
 
 export interface ApplicationConfig {
   environment?: string;
@@ -13,7 +14,7 @@ export interface ApplicationConfig {
 export default registerAs('application', (): ApplicationConfig => {
   const config: ApplicationConfig = {
     environment: process.env['NODE_ENV'],
-    port: parseInt(process.env['PORT'] || DEFAULT_PORT.toString(), 10)
+    port: parseInt(process.env['PORT'] || DEFAULT_PORT.toString(), RADIX)
   };
 
   const applicationEnvironment = plainToInstance(
