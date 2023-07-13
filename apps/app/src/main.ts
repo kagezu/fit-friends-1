@@ -8,19 +8,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-
   const configService = app.get(ConfigService);
   const port = configService.get('application.port');
-
   const config = new DocumentBuilder()
     .setTitle('The «FitFriends» service')
     .setDescription('Service API')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('spec', app, document);
 
+  SwaggerModule.setup('spec', app, document);
+  app.setGlobalPrefix(globalPrefix);
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port);
