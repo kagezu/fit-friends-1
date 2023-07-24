@@ -69,7 +69,7 @@ export class AuthService {
     }
     const verifiedUser = await this.verify(dto);
     const loggedUser = await this.createToken(verifiedUser);
-    return Object.assign(verifiedUser, loggedUser);
+    return {...loggedUser,  user:verifiedUser};
   }
 
   /** Проверка пароля*/

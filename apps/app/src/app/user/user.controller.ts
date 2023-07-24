@@ -37,6 +37,23 @@ export class UserController {
     return fillObject(UserRdo, existUser);
   }
 
+  /** Информация о ауторизированом пользователе*/
+  @ApiOkResponse({
+    type: UserRdo,
+    description: 'User found'
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  public async check(@Req() req: Request) {
+    return fillObject(UserRdo, req['user']);
+  }
+
   /** Список пользователей */
   @ApiOkResponse({
     type: [UserRdo],
@@ -53,7 +70,7 @@ export class UserController {
   })
   @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get('index')
   public async index(@Query() query: UserQuery) {
     const existUsers = await this.userService.index(query);
     return fillObject(UserRdo, existUsers);

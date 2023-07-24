@@ -87,6 +87,7 @@ export class CreateUserDto {
   })
   @IsString()
   @IsIn(userBackgrounds)
+  @IsOptional()
   background: string;
 
   @ApiProperty({
@@ -96,6 +97,7 @@ export class CreateUserDto {
   })
   @IsString()
   @IsEnum(TrainingLevel)
+  @IsOptional()
   trainingLevel: string;
 
   @ApiProperty({
@@ -109,6 +111,7 @@ export class CreateUserDto {
   @IsEnum(TrainingType, {
     each: true,
   })
+  @IsOptional()
   trainingTypes: string[];
 
   @ApiProperty({
@@ -119,6 +122,7 @@ export class CreateUserDto {
   @ValidateIf((obj) => obj.role === UserRole.User)
   @IsString()
   @IsIn(intervals)
+  @IsOptional()
   interval: string;
 
   @ApiProperty({
@@ -132,6 +136,7 @@ export class CreateUserDto {
   @IsInt()
   @Min(UserValidate.minCaloriesToBurn, { message: `caloriesToBurn: ${UserMessage.ValueTooLittle}` })
   @Max(UserValidate.maxCaloriesToBurn, { message: `caloriesToBurn: ${UserMessage.ValueTooBig}` })
+  @IsOptional()
   caloriesToBurn: number;
 
   @ApiProperty({
@@ -145,6 +150,7 @@ export class CreateUserDto {
   @IsInt()
   @Min(UserValidate.minCaloriesPerDay, { message: `caloriesPerDay: ${UserMessage.ValueTooLittle}` })
   @Max(UserValidate.maxCaloriesPerDay, { message: `caloriesPerDay: ${UserMessage.ValueTooBig}` })
+  @IsOptional()
   caloriesPerDay: number;
 
   @ApiProperty({
@@ -154,6 +160,7 @@ export class CreateUserDto {
   @Transform(({ obj }) => obj.readyForTraining === 'true')
   @ValidateIf((obj) => obj.role === UserRole.User)
   @IsBoolean()
+  @IsOptional()
   readyForTraining: boolean;
 
   @ApiProperty({
@@ -176,5 +183,6 @@ export class CreateUserDto {
   @Transform(({ obj }) => obj.readyForIndividualTraining === 'true')
   @ValidateIf((obj) => obj.role === UserRole.Coach)
   @IsBoolean()
+  @IsOptional()
   readyForIndividualTraining: boolean;
 }
