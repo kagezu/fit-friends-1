@@ -15,11 +15,11 @@ export class UserEntity implements Entity<User> {
   role: string;
   description?: string;
   location: string;
-  background: string;
+  background?: string;
   createdAt: Date;
 
-  trainingLevel: string;
-  trainingTypes: string[];
+  trainingLevel?: string;
+  trainingTypes?: string[];
 
   interval?: string;
   caloriesToBurn?: number;

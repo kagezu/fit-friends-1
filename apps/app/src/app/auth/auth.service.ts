@@ -8,10 +8,11 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from '@fit-friends-1/shared/configs';
 import { ConfigType } from '@nestjs/config';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
-import { createJWTPayload } from '@fit-friends-1/util/util-core';
+import { createJWTPayload, fillObject } from '@fit-friends-1/util/util-core';
 import * as crypto from 'node:crypto';
 import { MAX_TRAINING_TYPES, UserMessage } from './auth.constant';
 import { FileService } from '../file/file.service';
+import { UserRdo } from '../user/rdo/user.rdo';
 
 @Injectable()
 export class AuthService {
@@ -36,12 +37,12 @@ export class AuthService {
       ...dto,
       passwordHash: '',
       createdAt: new Date(),
-      trainingTypes: Array.from(new Set((dto.trainingTypes as unknown as string).split(','))).slice(0, MAX_TRAINING_TYPES)
+//       trainingTypes: Array.from(new Set((dto.trainingTypes as unknown as string).split(','))).slice(0, MAX_TRAINING_TYPES)
     };
 
     const existUser = await this.userRepository.findByEmail(email);
     if (existUser) {
-      throw new ConflictException(UserMessage.EmailExists);
+      throw new ConflictException('email ' + UserMessage.EmailExists);
     }
     const userEntity = await new UserEntity(user).setPassword(password);
 
@@ -49,7 +50,7 @@ export class AuthService {
       const document = await this.fileService.save(files?.avatar[0]);
       userEntity.avatar = document._id;
     }
-
+/*
     if (role === UserRole.Coach) {
       if (!files?.certificate) {
         throw new BadRequestException('отсутствует сертификат');
@@ -57,8 +58,12 @@ export class AuthService {
       const document = await this.fileService.save(files.certificate[0]);
       userEntity.certificate = document._id;
     }
-
-    return this.userRepository.create(userEntity);
+*/
+await this.userRepository.create(userEntity);
+const newUser = await this.userRepository.findByEmail(userEntity.email);
+const loggedUser = await this.createToken(newUser);
+return { ...loggedUser, user: fillObject(UserRdo, newUser) };
+//     return this.userRepository.create(userEntity);
   }
 
   /** Вход пользователя*/
@@ -69,7 +74,7 @@ export class AuthService {
     }
     const verifiedUser = await this.verify(dto);
     const loggedUser = await this.createToken(verifiedUser);
-    return {...loggedUser,  user:verifiedUser};
+    return { ...loggedUser, user: fillObject(UserRdo, verifiedUser) };
   }
 
   /** Проверка пароля*/

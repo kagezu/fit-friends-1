@@ -35,7 +35,7 @@ export class UpdateUserDto {
     example: '1981-03-12',
     required: false
   })
-  @IsISO8601({}, { message: UserMessage.BirthNotValid })
+  @IsISO8601()
   @IsOptional()
   birthday: Date;
 

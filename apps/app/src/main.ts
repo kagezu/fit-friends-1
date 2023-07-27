@@ -20,7 +20,13 @@ async function bootstrap() {
   SwaggerModule.setup('spec', app, document);
   app.setGlobalPrefix(globalPrefix);
   app.enableCors();
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    // validationError: {
+    //   target: true,
+    //   value: true
+    // },
+    // enableDebugMessages: true
+  }));
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`

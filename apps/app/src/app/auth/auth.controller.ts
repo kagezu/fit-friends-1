@@ -47,7 +47,9 @@ export class AuthenticationController {
     @UploadedFiles(new FileValidationPipe()) files: UserFiles
   ) {
     const newUser = await this.authService.register(authorization, dto, files);
-    return fillObject(UserRdo, newUser);
+    //     return fillObject(UserRdo, newUser);
+        return newUser;
+
   }
 
   /** Вход пользователя*/
@@ -60,7 +62,7 @@ export class AuthenticationController {
   @HttpCode(HttpStatus.CREATED)
   public async login(@Body() dto: LoginUserDto, @Headers('authorization') authorization: string) {
     const loggedUser = await this.authService.login(authorization, dto);
-    return fillObject(LoggedUserRdo, loggedUser);
+    return loggedUser;
   }
 
   /** Генерация нового токена */
