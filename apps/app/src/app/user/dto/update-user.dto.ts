@@ -94,6 +94,7 @@ export class UpdateUserDto {
   @IsArray()
   @IsEnum(TrainingType, {
     each: true,
+    message: 'trainingTypes Необходимо выбрать хотябы одно'
   })
   @IsOptional()
   trainingTypes: string[];
