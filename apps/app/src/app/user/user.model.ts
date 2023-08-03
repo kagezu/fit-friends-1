@@ -47,9 +47,9 @@ export class UserModel extends Document implements User {
 
   @Prop({
     ref: 'FileModel',
-    type: SchemaTypes.ObjectId
+    type: [{ type: SchemaTypes.ObjectId, ref: 'FileModel' }]
   })
-  public certificate?: string;
+  public certificate?: string[];
   @Prop()
   public resume?: string;
   @Prop()

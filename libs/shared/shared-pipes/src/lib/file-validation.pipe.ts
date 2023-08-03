@@ -8,7 +8,7 @@ const certificateExtensions = ['pdf','jpg','jpeg', 'png'];
 const avatarExtensions = ['jpeg', 'png'];
 enum MessagePipe {
   CertificateInvalid = 'Certificate invalid mimetype',
-  AvatarInvalid = 'Avatar invalid mimetype'
+  AvatarInvalid = 'avatar invalid mimetype'
 }
 
 @Injectable()
@@ -27,7 +27,7 @@ export class FileValidationPipe implements PipeTransform {
 
     if (files.avatar) {
       if (MAX_LIMIT_FILE_SIZE < files.avatar[0].size) {
-        throw new PayloadTooLargeException(`Avatar must not be larger than ${MAX_LIMIT_FILE_SIZE} bytes`);
+        throw new PayloadTooLargeException(`avatar must not be larger than ${MAX_LIMIT_FILE_SIZE} bytes`);
       }
 
       const avatarExtension = extension(files.avatar[0].mimetype);

@@ -20,7 +20,7 @@ export interface User {
   caloriesPerDay?: number;
   readyForTraining?: boolean;
 
-  certificate?: string;
+  certificate?: string[];
   resume?: string;
   readyForIndividualTraining?: boolean;
 }

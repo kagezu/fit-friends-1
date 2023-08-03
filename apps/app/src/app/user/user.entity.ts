@@ -26,7 +26,7 @@ export class UserEntity implements Entity<User> {
   caloriesPerDay?: number;
   readyForTraining?: boolean;
 
-  certificate?: string;
+  certificate?: string[];
   resume?: string;
   readyForIndividualTraining?: boolean;
 

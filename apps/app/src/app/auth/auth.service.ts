@@ -37,6 +37,7 @@ export class AuthService {
       ...dto,
       passwordHash: '',
       createdAt: new Date(),
+      certificate: [],
 //       trainingTypes: Array.from(new Set((dto.trainingTypes as unknown as string).split(','))).slice(0, MAX_TRAINING_TYPES)
     };
 

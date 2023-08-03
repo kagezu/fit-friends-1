@@ -213,7 +213,7 @@ export class SeedService {
         trainingLevel: getRandomItem(mockData.trainingLevels),
         trainingTypes: getRandomItems(mockData.trainingTypes),
 
-        certificate: getRandomItem(certificates)._id,
+        certificate: getRandomItems(certificates).map((value)=>value._id),
         resume: getRandomItem(mockData.resumes),
         readyForIndividualTraining: false
       });

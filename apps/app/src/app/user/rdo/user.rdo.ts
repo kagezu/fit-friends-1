@@ -1,6 +1,7 @@
 import { Gender, TrainingLevel, TrainingType, UserRole, intervals, locations } from '@fit-friends-1/shared/app-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
+import { UploadedFileRdo } from '../../file/rdo/uploaded-file.rdo';
 
 export class UserRdo {
   @ApiProperty({
@@ -129,8 +130,8 @@ export class UserRdo {
     example: 'certificate.pdf',
   })
   @Expose()
-  @Transform(({ obj }) => obj.certificate?.path)
-  certificate: string;
+  @Transform(({ obj }) => obj.certificate?.map(({ _id, path }) => ({ id: _id.toString(), path })))
+  certificate: UploadedFileRdo[];
 
   @ApiProperty({
     description: 'Текст с описанием заслуг тренера.'

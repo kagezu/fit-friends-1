@@ -15,9 +15,15 @@ export class UpdateUserDto {
   @IsString()
   @MinLength(UserValidate.minLengthName)
   @MaxLength(UserValidate.maxLengthName)
-  @Matches('^([а-яё]+|[a-z]+)$', 'i', { message: UserMessage.NameNotValid })
+  @Matches('^([а-яё ]+|[a-z ]+)$', 'i', { message: UserMessage.NameNotValid })
   @IsOptional()
   name: string;
+
+  @IsOptional()
+  avatar: string;
+
+  @IsOptional()
+  certificate: string[];
 
   @ApiProperty({
     description: 'Пол пользователя.Одно из трёх значений: женский, мужской и неважно.',

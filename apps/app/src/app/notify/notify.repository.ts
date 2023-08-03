@@ -19,6 +19,7 @@ export class NotifyRepository {
   public async index(user: string): Promise<Notify[] | null> {
     return this.NotifyModel
       .find({ user })
+      .sort([['createdAt', 'desc']])
       .exec();
   }
 
