@@ -21,7 +21,8 @@ import { SubscriberEntity } from '../subscriber/subscriber.entity';
 import { MailService } from '../mail/mail.service';
 import { OrderService } from '../order/order.service';
 
-const COUNT_ITEM = 10;
+const COUNT_ITEM = 100;
+const COUNT_ITEM_ORDER = 10;
 const MAX_PRICE = 10;
 const STEP_PRICE = 200;
 const MAX_COUNT_ORDER = 10;
@@ -116,7 +117,7 @@ export class SeedService {
     return Promise.all(trainings.map(
       (training) => {
         const orders = [];
-        for (let i = 0; i < COUNT_ITEM; i++) {
+        for (let i = 0; i < COUNT_ITEM_ORDER; i++) {
           const count = generateRandomValue(0, MAX_COUNT_ORDER);
           orders[i] = this.orderService.create(
             getRandomItem(users)._id,
@@ -213,7 +214,7 @@ export class SeedService {
         trainingLevel: getRandomItem(mockData.trainingLevels),
         trainingTypes: getRandomItems(mockData.trainingTypes),
 
-        certificate: getRandomItems(certificates).map((value)=>value._id),
+        certificate: getRandomItems(certificates).map((value) => value._id),
         resume: getRandomItem(mockData.resumes),
         readyForIndividualTraining: false
       });

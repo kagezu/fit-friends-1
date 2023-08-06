@@ -39,12 +39,13 @@ export class UserRepository {
       .exec();
   }
 
-  public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes }: UserQuery): Promise<User[]> {
+  public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes, readyForTraining }: UserQuery): Promise<User[]> {
     return this.userModel
       .find(Object.assign(
         location ? { location } : {},
         trainingLevel ? { trainingLevel } : {},
-        trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {}
+        trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {},
+        readyForTraining ? { readyForTraining } : {}
       ))
       .sort([[category, sortDirection]])
       .skip(page * limit)

@@ -47,9 +47,7 @@ export class AuthenticationController {
     @UploadedFiles(new FileValidationPipe()) files: UserFiles
   ) {
     const newUser = await this.authService.register(authorization, dto, files);
-    //     return fillObject(UserRdo, newUser);
         return newUser;
-
   }
 
   /** Вход пользователя*/

@@ -1,6 +1,6 @@
 import { IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { TrainingType } from '@fit-friends-1/shared/app-types';
+import { TrainingLevel, TrainingType, intervals } from '@fit-friends-1/shared/app-types';
 import { QueryOption } from '../../app.const';
 
 export class TrainingCatalogQuery {
@@ -12,7 +12,7 @@ export class TrainingCatalogQuery {
   @IsIn(['asc', 'desc'])
   public sortDirection: 'desc' | 'asc' = QueryOption.DefaultSortDirection;
 
-  @IsIn(['createdAt', 'price'])
+  @IsIn(['createdAt', 'price', 'rating'])
   public category: string = QueryOption.DefaultSortCategory;
 
   @Transform(({ value }) => +value)
@@ -56,7 +56,21 @@ export class TrainingCatalogQuery {
   @IsOptional()
   public ratingTo = QueryOption.maxRating;
 
-  @IsEnum(TrainingType)
+  @Transform(({ value }) => value.split(','))
+  @IsEnum(TrainingType, {
+    each: true
+  })
   @IsOptional()
-  public trainingType?: string;
+  public trainingType?: string[];
+
+  @IsEnum(TrainingLevel)
+  @IsOptional()
+  public trainingLevel?: string;
+
+  @Transform(({ value }) => value.split(','))
+  @IsIn(intervals, {
+    each: true
+  })
+  @IsOptional()
+  public interval?: string[];
 }

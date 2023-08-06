@@ -31,7 +31,7 @@ export class UserController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get(':id')
+  @Get('info/:id')
   public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.userService.getUser(id);
     return fillObject(UserRdo, existUser);

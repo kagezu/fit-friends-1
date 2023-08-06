@@ -71,7 +71,8 @@ return { ...loggedUser, user: fillObject(UserRdo, newUser) };
   public async login(authorization: string, dto: LoginUserDto) {
     const payload = await this.verifyToken(authorization);
     if (payload) {
-      throw new BadRequestException(UserMessage.AuthorizedUser);
+      return;
+//       throw new BadRequestException(UserMessage.AuthorizedUser);
     }
     const verifiedUser = await this.verify(dto);
     const loggedUser = await this.createToken(verifiedUser);

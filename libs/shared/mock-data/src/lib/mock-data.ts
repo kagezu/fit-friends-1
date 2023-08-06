@@ -75,10 +75,21 @@ export const mockData: MockData = {
     'Круговая тренировка'
   ],
   backgrounds: [
-    'training-1.png',
-    'training-2.png',
-    'training-3.png',
-    'training-4.png'
+  'training-01',
+  'training-02',
+  'training-03',
+  'training-04',
+  'training-05',
+  'training-06',
+  'training-07',
+  'training-08',
+  'training-09',
+  'training-10',
+  'training-11',
+  'training-12',
+  'preview-01',
+  'preview-02',
+  'preview-03',
   ],
   descriptions: [
     'Направлена на укрепление и развитие сердечнососудистой системы, избавление от лишних килограммов, повышение выносливости организма. Тренировку предпочтительнее начинать именно с кардиозоны, так как сначала вам необходимо подготовить свой организм к предстоящим силовым нагрузкам.',

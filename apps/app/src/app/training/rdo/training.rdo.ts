@@ -98,6 +98,12 @@ export class TrainingRdo {
   usersGender: string;
 
   @ApiProperty({
+    description: 'Фоновое изображение.'
+  })
+  @Expose()
+  background: string;
+
+  @ApiProperty({
     description: 'Признак специального предложения.',
     example: 'true'
   })
