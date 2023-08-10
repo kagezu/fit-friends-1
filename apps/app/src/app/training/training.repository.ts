@@ -4,7 +4,6 @@ import { Training } from '@fit-friends-1/shared/app-types';
 import { TrainingModel } from './training.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { TrainingQuery } from './query/trainer.query';
 import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 
 @Injectable()
@@ -22,7 +21,10 @@ export class TrainingRepository {
   public async findById(id: string): Promise<Training | null> {
     return this.trainingModel
       .findById(id)
-      .populate('demoVideo')
+      .populate(['coachId','demoVideo',{
+        path: 'coachId',
+        populate: 'avatar'
+      }])
       .exec();
   }
 
@@ -47,7 +49,7 @@ export class TrainingRepository {
 
   public async list(
     coachId: string,
-    { limit, page, sortDirection, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, interval }: TrainingQuery
+    { limit, page, sortDirection, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, trainingType, interval, trainingLevel, specialOffer }: TrainingCatalogQuery
   ): Promise<Training[]> {
     return this.trainingModel
       .find(Object.assign({
@@ -56,7 +58,10 @@ export class TrainingRepository {
         caloriesToBurn: { $gte: caloriesFrom, $lte: caloriesTo },
         rating: { $gte: ratingFrom, $lte: ratingTo }
       },
-        interval ? { interval: { $in: interval } } : {}
+      trainingType ? { trainingType: { $in: trainingType } } : {},
+      interval ? { interval: { $in: interval } } : {},
+      trainingLevel ? { trainingLevel } : {},
+      specialOffer ? { specialOffer } : {}
       ))
       .sort([['createdAt', sortDirection]])
       .skip(page * limit)
@@ -65,7 +70,7 @@ export class TrainingRepository {
       .exec();
   }
 
-  public async index({ limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, trainingType, interval, trainingLevel }: TrainingCatalogQuery
+  public async index({ limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, trainingType, interval, trainingLevel, specialOffer }: TrainingCatalogQuery
   ): Promise<Training[]> {
     return this.trainingModel
       .find(Object.assign({
@@ -75,7 +80,8 @@ export class TrainingRepository {
       },
         trainingType ? { trainingType: { $in: trainingType } } : {},
         interval ? { interval: { $in: interval } } : {},
-        trainingLevel ? { trainingLevel } : {}
+        trainingLevel ? { trainingLevel } : {},
+        specialOffer ? { specialOffer } : {}
       ))
       .sort([[category, sortDirection]])
       .skip(page * limit)

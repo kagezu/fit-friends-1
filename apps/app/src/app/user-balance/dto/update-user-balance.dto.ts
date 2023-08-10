@@ -3,12 +3,6 @@ import { IsInt, IsMongoId } from 'class-validator';
 
 export class UpdateUserBalanceDto {
   @ApiProperty({
-    description: 'Id пользователя'
-  })
-  @IsMongoId()
-  userId: string;
-
-  @ApiProperty({
     description: 'Id тренировки'
   })
   @IsMongoId()

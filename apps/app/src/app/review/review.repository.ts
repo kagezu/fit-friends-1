@@ -26,6 +26,10 @@ export class ReviewRepository {
       .sort([[category, sortDirection]])
       .skip(page * limit)
       .limit(limit)
+      .populate(['author',{
+        path: 'author',
+        populate: 'avatar'
+      }])
       .exec();
   }
 

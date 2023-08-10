@@ -8,8 +8,8 @@ import { TrainingEntity } from '../training/training.entity';
 import { plainToInstance } from 'class-transformer';
 
 enum ExceptionMessage {
-  TrainingNotFound = 'Training not exist.',
-  ReviewExists = 'Review already exists.'
+  TrainingNotFound = 'message Training not exist.',
+  ReviewExists = 'message Review already exists.'
 }
 
 @Injectable()

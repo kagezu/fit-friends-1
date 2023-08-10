@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Review } from '@fit-friends-1/shared/app-types';
 
@@ -7,7 +7,10 @@ import { Review } from '@fit-friends-1/shared/app-types';
   timestamps: true,
 })
 export class ReviewModel extends Document implements Review {
-  @Prop()
+  @Prop({
+    ref: 'UserModel',
+    type: SchemaTypes.ObjectId
+  })
   author: string;
   @Prop()
   training: string;

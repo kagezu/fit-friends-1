@@ -1,4 +1,4 @@
-import { Controller, HttpCode, HttpStatus, UseGuards, Req, Get, Patch, Body } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, UseGuards, Req, Get, Patch, Body, Param } from '@nestjs/common';
 import { fillObject } from '@fit-friends-1/util/util-core';
 import { ApiCreatedResponse, ApiHeader, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserBalanceService } from './user-balance.service';
@@ -6,6 +6,7 @@ import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { UserBalanceRdo } from './rdo/user-balance.rdo';
 import { JwtCoachGuard } from '../auth/guards/jwt-coach.guard';
 import { UpdateUserBalanceDto } from './dto/update-user-balance.dto';
+import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 
 @ApiTags('balance')
 @Controller('balance')
@@ -14,7 +15,7 @@ export class UserBalanceController {
     private readonly userBalanceService: UserBalanceService,
   ) { }
 
-  /** Добавление баланса тренером */
+  /** Добавление баланса */
   @ApiCreatedResponse({
     description: 'Current balance',
     type: UserBalanceRdo
@@ -38,7 +39,7 @@ export class UserBalanceController {
     return fillObject(UserBalanceRdo, existUserBalance);
   }
 
-  /** Списание с баланса тренером */
+  /** Списание с баланса */
   @ApiCreatedResponse({
     description: 'Current balance',
     type: UserBalanceRdo
@@ -51,7 +52,7 @@ export class UserBalanceController {
     name: 'authorization',
     description: 'Access token'
   })
-  @UseGuards(JwtCoachGuard)
+  @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.OK)
   @Patch('dec')
   public async decrease(
@@ -74,9 +75,27 @@ export class UserBalanceController {
   })
   @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get('list')
   public async index(@Req() req: Request) {
     const userBalances = await this.userBalanceService.index(req['user']._id);
+    return fillObject(UserBalanceRdo, userBalances);
+  }
+
+  /** Запрос баланса пользователем по id */
+  @ApiOkResponse({
+    type: [UserBalanceRdo],
+    description: 'Balance found'
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @UseGuards(JwtUserGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get('info/:id')
+  public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string) {
+    const userBalances = await this.userBalanceService.show(req['user']._id, id);
     return fillObject(UserBalanceRdo, userBalances);
   }
 }

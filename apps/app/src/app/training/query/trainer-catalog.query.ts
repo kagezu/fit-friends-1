@@ -1,4 +1,4 @@
-import { IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, IsBoolean, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { TrainingLevel, TrainingType, intervals } from '@fit-friends-1/shared/app-types';
 import { QueryOption } from '../../app.const';
@@ -73,4 +73,9 @@ export class TrainingCatalogQuery {
   })
   @IsOptional()
   public interval?: string[];
+
+  @Transform(({ value }) => value === 'true')
+  @IsBoolean()
+  @IsOptional()
+  public specialOffer?: boolean;
 }

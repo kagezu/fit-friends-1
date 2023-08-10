@@ -37,7 +37,7 @@ export class TrainingModel extends Document implements Training {
   })
   public rating: number;
   @Prop({
-    ref: 'FileModel',
+    ref: 'UserModel',
     type: SchemaTypes.ObjectId
   })
   public coachId: string;

@@ -26,10 +26,9 @@ export class OrderService {
       throw new NotFoundException(TRAINING_NOT_FOUND);
     }
 
-    await this.userBalanceService.increase(
-      existTraining.coachId,
+    const newBalance = await this.userBalanceService.increase(
+      userId,
       {
-        userId,
         training: dto.training,
         count: dto.count
       });
@@ -49,7 +48,9 @@ export class OrderService {
       orderPrice: existTraining.price * dto.count
     });
 
-    return this.orderRepository.create(orderEntity);
+    await this.orderRepository.create(orderEntity);
+
+    return newBalance;
   }
 
   /** Список заказов тренера */

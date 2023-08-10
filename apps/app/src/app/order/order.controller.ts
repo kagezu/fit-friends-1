@@ -7,6 +7,7 @@ import { CoachOrderQuery } from './query/coach-order.query';
 import { OrderService } from './order.service';
 import { OrderCreateDto } from './dto/order-create.dto';
 import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
+import { UserBalanceRdo } from '../user-balance/rdo/user-balance.rdo';
 
 @ApiTags('order')
 @Controller('order')
@@ -33,8 +34,8 @@ export class OrderController {
     @Body() dto: OrderCreateDto,
     @Req() req: Request
   ) {
-    const newOrder = await this.orderService.create(req['user']._id, dto);
-    return fillObject(OrderRdo, newOrder);
+    const newBalance = await this.orderService.create(req['user']._id, dto);
+    return fillObject(UserBalanceRdo, newBalance);
   }
 
   /** Список заказов тренера */

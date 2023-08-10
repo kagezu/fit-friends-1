@@ -9,8 +9,8 @@ import { TrainingRdo } from './rdo/training.rdo';
 import { MongoidValidationPipe, VideoValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { TrainingUpdateDto } from './dto/training-update.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { TrainingQuery } from './query/trainer.query';
 import { TrainingCatalogQuery } from './query/trainer-catalog.query';
+import { TrainingDetailRdo } from './rdo/training-detail.rdo';
 
 @ApiTags('training')
 @Controller('training')
@@ -93,7 +93,7 @@ export class TrainingController {
   @Get('detail/:id')
   public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existTraining = await this.trainingService.show(id);
-    return fillObject(TrainingRdo, existTraining);
+    return fillObject(TrainingDetailRdo, existTraining);
   }
 
   /** Список тренировок тренера */
@@ -108,12 +108,12 @@ export class TrainingController {
   })
   @ApiQuery({
     description: 'Query options',
-    type: TrainingQuery
+    type: TrainingCatalogQuery
   })
   @UseGuards(JwtCoachGuard)
   @HttpCode(HttpStatus.OK)
   @Get('my')
-  public async list(@Query() query: TrainingQuery,
+  public async list(@Query() query: TrainingCatalogQuery,
     @Req() req: Request
   ) {
     const existTrainings = await this.trainingService.list(req['user']._id, query);
@@ -136,7 +136,7 @@ export class TrainingController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get('')
+  @Get('index')
   public async index(@Query() query: TrainingCatalogQuery) {
     const existTrainings = await this.trainingService.index(query);
     return fillObject(TrainingRdo, existTrainings);

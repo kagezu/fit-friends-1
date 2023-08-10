@@ -5,13 +5,14 @@ import { FileService } from '../file/file.service';
 import { TrainingCreateDto } from './dto/training-create.dto';
 import { TrainingUpdateDto } from './dto/training-update.dto';
 import { plainToInstance } from 'class-transformer';
-import { TrainingQuery } from './query/trainer.query';
 import { MailService } from '../mail/mail.service';
 import { TrainingCatalogQuery } from './query/trainer-catalog.query';
+import { mockData } from '@fit-friends-1/shared/mock-data';
+import { getRandomItem } from '@fit-friends-1/util/util-core';
 
 enum ExceptionMessage {
   NotFound = 'Training not exist',
-  VideoIsRequest = 'Video file is request',
+  VideoIsRequest = 'video file is request',
   ТoEditingPermissions = 'Тo editing permissions'
 }
 
@@ -41,7 +42,7 @@ export class TrainingService {
     const training = {
       ...dto,
       rating: 0,
-      background: '',
+      background: getRandomItem(mockData.backgrounds),
       coachId,
       demoVideo: file._id,
       totalSale: 0,
@@ -55,7 +56,7 @@ export class TrainingService {
 
   /** Редактирование тренировки */
   public async update(trainingId: string, coachId: string, dto: TrainingUpdateDto, video: Express.Multer.File) {
-    const existTraining = await this.show(trainingId);
+    const existTraining = await this.trainingRepository.check(trainingId);
     const trainingEntity = new TrainingEntity(existTraining);
 
     if (existTraining.coachId.toString() !== coachId) {
@@ -71,9 +72,9 @@ export class TrainingService {
   }
 
   /** Список тренировок тренера */
-  public async list(coachId: string, query: TrainingQuery) {
+  public async list(coachId: string, query: TrainingCatalogQuery) {
     const trainingQuery = plainToInstance(
-      TrainingQuery,
+      TrainingCatalogQuery,
       query,
       { enableImplicitConversion: true });
     return this.trainingRepository.list(coachId, trainingQuery);

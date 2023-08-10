@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserBalanceRepository } from './user-balance.repository';
 import { TrainingService } from '../training/training.service';
 import { UpdateUserBalanceDto } from './dto/update-user-balance.dto';
@@ -20,21 +20,18 @@ export class UserBalanceService {
   ) { }
 
   /** Поступление */
-  public async increase(coachId: string, dto: UpdateUserBalanceDto) {
-    const { userId, training, count } = dto;
+  public async increase(userId: string, dto: UpdateUserBalanceDto) {
+    const { training, count } = dto;
     const existTraining = await this.trainingService.show(training);
     if (!existTraining) {
       throw new NotFoundException(ExceptionMessage.TrainingNotFound);
-    }
-
-    if (existTraining.coachId.toString() !== coachId.toString()) {
-      throw new UnauthorizedException(ExceptionMessage.UnauthorizedUser);
     }
 
     const existUserBalance = await this.userBalanceRepository.show(userId, training);
     if (existUserBalance) {
       await this.userBalanceRepository.update({
         ...dto,
+        userId,
         count: existUserBalance.count + count
       });
       return this.userBalanceRepository.show(userId, training);
@@ -45,22 +42,18 @@ export class UserBalanceService {
       throw new NotFoundException(ExceptionMessage.UserNotFound);
     }
 
-    return this.userBalanceRepository.create(dto);
+    return this.userBalanceRepository.create({ ...dto, userId });
   }
 
   /** Списание  */
-  public async decrease(coachId: string, dto: UpdateUserBalanceDto) {
-    const { userId, training, count } = dto;
+  public async decrease(id: string, dto: UpdateUserBalanceDto) {
+    const { training, count } = dto;
     const existTraining = await this.trainingService.show(training);
     if (!existTraining) {
       throw new NotFoundException(ExceptionMessage.TrainingNotFound);
     }
 
-    if (existTraining.coachId.toString() !== coachId.toString()) {
-      throw new UnauthorizedException(ExceptionMessage.UnauthorizedUser);
-    }
-
-    const existUserBalance = await this.userBalanceRepository.show(userId, training);
+    const existUserBalance = await this.userBalanceRepository.show(id, training);
     if (!existUserBalance) {
       throw new NotFoundException(ExceptionMessage.EmptyBalance);
     }
@@ -71,13 +64,19 @@ export class UserBalanceService {
 
     await this.userBalanceRepository.update({
       ...dto,
+      userId: id,
       count: existUserBalance.count - count
     });
-    return this.userBalanceRepository.show(userId, training);
+    return this.userBalanceRepository.show(id, training);
   }
 
   /** Запрос баланса */
   public async index(userId: string) {
     return this.userBalanceRepository.index(userId);
+  }
+
+  /** Запрос баланса по id */
+  public async show(userId: string, training: string) {
+    return this.userBalanceRepository.show(userId, training);
   }
 }

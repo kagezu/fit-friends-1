@@ -1,14 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
-export class ReviewRdo {
+export class ReviewRdo {  @ApiProperty({
+    description: 'Идентификатор отзыва',
+    example: '6497e4e84c024e968c12fc9c'
+  })
+  @Expose({ name: '_id' })
+  @Transform(({ obj }) => obj._id.toString())
+  public id: string;
+
   @ApiProperty({
     description: 'Идентификатор автора отзыва',
     example: '6497e4e84c024e968c12fc9c'
   })
   @Expose()
-  @Transform(({ obj }) => obj.author.toString())
-  author: string;
+  @Transform(({ obj }) => obj.author.name)
+  name: string;
+
+  @ApiProperty({
+    description: 'Идентификатор автора отзыва',
+    example: '6497e4e84c024e968c12fc9c'
+  })
+  @Expose()
+  @Transform(({ obj }) => obj.author.avatar.path)
+  avatar: string;
 
   @ApiProperty({
     description: 'Идентификатор тренировки',
