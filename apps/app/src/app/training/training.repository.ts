@@ -42,8 +42,11 @@ export class TrainingRepository {
 
   public async update(id: string, item: TrainingEntity): Promise<Training> {
     return this.trainingModel
-      .findByIdAndUpdate(id, item.toObject(), { new: true })
-      .populate('demoVideo')
+    .findByIdAndUpdate(id, item.toObject(), { new: true })
+    .populate(['coachId','demoVideo',{
+      path: 'coachId',
+      populate: 'avatar'
+    }])
       .exec();
   }
 

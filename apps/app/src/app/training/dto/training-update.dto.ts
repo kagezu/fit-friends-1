@@ -50,10 +50,9 @@ export class TrainingUpdateDto {
     example: '1000',
     minimum: TrainingValidate.minPrice
   })
-  @Transform(({ obj }) => +obj.price)
+  @Transform(({ obj }) => +obj.price ?? 'x')
   @IsInt()
   @Min(TrainingValidate.minPrice)
-  @IsOptional()
   @IsOptional()
   price: number;
 

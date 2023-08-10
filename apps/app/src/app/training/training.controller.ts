@@ -73,7 +73,7 @@ export class TrainingController {
       dto,
       video
     );
-    return fillObject(TrainingRdo, training);
+    return fillObject(TrainingDetailRdo, training);
   }
 
   /** Информация о тренировке */
