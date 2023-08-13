@@ -2,7 +2,7 @@ import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { ApiCreatedResponse, ApiUnauthorizedResponse, ApiConflictResponse, ApiHeader, ApiNotFoundResponse } from '@nestjs/swagger';
 import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { SubscriberService } from './subscriber.service';
-import { Controller, Delete, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Delete, HttpCode, HttpStatus, Param, Post, Req, Get, UseGuards } from '@nestjs/common';
 import { Subscriber } from 'rxjs';
 
 @Controller('subscribe')
@@ -53,5 +53,23 @@ export class SubscriberController {
   ) {
     const { email } = req['user'];
     return this.subscriberService.delete(email, id);
+  }
+
+  /** Проверка подписки */
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Subscription not found.' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtUserGuard)
+  @Get(':id')
+  public async check(
+    @Param('id', MongoidValidationPipe) id: string,
+    @Req() req: Request
+  ) {
+    const { email } = req['user'];
+    return this.subscriberService.check(email, id);
   }
 }

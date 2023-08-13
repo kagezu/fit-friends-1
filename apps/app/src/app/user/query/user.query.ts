@@ -19,9 +19,12 @@ export class UserQuery {
   @IsInt()
   public page = 0;
 
+  @Transform(({ value }) => value.split(','))
+  @IsIn(locations, {
+    each: true
+  })
   @IsOptional()
-  @IsIn(locations)
-  public location?: string;
+  public location?: string[];
 
   @IsOptional()
   @IsEnum(TrainingLevel)

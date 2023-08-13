@@ -23,15 +23,21 @@ export class SubscriberService {
 
     const existSubscriber = this.subscriberRepository.check(email, coach);
     if (existSubscriber) {
+      return existSubscriber;
       throw new ConflictException(ExceptionMessage.SubscriptionExist);
     }
 
     return this.subscriberRepository
-      .create(new SubscriberEntity(subscriber));
+    .create(new SubscriberEntity(subscriber));
+  }
+
+  public async check(mail: string, coach: string) {
+    return this.subscriberRepository
+    .check(mail, coach);
   }
 
   public async delete(mail: string, coach: string) {
     return this.subscriberRepository
-      .destroy(mail, coach);
+    .destroy(mail, coach);
   }
 }

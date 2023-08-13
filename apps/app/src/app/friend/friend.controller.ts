@@ -71,9 +71,31 @@ export class FriendController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get('')
+  @Get('index')
   public async index(@Req() req: Request) {
     const existFriends = await this.friendService.index(req['user']._id);
     return fillObject(FriendRdo, existFriends);
+  }
+
+  /** Статус дружбы */
+  @ApiCreatedResponse({
+    description: 'New friend added successfully.',
+    type: FriendRdo
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Friend not exist.' })
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(':id')
+  public async check(
+    @Param('id', MongoidValidationPipe) id: string,
+                      @Req() req: Request
+  ) {
+    const existFriend = await this.friendService.check(req['user']._id, id);
+    return fillObject(FriendRdo, existFriend);
   }
 }

@@ -24,18 +24,18 @@ export class SubscriberRepository {
   public async check(email: string, coach: string): Promise<Subscriber | null> {
     return this.subscriberModel
       .findOne({ email, coach })
-      .exec()
+      .exec();
   }
 
   public async findByEmail(email: string): Promise<Subscriber[] | null> {
     return this.subscriberModel
       .find({ email })
-      .exec()
+      .exec();
   }
 
   public async findByCoach(coach: string): Promise<Subscriber[] | null> {
     return this.subscriberModel
       .find({ coach })
-      .exec()
+      .exec();
   }
 }

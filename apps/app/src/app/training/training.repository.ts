@@ -73,7 +73,7 @@ export class TrainingRepository {
       .exec();
   }
 
-  public async index({ limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, trainingType, interval, trainingLevel, specialOffer }: TrainingCatalogQuery
+  public async index({coachId, limit, page, sortDirection, category, priceFrom, priceTo, caloriesFrom, caloriesTo, ratingFrom, ratingTo, trainingType, interval, trainingLevel, specialOffer }: TrainingCatalogQuery
   ): Promise<Training[]> {
     return this.trainingModel
       .find(Object.assign({
@@ -81,6 +81,7 @@ export class TrainingRepository {
         caloriesToBurn: { $gte: caloriesFrom, $lte: caloriesTo },
         rating: { $gte: ratingFrom, $lte: ratingTo }
       },
+        coachId ? { coachId } : {},
         trainingType ? { trainingType: { $in: trainingType } } : {},
         interval ? { interval: { $in: interval } } : {},
         trainingLevel ? { trainingLevel } : {},

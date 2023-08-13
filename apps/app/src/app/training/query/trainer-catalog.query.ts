@@ -4,6 +4,10 @@ import { TrainingLevel, TrainingType, intervals } from '@fit-friends-1/shared/ap
 import { QueryOption } from '../../app.const';
 
 export class TrainingCatalogQuery {
+
+  @IsOptional()
+  public coachId?: string;
+
   @Transform(({ value }) => +value || QueryOption.DefaultCountLimit)
   @IsInt()
   @Max(QueryOption.MaxCountLimit)

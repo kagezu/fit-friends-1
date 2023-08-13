@@ -38,6 +38,25 @@ export class PersonalOrderController {
     return fillObject(PersonalOrderRdo, newOrder);
   }
 
+  /** Проверка заявки */
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'User not exist.' })
+  @ApiBadRequestResponse()
+  @ApiHeader({
+    name: 'authorization',
+    description: 'Access token'
+  })
+  @UseGuards(JwtUserGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(':user')
+  public async check(
+    @Param('user', MongoidValidationPipe) user: string,
+    @Req() req: Request
+  ) {
+    const newOrder = await this.personalOrderService.show(req['user'], user);
+    return fillObject(PersonalOrderRdo, newOrder);
+  }
+
   /** Изменение статуса заявки  */
   @ApiOkResponse({
     description: 'Request status changed successfully.',
@@ -74,7 +93,7 @@ export class PersonalOrderController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get('')
+  @Get('index')
   public async index(@Req() req: Request) {
     const existPersonalOrders = await this.personalOrderService.index(req['user']._id);
     return fillObject(PersonalOrderRdo, existPersonalOrders);

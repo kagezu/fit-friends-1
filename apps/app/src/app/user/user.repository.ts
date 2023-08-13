@@ -42,7 +42,7 @@ export class UserRepository {
   public async index({ limit, page, category, sortDirection, location, trainingLevel, trainingTypes, readyForTraining }: UserQuery): Promise<User[]> {
     return this.userModel
       .find(Object.assign(
-        location ? { location } : {},
+        location ? { location: { $in: location } } : {},
         trainingLevel ? { trainingLevel } : {},
         trainingTypes ? { trainingTypes: { $in: trainingTypes } } : {},
         readyForTraining ? { readyForTraining } : {}

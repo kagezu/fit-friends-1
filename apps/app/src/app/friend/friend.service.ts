@@ -45,6 +45,11 @@ export class FriendService {
     return this.friendRepository.destroy(userId, friend);
   }
 
+  /** Статус дружбы */
+  public async check(userId: string, friend: string) {
+    return await this.friendRepository.check(userId, friend);
+  }
+
   /** Список друзей */
   public async index(userId: string) {
     return this.friendRepository.index(userId);

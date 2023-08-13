@@ -22,10 +22,10 @@ export class PersonalOrderRepository {
       .exec();
   }
 
-  public async show(id: string): Promise<PersonalOrder | null> {
+  public async show(user: string, initiator: string): Promise<PersonalOrder | null> {
     return this.personalOrderModel
-      .findById(id)
-      .exec();
+    .findOne({user, initiator})
+    .exec();
   }
 
   public async update(id: string, item: PersonalOrderEntity): Promise<PersonalOrder> {
