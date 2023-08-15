@@ -14,12 +14,12 @@ import { ReviewValidate } from '../review/review.const';
 import { ReviewService } from '../review/review.service'
 import { PersonalOrderRepository } from '../personal-order/personal-order.repository';
 import { PersonalOrderEntity } from '../personal-order/personal-order.entity';
-import { UserBalanceRepository } from '../user-balance/user-balance.repository';
 import { FriendService } from '../friend/friend.service';
 import { SubscriberRepository } from '../subscriber/subscriber.repository';
 import { SubscriberEntity } from '../subscriber/subscriber.entity';
 import { MailService } from '../mail/mail.service';
 import { OrderService } from '../order/order.service';
+import { UserBalanceService } from '../user-balance/user-balance.service';
 
 const COUNT_ITEM = 100;
 const COUNT_ITEM_ORDER = 10;
@@ -37,7 +37,7 @@ export class SeedService {
     private readonly mailService: MailService,
     private readonly orderService: OrderService,
     private readonly personalOrderRepository: PersonalOrderRepository,
-    private readonly userBalanceRepository: UserBalanceRepository,
+    private readonly userBalanceService: UserBalanceService,
     private readonly friendService: FriendService,
     private readonly subscriberRepository: SubscriberRepository
   ) { }
@@ -77,11 +77,12 @@ export class SeedService {
 
   private async generateBalance(users: User[], trainings: Training[]) {
     return Promise.all(users.map(
-      (user) => this.userBalanceRepository.create({
-        userId: user._id,
-        training: getRandomItem(trainings)._id,
-        count: generateRandomValue(0, MAX_COUNT_ORDER)
-      })));
+      (user) => this.userBalanceService.increase(
+        user._id,
+        {
+          training: getRandomItem(trainings)._id,
+          count: generateRandomValue(0, MAX_COUNT_ORDER)
+        })));
   }
 
   private async generateSubscriptions(users: User[], coachs: User[]) {

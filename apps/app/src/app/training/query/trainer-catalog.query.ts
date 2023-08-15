@@ -16,7 +16,7 @@ export class TrainingCatalogQuery {
   @IsIn(['asc', 'desc'])
   public sortDirection: 'desc' | 'asc' = QueryOption.DefaultSortDirection;
 
-  @IsIn(['createdAt', 'price', 'rating'])
+  @IsIn(['createdAt', 'price', 'rating', 'totalSale', 'totalAmount'])
   public category: string = QueryOption.DefaultSortCategory;
 
   @Transform(({ value }) => +value)

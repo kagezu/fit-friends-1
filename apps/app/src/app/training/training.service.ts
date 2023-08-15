@@ -75,9 +75,9 @@ export class TrainingService {
   public async list(coachId: string, query: TrainingCatalogQuery) {
     const trainingQuery = plainToInstance(
       TrainingCatalogQuery,
-      query,
+      { ...query, coachId},
       { enableImplicitConversion: true });
-    return this.trainingRepository.list(coachId, trainingQuery);
+    return this.trainingRepository.index(trainingQuery);
   }
 
   /** Список тренировок */

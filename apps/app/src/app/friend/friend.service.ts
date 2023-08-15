@@ -32,7 +32,11 @@ export class FriendService {
       user: friend,
       message: `${user.name} added you as a friend`
     });
-    const friendEntity = new FriendEntity({ userId: user._id, friend });
+
+    let friendEntity = new FriendEntity({ userId: friend, friend:user._id });
+    await this.friendRepository.create(friendEntity);
+
+    friendEntity = new FriendEntity({ userId: user._id, friend });
     return this.friendRepository.create(friendEntity);
   }
 
@@ -42,6 +46,7 @@ export class FriendService {
     if (!existFriend) {
       throw new NotFoundException('Friend not exist.')
     }
+    await this.friendRepository.destroy(friend, userId );
     return this.friendRepository.destroy(userId, friend);
   }
 

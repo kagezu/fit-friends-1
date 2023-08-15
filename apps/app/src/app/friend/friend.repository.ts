@@ -18,20 +18,23 @@ export class FriendRepository {
 
   public async index(userId: string): Promise<Friend[] | null> {
     return this.friendModel
-      .find({ userId })
-      .populate('friend')
+    .find({ $or: [{ userId }, { friend: userId }] })
+      .populate(['friend',{
+        path: 'friend',
+        populate: 'avatar'
+      }])
       .exec();
   }
 
   public async check(userId: string, friend: string): Promise<Friend | null> {
     return this.friendModel
-      .findOne({ userId, friend })
-      .exec();
+    .findOne({ $or: [{ userId, friend }, { userId: friend, friend: userId }] })
+    .exec();
   }
 
   public async destroy(userId: string, friend: string) {
     return this.friendModel
-      .deleteOne({ userId, friend })
+    .deleteOne({ $or: [{ userId, friend }, { userId: friend, friend: userId }] })
       .exec();
   }
 }

@@ -35,6 +35,7 @@ export class OrderController {
     @Req() req: Request
   ) {
     const newBalance = await this.orderService.create(req['user']._id, dto);
+    console.log(newBalance);
     return fillObject(UserBalanceRdo, newBalance);
   }
 

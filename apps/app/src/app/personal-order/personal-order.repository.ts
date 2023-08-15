@@ -18,14 +18,14 @@ export class PersonalOrderRepository {
 
   public async index(user: string): Promise<PersonalOrder[] | null> {
     return this.personalOrderModel
-      .find({ user })
+      .find({ $or: [{ user }, { initiator: user }] })
       .exec();
   }
 
   public async show(user: string, initiator: string): Promise<PersonalOrder | null> {
     return this.personalOrderModel
-    .findOne({user, initiator})
-    .exec();
+    .findOne({ $or: [{ user }, { initiator: user }] })
+      .exec();
   }
 
   public async update(id: string, item: PersonalOrderEntity): Promise<PersonalOrder> {

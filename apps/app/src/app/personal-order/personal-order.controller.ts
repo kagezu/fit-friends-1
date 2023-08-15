@@ -29,7 +29,7 @@ export class PersonalOrderController {
   })
   @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post(':user')
+  @Post('user/:user')
   public async create(
     @Param('user', MongoidValidationPipe) user: string,
     @Req() req: Request
@@ -46,9 +46,9 @@ export class PersonalOrderController {
     name: 'authorization',
     description: 'Access token'
   })
-  @UseGuards(JwtUserGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get(':user')
+  @Get('user/:user')
   public async check(
     @Param('user', MongoidValidationPipe) user: string,
     @Req() req: Request
@@ -72,7 +72,7 @@ export class PersonalOrderController {
   })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Patch(':id')
+  @Patch('user/:id')
   public async delete(
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request,

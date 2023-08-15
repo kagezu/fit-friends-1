@@ -37,6 +37,7 @@ export class UserBalanceController {
   ) {
     const existUserBalance = await this.userBalanceService.increase(req['user']._id, dto);
     return fillObject(UserBalanceRdo, existUserBalance);
+    // return existUserBalance;
   }
 
   /** Списание с баланса */
@@ -75,7 +76,7 @@ export class UserBalanceController {
   })
   @UseGuards(JwtUserGuard)
   @HttpCode(HttpStatus.OK)
-  @Get('list')
+  @Get('index')
   public async index(@Req() req: Request) {
     const userBalances = await this.userBalanceService.index(req['user']._id);
     return fillObject(UserBalanceRdo, userBalances);

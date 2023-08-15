@@ -11,6 +11,7 @@ import { TrainingUpdateDto } from './dto/training-update.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 import { TrainingDetailRdo } from './rdo/training-detail.rdo';
+import { MyTrainingRdo } from './rdo/my-training.rdo';
 
 @ApiTags('training')
 @Controller('training')
@@ -117,7 +118,7 @@ export class TrainingController {
     @Req() req: Request
   ) {
     const existTrainings = await this.trainingService.list(req['user']._id, query);
-    return fillObject(TrainingRdo, existTrainings);
+    return fillObject(MyTrainingRdo, existTrainings);
   }
 
   /** Список тренировок */

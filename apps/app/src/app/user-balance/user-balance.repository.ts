@@ -27,12 +27,14 @@ export class UserBalanceRepository {
   public async index(userId: string): Promise<UserBalance[] | null> {
     return this.userBalanceModel
       .find({ userId })
+      .populate('training')
       .exec();
   }
 
   public async show(userId: string, training: string): Promise<UserBalance | null> {
     return this.userBalanceModel
       .findOne({ userId, training })
+      .populate('training')
       .exec();
   }
 
