@@ -47,7 +47,7 @@ export class AuthService {
     }
     const userEntity = await new UserEntity(user).setPassword(password);
 
-    if (files?.avatar[0]) {
+    if (files?.avatar) {
       const document = await this.fileService.save(files?.avatar[0]);
       userEntity.avatar = document._id;
     }
