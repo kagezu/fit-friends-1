@@ -1,8 +1,7 @@
-import { IsArray, IsBoolean, IsEmail, IsEnum, IsISO8601, IsIn, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
+import { IsEmail, IsEnum, IsISO8601, IsIn, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserMessage, UserValidate } from '../auth.constant';
-import { Gender, TrainingLevel, TrainingType, UserRole, userBackgrounds, intervals, locations } from '@fit-friends-1/shared/app-types';
-import { Transform } from 'class-transformer';
+import { Gender, UserRole, locations } from '@fit-friends-1/shared/app-types';
 
 export class CreateUserDto {
   @ApiProperty({

@@ -7,7 +7,6 @@ export class UserBalanceRdo {
     description: 'Тренировка'
   })
   @Expose()
-  // @Transform(({ obj }) => obj.training.toString())
   @Type(() => TrainingRdo)
   training: TrainingRdo;
 

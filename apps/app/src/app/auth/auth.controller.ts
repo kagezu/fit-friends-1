@@ -1,8 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Headers, Req, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { fillObject } from '@fit-friends-1/util/util-core';
-import { UserRdo } from '../user/rdo/user.rdo';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiBadRequestResponse, ApiBody, ApiConflictResponse, ApiConsumes, ApiCreatedResponse, ApiHeader, ApiProperty, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
@@ -47,7 +45,7 @@ export class AuthenticationController {
     @UploadedFiles(new FileValidationPipe()) files: UserFiles
   ) {
     const newUser = await this.authService.register(authorization, dto, files);
-        return newUser;
+    return newUser;
   }
 
   /** Вход пользователя*/

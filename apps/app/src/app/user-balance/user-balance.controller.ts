@@ -37,7 +37,6 @@ export class UserBalanceController {
   ) {
     const existUserBalance = await this.userBalanceService.increase(req['user']._id, dto);
     return fillObject(UserBalanceRdo, existUserBalance);
-    // return existUserBalance;
   }
 
   /** Списание с баланса */

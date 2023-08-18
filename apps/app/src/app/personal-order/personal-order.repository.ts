@@ -24,7 +24,7 @@ export class PersonalOrderRepository {
 
   public async show(user: string, initiator: string): Promise<PersonalOrder | null> {
     return this.personalOrderModel
-    .findOne({ $or: [{ user }, { initiator: user }] })
+      .findOne({ $or: [{ user, initiator }, { user: initiator, initiator: user }] })
       .exec();
   }
 

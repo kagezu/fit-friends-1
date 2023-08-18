@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { TokenPayload, User, UserFiles, UserRole } from '@fit-friends-1/shared/app-types';
+import { TokenPayload, User, UserFiles } from '@fit-friends-1/shared/app-types';
 import { UserEntity } from '../user/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserRepository } from '../user/user.repository';
@@ -10,7 +10,7 @@ import { ConfigType } from '@nestjs/config';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { createJWTPayload, fillObject } from '@fit-friends-1/util/util-core';
 import * as crypto from 'node:crypto';
-import { MAX_TRAINING_TYPES, UserMessage } from './auth.constant';
+import { UserMessage } from './auth.constant';
 import { FileService } from '../file/file.service';
 import { UserRdo } from '../user/rdo/user.rdo';
 
@@ -26,7 +26,7 @@ export class AuthService {
 
   /** Регистрация пользователя*/
   public async register(authorization: string, dto: CreateUserDto, files: UserFiles) {
-    const { role, email, password } = dto;
+    const { email, password } = dto;
 
     const payload = await this.verifyToken(authorization);
     if (payload) {
@@ -38,7 +38,6 @@ export class AuthService {
       passwordHash: '',
       createdAt: new Date(),
       certificate: [],
-//       trainingTypes: Array.from(new Set((dto.trainingTypes as unknown as string).split(','))).slice(0, MAX_TRAINING_TYPES)
     };
 
     const existUser = await this.userRepository.findByEmail(email);
@@ -51,20 +50,11 @@ export class AuthService {
       const document = await this.fileService.save(files?.avatar[0]);
       userEntity.avatar = document._id;
     }
-/*
-    if (role === UserRole.Coach) {
-      if (!files?.certificate) {
-        throw new BadRequestException('отсутствует сертификат');
-      }
-      const document = await this.fileService.save(files.certificate[0]);
-      userEntity.certificate = document._id;
-    }
-*/
-await this.userRepository.create(userEntity);
-const newUser = await this.userRepository.findByEmail(userEntity.email);
-const loggedUser = await this.createToken(newUser);
-return { ...loggedUser, user: fillObject(UserRdo, newUser) };
-//     return this.userRepository.create(userEntity);
+
+    await this.userRepository.create(userEntity);
+    const newUser = await this.userRepository.findByEmail(userEntity.email);
+    const loggedUser = await this.createToken(newUser);
+    return { ...loggedUser, user: fillObject(UserRdo, newUser) };
   }
 
   /** Вход пользователя*/
@@ -72,7 +62,6 @@ return { ...loggedUser, user: fillObject(UserRdo, newUser) };
     const payload = await this.verifyToken(authorization);
     if (payload) {
       return;
-//       throw new BadRequestException(UserMessage.AuthorizedUser);
     }
     const verifiedUser = await this.verify(dto);
     const loggedUser = await this.createToken(verifiedUser);
