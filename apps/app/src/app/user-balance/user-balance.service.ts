@@ -42,7 +42,8 @@ export class UserBalanceService {
       throw new NotFoundException(ExceptionMessage.UserNotFound);
     }
 
-    return this.userBalanceRepository.create({ ...dto, userId });
+    await this.userBalanceRepository.create({ ...dto, userId });
+    return await this.userBalanceRepository.show(userId, training);
   }
 
   /** Списание  */

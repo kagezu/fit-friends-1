@@ -4,10 +4,10 @@ import 'multer';
 import { UserFiles } from '@fit-friends-1/shared/app-types';
 
 const MAX_LIMIT_FILE_SIZE = 1000000;
-const certificateExtensions = ['pdf','jpg','jpeg', 'png'];
+const certificateExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
 const avatarExtensions = ['jpeg', 'png'];
 enum MessagePipe {
-  CertificateInvalid = 'Certificate invalid mimetype',
+  CertificateInvalid = 'certificate invalid mimetype',
   AvatarInvalid = 'avatar invalid mimetype'
 }
 
@@ -21,7 +21,7 @@ export class FileValidationPipe implements PipeTransform {
     if (files.certificate) {
       const certificateExtension = extension(files.certificate[0].mimetype);
       if (!certificateExtensions.some((item) => item === certificateExtension)) {
-      throw new BadRequestException(MessagePipe.CertificateInvalid);
+        throw new BadRequestException(MessagePipe.CertificateInvalid);
       }
     }
 
