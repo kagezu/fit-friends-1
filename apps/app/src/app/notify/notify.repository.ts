@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { NotifyEntity } from './notify.entity';
-import { Notify } from '@fit-friends-1/shared/app-types';
+import { FieldList, Notify, SortDirection } from '@fit-friends-1/shared/app-types';
 import { NotifyModel } from './notify.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -19,7 +19,7 @@ export class NotifyRepository {
   public async index(user: string): Promise<Notify[] | null> {
     return this.NotifyModel
       .find({ user })
-      .sort([['createdAt', 'desc']])
+      .sort([[FieldList.CreatedAt, SortDirection.Desc]])
       .exec();
   }
 

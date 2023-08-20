@@ -1,7 +1,7 @@
 import { Subscriber } from '@fit-friends-1/shared/app-types';
 import { SubscriberEntity } from './subscriber.entity';
 import { SubscriberRepository } from './subscriber.repository';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 enum ExceptionMessage {
   NotFound = 'Coach not found',
@@ -24,20 +24,19 @@ export class SubscriberService {
     const existSubscriber = this.subscriberRepository.check(email, coach);
     if (existSubscriber) {
       return existSubscriber;
-      throw new ConflictException(ExceptionMessage.SubscriptionExist);
     }
 
     return this.subscriberRepository
-    .create(new SubscriberEntity(subscriber));
+      .create(new SubscriberEntity(subscriber));
   }
 
   public async check(mail: string, coach: string) {
     return this.subscriberRepository
-    .check(mail, coach);
+      .check(mail, coach);
   }
 
   public async delete(mail: string, coach: string) {
     return this.subscriberRepository
-    .destroy(mail, coach);
+      .destroy(mail, coach);
   }
 }

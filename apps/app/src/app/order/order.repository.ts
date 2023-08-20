@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Order } from '@fit-friends-1/shared/app-types';
+import { FieldList, Order } from '@fit-friends-1/shared/app-types';
 import { OrderModel } from './order.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -26,7 +26,7 @@ export class OrderRepository {
       .sort([[category, sortDirection]])
       .skip(page * limit)
       .limit(limit)
-      .populate('training')
+      .populate(FieldList.Training)
       .exec();
   }
 }

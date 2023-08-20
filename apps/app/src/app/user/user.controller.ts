@@ -7,7 +7,7 @@ import { UserService } from './user.service';
 import { FileValidationPipe, MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { UserQuery } from './query/user.query';
 import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
-import { UserFiles } from '@fit-friends-1/shared/app-types';
+import { FieldList, UserFiles } from '@fit-friends-1/shared/app-types';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserFilesUploadDto } from '../auth/dto/user-files-upload.dto';
@@ -51,7 +51,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Get()
   public async check(@Req() req: Request) {
-    return fillObject(UserRdo, req['user']);
+    return fillObject(UserRdo, req[FieldList.User]);
   }
 
   /** Список пользователей */
@@ -104,7 +104,7 @@ export class UserController {
     @UploadedFiles(new FileValidationPipe()) files: UserFiles,
     @Req() req: Request
   ) {
-    const user = await this.userService.update(req['user'], dto, files);
+    const user = await this.userService.update(req[FieldList.User], dto, files);
     return fillObject(UserRdo, user);
   }
 }

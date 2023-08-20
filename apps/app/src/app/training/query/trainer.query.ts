@@ -1,7 +1,8 @@
-import { IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { intervals } from '@fit-friends-1/shared/app-types';
+import { SortDirection, intervals } from '@fit-friends-1/shared/app-types';
 import { QueryOption } from '../../app.const';
+import { SortOrder } from 'mongoose';
 
 export class TrainingQuery {
   @Transform(({ value }) => +value || QueryOption.DefaultCountLimit)
@@ -9,8 +10,8 @@ export class TrainingQuery {
   @Max(QueryOption.MaxCountLimit)
   public limit: number = QueryOption.DefaultCountLimit;
 
-  @IsIn(['asc', 'desc'])
-  public sortDirection: 'desc' | 'asc' = QueryOption.DefaultSortDirection;
+  @IsEnum(SortDirection)
+  public sortDirection: SortOrder = QueryOption.DefaultSortDirection;
 
   @Transform(({ value }) => +value)
   @IsInt()

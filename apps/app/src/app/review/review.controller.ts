@@ -8,6 +8,7 @@ import { ReviewCreateDto } from './dto/review-create.dto';
 import { ReviewQuery } from './query/review.query';
 import { ReviewRdo } from './rdo/review.rdo';
 import { ReviewService } from './review.service';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @ApiTags('review')
 @Controller('review')
@@ -35,7 +36,7 @@ export class ReviewController {
     @Body() dto: ReviewCreateDto,
     @Req() req: Request
   ) {
-    const newReview = await this.reviewService.create(req['user']._id, dto);
+    const newReview = await this.reviewService.create(req[FieldList.User]._id, dto);
     return fillObject(ReviewRdo, newReview);
   }
 

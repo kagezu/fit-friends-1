@@ -8,6 +8,7 @@ import { OrderService } from './order.service';
 import { OrderCreateDto } from './dto/order-create.dto';
 import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { UserBalanceRdo } from '../user-balance/rdo/user-balance.rdo';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @ApiTags('order')
 @Controller('order')
@@ -34,8 +35,7 @@ export class OrderController {
     @Body() dto: OrderCreateDto,
     @Req() req: Request
   ) {
-    const newBalance = await this.orderService.create(req['user']._id, dto);
-    console.log(newBalance);
+    const newBalance = await this.orderService.create(req[FieldList.User]._id, dto);
     return fillObject(UserBalanceRdo, newBalance);
   }
 
@@ -61,7 +61,7 @@ export class OrderController {
   ) {
     return fillObject(
       OrderRdo,
-      await this.orderService.index(req['user']._id, query)
+      await this.orderService.index(req[FieldList.User]._id, query)
     );
   }
 }

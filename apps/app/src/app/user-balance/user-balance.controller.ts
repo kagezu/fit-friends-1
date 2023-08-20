@@ -7,6 +7,7 @@ import { UserBalanceRdo } from './rdo/user-balance.rdo';
 import { JwtCoachGuard } from '../auth/guards/jwt-coach.guard';
 import { UpdateUserBalanceDto } from './dto/update-user-balance.dto';
 import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @ApiTags('balance')
 @Controller('balance')
@@ -35,7 +36,7 @@ export class UserBalanceController {
     @Body() dto: UpdateUserBalanceDto,
     @Req() req: Request,
   ) {
-    const existUserBalance = await this.userBalanceService.increase(req['user']._id, dto);
+    const existUserBalance = await this.userBalanceService.increase(req[FieldList.User]._id, dto);
     return fillObject(UserBalanceRdo, existUserBalance);
   }
 
@@ -59,7 +60,7 @@ export class UserBalanceController {
     @Body() dto: UpdateUserBalanceDto,
     @Req() req: Request
   ) {
-    const existUserBalance = await this.userBalanceService.decrease(req['user']._id, dto);
+    const existUserBalance = await this.userBalanceService.decrease(req[FieldList.User]._id, dto);
     return fillObject(UserBalanceRdo, existUserBalance);
   }
 
@@ -77,7 +78,7 @@ export class UserBalanceController {
   @HttpCode(HttpStatus.OK)
   @Get('index')
   public async index(@Req() req: Request) {
-    const userBalances = await this.userBalanceService.index(req['user']._id);
+    const userBalances = await this.userBalanceService.index(req[FieldList.User]._id);
     return fillObject(UserBalanceRdo, userBalances);
   }
 
@@ -95,7 +96,7 @@ export class UserBalanceController {
   @HttpCode(HttpStatus.OK)
   @Get('info/:id')
   public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string) {
-    const userBalances = await this.userBalanceService.show(req['user']._id, id);
+    const userBalances = await this.userBalanceService.show(req[FieldList.User]._id, id);
     return fillObject(UserBalanceRdo, userBalances);
   }
 }

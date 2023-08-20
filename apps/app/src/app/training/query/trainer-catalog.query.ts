@@ -1,7 +1,8 @@
 import { IsEnum, IsIn, IsInt, IsOptional, IsBoolean, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { TrainingLevel, TrainingType, intervals } from '@fit-friends-1/shared/app-types';
+import { FieldList, SortDirection, TrainingLevel, TrainingType, intervals } from '@fit-friends-1/shared/app-types';
 import { QueryOption } from '../../app.const';
+import { SortOrder } from 'mongoose';
 
 export class TrainingCatalogQuery {
 
@@ -13,10 +14,16 @@ export class TrainingCatalogQuery {
   @Max(QueryOption.MaxCountLimit)
   public limit: number = QueryOption.DefaultCountLimit;
 
-  @IsIn(['asc', 'desc'])
-  public sortDirection: 'desc' | 'asc' = QueryOption.DefaultSortDirection;
+  @IsEnum(SortDirection)
+  public sortDirection: SortOrder = QueryOption.DefaultSortDirection;
 
-  @IsIn(['createdAt', 'price', 'rating', 'totalSale', 'totalAmount'])
+  @IsIn([
+    FieldList.CreatedAt,
+    FieldList.Price,
+    FieldList.Rating,
+    FieldList.TotalSale,
+    FieldList.TotalAmount
+  ])
   public category: string = QueryOption.DefaultSortCategory;
 
   @Transform(({ value }) => +value)

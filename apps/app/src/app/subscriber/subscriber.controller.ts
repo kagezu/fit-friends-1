@@ -4,6 +4,7 @@ import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { SubscriberService } from './subscriber.service';
 import { Controller, Delete, HttpCode, HttpStatus, Param, Post, Req, Get, UseGuards } from '@nestjs/common';
 import { Subscriber } from 'rxjs';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @Controller('subscribe')
 export class SubscriberController {
@@ -30,7 +31,7 @@ export class SubscriberController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const { email } = req['user'];
+    const { email } = req[FieldList.User];
     return this.subscriberService.add({
       email,
       coach: id
@@ -51,7 +52,7 @@ export class SubscriberController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const { email } = req['user'];
+    const { email } = req[FieldList.User];
     return this.subscriberService.delete(email, id);
   }
 
@@ -69,7 +70,7 @@ export class SubscriberController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const { email } = req['user'];
+    const { email } = req[FieldList.User];
     return this.subscriberService.check(email, id);
   }
 }

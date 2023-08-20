@@ -12,6 +12,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TrainingCatalogQuery } from './query/trainer-catalog.query';
 import { TrainingDetailRdo } from './rdo/training-detail.rdo';
 import { MyTrainingRdo } from './rdo/my-training.rdo';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @ApiTags('training')
 @Controller('training')
@@ -41,7 +42,7 @@ export class TrainingController {
     @Req() req: Request,
     @UploadedFile(VideoValidationPipe) video: Express.Multer.File
   ) {
-    const newTraining = await this.trainingService.create(req['user']._id, dto, video);
+    const newTraining = await this.trainingService.create(req[FieldList.User]._id, dto, video);
     return fillObject(TrainingRdo, newTraining);
   }
 
@@ -70,7 +71,7 @@ export class TrainingController {
   ) {
     const training = await this.trainingService.update(
       id,
-      req['user']._id.toString(),
+      req[FieldList.User]._id.toString(),
       dto,
       video
     );
@@ -117,7 +118,7 @@ export class TrainingController {
   public async list(@Query() query: TrainingCatalogQuery,
     @Req() req: Request
   ) {
-    const existTrainings = await this.trainingService.list(req['user']._id, query);
+    const existTrainings = await this.trainingService.list(req[FieldList.User]._id, query);
     return fillObject(MyTrainingRdo, existTrainings);
   }
 

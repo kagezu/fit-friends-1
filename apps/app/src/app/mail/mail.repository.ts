@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailModel } from './mail.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { MailQueue } from '@fit-friends-1/shared/app-types';
+import { MailQueue, FieldList } from '@fit-friends-1/shared/app-types';
 import { MailQueueEntity } from './mail-queue.entity';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class MailRepository {
   public async index() {
     return this.mailModel
       .find()
-      .populate('training')
+      .populate(FieldList.Training)
       .exec();
   }
 

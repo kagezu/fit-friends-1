@@ -7,6 +7,7 @@ import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
 import { PersonalOrderService } from './personal-order.service';
 import { PersonalOrderRdo } from './rdo/personal-order.rdo';
 import { UpdatePersonalOrderDto } from './dto/personal-order.dto';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @ApiTags('personal-order')
 @Controller('personal-order')
@@ -34,7 +35,7 @@ export class PersonalOrderController {
     @Param('user', MongoidValidationPipe) user: string,
     @Req() req: Request
   ) {
-    const newOrder = await this.personalOrderService.create(req['user'], user);
+    const newOrder = await this.personalOrderService.create(req[FieldList.User], user);
     return fillObject(PersonalOrderRdo, newOrder);
   }
 
@@ -53,7 +54,7 @@ export class PersonalOrderController {
     @Param('user', MongoidValidationPipe) user: string,
     @Req() req: Request
   ) {
-    const newOrder = await this.personalOrderService.show(req['user'], user);
+    const newOrder = await this.personalOrderService.show(req[FieldList.User], user);
     return fillObject(PersonalOrderRdo, newOrder);
   }
 
@@ -78,7 +79,7 @@ export class PersonalOrderController {
     @Req() req: Request,
     @Body() dto: UpdatePersonalOrderDto
   ) {
-    const personalOrder = await this.personalOrderService.update(req['user'], id, dto.orderStatus);
+    const personalOrder = await this.personalOrderService.update(req[FieldList.User], id, dto.orderStatus);
     return fillObject(PersonalOrderRdo, personalOrder);
   }
 
@@ -95,7 +96,7 @@ export class PersonalOrderController {
   @HttpCode(HttpStatus.OK)
   @Get('index')
   public async index(@Req() req: Request) {
-    const existPersonalOrders = await this.personalOrderService.index(req['user']._id);
+    const existPersonalOrders = await this.personalOrderService.index(req[FieldList.User]._id);
     return fillObject(PersonalOrderRdo, existPersonalOrders);
   }
 }

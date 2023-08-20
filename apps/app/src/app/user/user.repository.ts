@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from './user.entity';
-import { User } from '@fit-friends-1/shared/app-types';
+import { FieldList, User } from '@fit-friends-1/shared/app-types';
 import { UserModel } from './user.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -21,21 +21,21 @@ export class UserRepository {
   public async findById(id: string): Promise<User | null> {
     return this.userModel
       .findById(id)
-      .populate(['certificate', 'avatar'])
+      .populate([FieldList.Certificate, FieldList.Avatar])
       .exec();
   }
 
   public async findByEmail(email: string): Promise<User | null> {
     return this.userModel
       .findOne({ email })
-      .populate(['certificate', 'avatar'])
+      .populate([FieldList.Certificate, FieldList.Avatar])
       .exec();
   }
 
   public async update(id: string, item: UserEntity): Promise<User> {
     return this.userModel
       .findByIdAndUpdate(id, item.toObject(), { new: true })
-      .populate(['certificate', 'avatar'])
+      .populate([FieldList.Certificate, FieldList.Avatar])
       .exec();
   }
 
@@ -50,7 +50,7 @@ export class UserRepository {
       .sort([[category, sortDirection]])
       .skip(page * limit)
       .limit(limit)
-      .populate(['certificate', 'avatar'])
+      .populate([FieldList.Certificate, FieldList.Avatar])
       .exec();
   }
 }

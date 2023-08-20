@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ReviewEntity } from './review.entity';
-import { Review } from '@fit-friends-1/shared/app-types';
+import { FieldList, Review } from '@fit-friends-1/shared/app-types';
 import { ReviewModel } from './review.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -26,9 +26,9 @@ export class ReviewRepository {
       .sort([[category, sortDirection]])
       .skip(page * limit)
       .limit(limit)
-      .populate(['author',{
-        path: 'author',
-        populate: 'avatar'
+      .populate([FieldList.Author, {
+        path: FieldList.Author,
+        populate: FieldList.Avatar
       }])
       .exec();
   }

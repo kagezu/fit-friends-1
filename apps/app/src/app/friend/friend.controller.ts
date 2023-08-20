@@ -6,6 +6,7 @@ import { FriendRdo } from './rdo/friend.rdo';
 import { MongoidValidationPipe } from '@fit-friends-1/shared/shared-pipes';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtUserGuard } from '../auth/guards/jwt-user.guard';
+import { FieldList } from '@fit-friends-1/shared/app-types';
 
 @ApiTags('friend')
 @Controller('friend')
@@ -33,7 +34,7 @@ export class FriendController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const existFriend = await this.friendService.create(req['user'], id);
+    const existFriend = await this.friendService.create(req[FieldList.User], id);
     return fillObject(FriendRdo, existFriend);
   }
 
@@ -55,7 +56,7 @@ export class FriendController {
     @Param('id', MongoidValidationPipe) id: string,
     @Req() req: Request
   ) {
-    const existFriend = await this.friendService.destroy(req['user']._id, id);
+    const existFriend = await this.friendService.destroy(req[FieldList.User]._id, id);
     return fillObject(FriendRdo, existFriend);
   }
 
@@ -73,7 +74,7 @@ export class FriendController {
   @HttpCode(HttpStatus.OK)
   @Get('index')
   public async index(@Req() req: Request) {
-    const existFriends = await this.friendService.index(req['user']._id);
+    const existFriends = await this.friendService.index(req[FieldList.User]._id);
     return fillObject(FriendRdo, existFriends);
   }
 
@@ -93,9 +94,9 @@ export class FriendController {
   @Get(':id')
   public async check(
     @Param('id', MongoidValidationPipe) id: string,
-                      @Req() req: Request
+    @Req() req: Request
   ) {
-    const existFriend = await this.friendService.check(req['user']._id, id);
+    const existFriend = await this.friendService.check(req[FieldList.User]._id, id);
     return fillObject(FriendRdo, existFriend);
   }
 }

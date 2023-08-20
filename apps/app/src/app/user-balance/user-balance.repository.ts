@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserBalance } from '@fit-friends-1/shared/app-types';
+import { FieldList, UserBalance } from '@fit-friends-1/shared/app-types';
 import { UserBalanceModel } from './user-balance.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -27,14 +27,14 @@ export class UserBalanceRepository {
   public async index(userId: string): Promise<UserBalance[] | null> {
     return this.userBalanceModel
       .find({ userId })
-      .populate('training')
+      .populate(FieldList.Training)
       .exec();
   }
 
   public async show(userId: string, training: string): Promise<UserBalance | null> {
     return this.userBalanceModel
       .findOne({ userId, training })
-      .populate('training')
+      .populate(FieldList.Training)
       .exec();
   }
 
