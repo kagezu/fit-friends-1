@@ -1,0 +1,42 @@
+version: "3.5"
+services:
+  fitfriends.mongo:
+    image: mongo
+    restart: always
+    container_name: fitfriends.mongo
+    env_file:
+      - .fit.mongo.env
+    volumes:
+      - fitfriends.app.volume:/data/db
+    networks:
+      - fitfriends.app.network
+
+  fitfriends.app.fakesmtp:
+    image: gessnerfl/fake-smtp-server
+    container_name: fitfriends.fakesmtp
+    hostname: fakesmtp
+    restart: always
+    networks:
+      - fitfriends.app.network
+    ports:
+      - 1082:8080
+
+  fitfriends.app:
+    image: fitfriends.app:latest
+    container_name: fitfriends.app
+    depends_on:
+      - fitfriends.mongo
+    restart: always
+    env_file:
+      - .fit.app.env
+    networks:
+      - fitfriends.app.network
+    ports:
+      - 3333:3333
+
+networks:
+  fitfriends.app.network:
+    driver: bridge
+
+volumes:
+  fitfriends.app.volume:

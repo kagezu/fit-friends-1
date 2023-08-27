@@ -4,11 +4,21 @@
   "sourceRoot": "apps/app/src",
   "projectType": "application",
   "targets": {
+    "buildImage":{
+      "executor": "nx:run-commands",
+      "options": {
+        "commands":[
+          "nx run app:build",
+          "docker build --file ./apps/app/Dockerfile --tag fitfriends.app:latest ."
+        ]
+      }
+    },
     "build": {
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "generatePackageJson": true,
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/apps/app",

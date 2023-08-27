@@ -1,45 +1,43 @@
 version: '3.5'
 services:
-  fitfriends.app.mongo:
+  fitfriends.mongo:
     image: mongo
     restart: always
-    container_name: fitfriends.app.mongo
-
+    container_name: fitfriends.mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: test
       MONGO_INITDB_DATABASE: fitfriends-app
-
     ports:
       - 27017:27017
-
     volumes:
-      - fitfriends.mongo.app:/data/db
-
+      - fitfriends.app.volumes:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/fitfriends-app --quiet
       interval: 10s
       timeout: 10s
       retries: 5
 
-  fitfriends.user.mongo.ui:
+  fitfriends.mongo.ui:
     image: mongo-express
+    depends_on:
+      - fitfriends.mongo
     restart: always
-    container_name: fitfriends.app.mongo.ui
+    container_name: fitfriends.mongo.ui
     ports:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: test
-      ME_CONFIG_MONGODB_URL: mongodb://admin:test@fitfriends.app.mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://admin:test@fitfriends.mongo:27017/
 
   fitfriends.app.fakesmtp:
     image: gessnerfl/fake-smtp-server
-    container_name: fitfriends.app.fakesmtp
+    container_name: fitfriends.fakesmtp
     hostname: fakesmtp
     ports:
       - '8025:8025'
       - '1082:8080'
 
 volumes:
-  fitfriends.mongo.app:
+  fitfriends.app.volumes:
